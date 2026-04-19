@@ -1,0 +1,935 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MoRoute — Travel Safer</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --green: #3dff8f;
+      --red: #ff4d4d;
+      --orange: #ffa040;
+      --bg: #080e1a;
+      --surface: #0d1829;
+      --surface-hover: #111f38;
+      --text: #e8f0ff;
+      --text-muted: rgba(232, 240, 255, 0.55);
+      --text-dim: rgba(232, 240, 255, 0.35);
+      --border: rgba(255, 255, 255, 0.07);
+      --border-mid: rgba(255, 255, 255, 0.12);
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* ── NAVIGATION ─────────────────────────────────────────── */
+    nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 18px 48px;
+      border-bottom: 0.5px solid var(--border);
+      background: rgba(8, 14, 26, 0.92);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      backdrop-filter: blur(14px);
+    }
+
+    .logo {
+      font-family: 'Syne', sans-serif;
+      font-weight: 800;
+      font-size: 22px;
+      color: var(--text);
+      letter-spacing: -0.02em;
+      text-decoration: none;
+    }
+    .logo span { color: var(--green); }
+
+    .nav-links {
+      display: flex;
+      gap: 36px;
+      list-style: none;
+    }
+    .nav-links a {
+      font-size: 14px;
+      color: var(--text-muted);
+      text-decoration: none;
+      font-weight: 400;
+      letter-spacing: 0.01em;
+      transition: color 0.2s;
+    }
+    .nav-links a:hover { color: var(--text); }
+
+    .nav-cta {
+      background: var(--green);
+      color: var(--bg);
+      border: none;
+      border-radius: 8px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 14px;
+      font-weight: 500;
+      padding: 9px 20px;
+      cursor: pointer;
+      transition: opacity 0.2s;
+    }
+    .nav-cta:hover { opacity: 0.88; }
+
+    /* ── HERO ────────────────────────────────────────────────── */
+    .hero {
+      position: relative;
+      padding: 90px 48px 70px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 64px;
+      align-items: center;
+      overflow: hidden;
+    }
+    .hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse 60% 70% at 72% 50%, rgba(61, 255, 143, 0.07) 0%, transparent 65%);
+      pointer-events: none;
+    }
+
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(61, 255, 143, 0.08);
+      border: 0.5px solid rgba(61, 255, 143, 0.28);
+      border-radius: 100px;
+      padding: 5px 16px;
+      margin-bottom: 28px;
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--green);
+      letter-spacing: 0.04em;
+    }
+    .badge-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--green);
+      animation: pulse 2s ease-in-out infinite;
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.35; transform: scale(0.65); }
+    }
+
+    .hero h1 {
+      font-family: 'Syne', sans-serif;
+      font-size: 58px;
+      font-weight: 800;
+      line-height: 1.04;
+      letter-spacing: -0.035em;
+      color: var(--text);
+      margin-bottom: 22px;
+    }
+    .hero h1 em {
+      font-style: normal;
+      color: var(--green);
+    }
+
+    .hero p {
+      font-size: 16px;
+      line-height: 1.75;
+      color: var(--text-muted);
+      max-width: 430px;
+      margin-bottom: 40px;
+      font-weight: 300;
+    }
+
+    .hero-actions {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+    }
+
+    .btn-primary {
+      display: inline-flex;
+      align-items: center;
+      gap: 9px;
+      background: var(--green);
+      color: var(--bg);
+      border: none;
+      border-radius: 10px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 14px;
+      font-weight: 500;
+      padding: 14px 26px;
+      cursor: pointer;
+      text-decoration: none;
+      transition: opacity 0.2s, transform 0.15s;
+    }
+    .btn-primary:hover { opacity: 0.88; transform: translateY(-1px); }
+
+    .btn-secondary {
+      display: inline-flex;
+      align-items: center;
+      gap: 9px;
+      background: transparent;
+      color: var(--text-muted);
+      border: 0.5px solid var(--border-mid);
+      border-radius: 10px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 14px;
+      font-weight: 400;
+      padding: 14px 26px;
+      cursor: pointer;
+      text-decoration: none;
+      transition: background 0.2s, color 0.2s;
+    }
+    .btn-secondary:hover {
+      background: var(--surface);
+      color: var(--text);
+    }
+
+    /* ── MAP MOCKUP ──────────────────────────────────────────── */
+    .map-frame {
+      position: relative;
+      background: var(--surface);
+      border-radius: 22px;
+      border: 0.5px solid var(--border);
+      overflow: hidden;
+      height: 400px;
+    }
+
+    .map-grid {
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(61, 255, 143, 0.035) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(61, 255, 143, 0.035) 1px, transparent 1px);
+      background-size: 34px 34px;
+    }
+
+    .map-roads {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+    }
+
+    .map-overlay {
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse 85% 85% at 50% 50%, rgba(13, 24, 41, 0.25) 0%, rgba(13, 24, 41, 0.8) 100%);
+    }
+
+    .chip {
+      position: absolute;
+      border-radius: 8px;
+      padding: 7px 12px;
+      font-size: 11px;
+      font-weight: 500;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .chip-red {
+      background: rgba(255, 77, 77, 0.15);
+      border: 0.5px solid rgba(255, 77, 77, 0.4);
+      color: #ff8080;
+    }
+    .chip-green {
+      background: rgba(61, 255, 143, 0.1);
+      border: 0.5px solid rgba(61, 255, 143, 0.3);
+      color: var(--green);
+    }
+    .chip-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+    }
+
+    .map-info-card {
+      position: absolute;
+      bottom: 18px;
+      left: 18px;
+      right: 18px;
+      background: rgba(8, 14, 26, 0.93);
+      border: 0.5px solid rgba(255, 255, 255, 0.1);
+      border-radius: 15px;
+      padding: 15px 18px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      backdrop-filter: blur(10px);
+    }
+    .info-label {
+      font-size: 11px;
+      color: var(--text-dim);
+      margin-bottom: 3px;
+    }
+    .info-val {
+      font-family: 'Syne', sans-serif;
+      font-size: 17px;
+      font-weight: 700;
+      color: var(--text);
+    }
+    .info-val span {
+      font-size: 12px;
+      font-weight: 400;
+      color: var(--text-dim);
+    }
+    .sos-btn {
+      background: var(--red);
+      color: white;
+      border: none;
+      border-radius: 9px;
+      padding: 10px 20px;
+      font-family: 'Syne', sans-serif;
+      font-size: 13px;
+      font-weight: 800;
+      letter-spacing: 0.07em;
+      cursor: pointer;
+      transition: opacity 0.2s;
+    }
+    .sos-btn:hover { opacity: 0.85; }
+
+    /* ── STATS BAR ───────────────────────────────────────────── */
+    .stats-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1px;
+      background: rgba(255, 255, 255, 0.05);
+      border-top: 0.5px solid var(--border);
+      border-bottom: 0.5px solid var(--border);
+      margin-bottom: 90px;
+    }
+
+    .stat-item {
+      background: var(--bg);
+      padding: 36px 48px;
+    }
+
+    .stat-num {
+      font-family: 'Syne', sans-serif;
+      font-size: 40px;
+      font-weight: 800;
+      color: var(--text);
+      letter-spacing: -0.04em;
+      margin-bottom: 6px;
+      line-height: 1;
+    }
+    .stat-num span { color: var(--green); }
+
+    .stat-label {
+      font-size: 13px;
+      color: var(--text-dim);
+      font-weight: 300;
+      line-height: 1.45;
+      max-width: 160px;
+    }
+
+    /* ── SECTION COMMON ──────────────────────────────────────── */
+    section { padding: 0 48px 90px; }
+
+    .section-tag {
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.12em;
+      color: var(--green);
+      text-transform: uppercase;
+      margin-bottom: 14px;
+    }
+
+    .section-title {
+      font-family: 'Syne', sans-serif;
+      font-size: 40px;
+      font-weight: 800;
+      letter-spacing: -0.028em;
+      color: var(--text);
+      margin-bottom: 52px;
+      max-width: 500px;
+      line-height: 1.1;
+    }
+
+    /* ── FEATURES ────────────────────────────────────────────── */
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 0.5px solid var(--border);
+      border-radius: 18px;
+      overflow: hidden;
+    }
+
+    .feature-card {
+      background: var(--surface);
+      padding: 30px 30px;
+      transition: background 0.2s;
+    }
+    .feature-card:hover { background: var(--surface-hover); }
+
+    .feature-icon {
+      width: 44px;
+      height: 44px;
+      border-radius: 11px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 18px;
+      font-size: 20px;
+    }
+    .icon-green  { background: rgba(61, 255, 143, 0.1); }
+    .icon-red    { background: rgba(255, 77, 77, 0.1); }
+    .icon-blue   { background: rgba(100, 160, 255, 0.1); }
+    .icon-orange { background: rgba(255, 160, 64, 0.1); }
+    .icon-purple { background: rgba(160, 120, 255, 0.1); }
+    .icon-teal   { background: rgba(64, 220, 200, 0.1); }
+
+    .feature-name {
+      font-family: 'Syne', sans-serif;
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 9px;
+      letter-spacing: -0.01em;
+    }
+
+    .feature-desc {
+      font-size: 13px;
+      line-height: 1.65;
+      color: var(--text-muted);
+      font-weight: 300;
+    }
+
+    /* ── THREATS + RISK ──────────────────────────────────────── */
+    .threats-section {
+      padding: 0 48px 90px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 48px;
+      align-items: start;
+    }
+
+    .threats-header .section-title {
+      font-size: 32px;
+      margin-bottom: 24px;
+    }
+
+    .threat-list {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .threat-item {
+      background: var(--surface);
+      border: 0.5px solid rgba(255, 255, 255, 0.06);
+      border-radius: 13px;
+      padding: 20px 24px;
+      display: flex;
+      align-items: flex-start;
+      gap: 18px;
+      cursor: pointer;
+      transition: border-color 0.2s, background 0.2s;
+    }
+    .threat-item:hover {
+      border-color: rgba(61, 255, 143, 0.2);
+      background: var(--surface-hover);
+    }
+
+    .threat-number {
+      font-family: 'Syne', sans-serif;
+      font-size: 11px;
+      font-weight: 800;
+      color: rgba(232, 240, 255, 0.2);
+      letter-spacing: 0.06em;
+      padding-top: 2px;
+      min-width: 22px;
+    }
+
+    .threat-title {
+      font-family: 'Syne', sans-serif;
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 5px;
+    }
+
+    .threat-desc {
+      font-size: 12px;
+      line-height: 1.6;
+      color: var(--text-muted);
+      font-weight: 300;
+    }
+
+    /* ── RISK PANEL ──────────────────────────────────────────── */
+    .risk-panel {
+      background: var(--surface);
+      border: 0.5px solid var(--border);
+      border-radius: 18px;
+      padding: 34px;
+    }
+
+    .risk-panel-title {
+      font-size: 11px;
+      letter-spacing: 0.1em;
+      color: var(--text-dim);
+      text-transform: uppercase;
+      font-weight: 500;
+      margin-bottom: 28px;
+    }
+
+    .risk-row {
+      padding: 14px 0 10px;
+      border-bottom: 0.5px solid rgba(255, 255, 255, 0.06);
+    }
+    .risk-row:last-child { border-bottom: none; }
+
+    .risk-row-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      margin-bottom: 8px;
+    }
+
+    .risk-row-label {
+      font-size: 13px;
+      color: var(--text-muted);
+    }
+
+    .risk-row-val {
+      font-family: 'Syne', sans-serif;
+      font-size: 19px;
+      font-weight: 700;
+    }
+
+    .bar-track {
+      width: 100%;
+      height: 4px;
+      background: rgba(255, 255, 255, 0.07);
+      border-radius: 2px;
+    }
+    .bar-fill {
+      height: 4px;
+      border-radius: 2px;
+      transition: width 0.6s ease;
+    }
+
+    /* ── CTA ─────────────────────────────────────────────────── */
+    .cta-section {
+      margin: 0 48px 48px;
+      background: var(--surface);
+      border: 0.5px solid var(--border);
+      border-radius: 22px;
+      padding: 72px 60px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .cta-section::before {
+      content: '';
+      position: absolute;
+      width: 480px;
+      height: 480px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(61, 255, 143, 0.07) 0%, transparent 70%);
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      pointer-events: none;
+    }
+
+    .cta-section h2 {
+      font-family: 'Syne', sans-serif;
+      font-size: 46px;
+      font-weight: 800;
+      letter-spacing: -0.035em;
+      color: var(--text);
+      margin-bottom: 14px;
+      line-height: 1.08;
+      position: relative;
+    }
+
+    .cta-section p {
+      font-size: 16px;
+      color: var(--text-muted);
+      margin-bottom: 36px;
+      font-weight: 300;
+      position: relative;
+    }
+
+    .store-btns {
+      display: flex;
+      gap: 14px;
+      justify-content: center;
+      position: relative;
+    }
+
+    .store-btn {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      background: rgba(232, 240, 255, 0.05);
+      border: 0.5px solid var(--border-mid);
+      border-radius: 13px;
+      padding: 14px 26px;
+      cursor: pointer;
+      transition: background 0.2s, border-color 0.2s;
+      text-decoration: none;
+    }
+    .store-btn:hover {
+      background: rgba(232, 240, 255, 0.09);
+      border-color: rgba(255, 255, 255, 0.2);
+    }
+
+    .store-btn-sub {
+      font-size: 10px;
+      color: var(--text-dim);
+      text-align: left;
+      margin-bottom: 2px;
+    }
+    .store-btn-name {
+      font-size: 15px;
+      font-weight: 500;
+      color: var(--text);
+    }
+
+    /* ── FOOTER ──────────────────────────────────────────────── */
+    footer {
+      padding: 26px 48px;
+      border-top: 0.5px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .footer-links {
+      display: flex;
+      gap: 28px;
+      list-style: none;
+    }
+    .footer-links a {
+      font-size: 12px;
+      color: var(--text-dim);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+    .footer-links a:hover { color: var(--text-muted); }
+
+    .footer-copy {
+      font-size: 12px;
+      color: var(--text-dim);
+    }
+
+    /* ── RESPONSIVE ──────────────────────────────────────────── */
+    @media (max-width: 900px) {
+      nav { padding: 16px 24px; }
+      .nav-links { display: none; }
+
+      .hero {
+        grid-template-columns: 1fr;
+        padding: 60px 24px 48px;
+        gap: 40px;
+      }
+      .hero h1 { font-size: 40px; }
+
+      .stats-bar {
+        grid-template-columns: repeat(2, 1fr);
+        margin-bottom: 60px;
+      }
+      .stat-item { padding: 24px 24px; }
+
+      section { padding: 0 24px 60px; }
+      .section-title { font-size: 30px; }
+
+      .features-grid { grid-template-columns: 1fr; }
+      .threats-section {
+        grid-template-columns: 1fr;
+        padding: 0 24px 60px;
+        gap: 32px;
+      }
+
+      .cta-section { margin: 0 24px 40px; padding: 48px 28px; }
+      .cta-section h2 { font-size: 32px; }
+      .store-btns { flex-direction: column; align-items: center; }
+
+      footer { flex-direction: column; gap: 16px; text-align: center; }
+      .footer-links { justify-content: center; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ── NAVIGATION ─────────────────────────────────────────── -->
+  <nav>
+    <a href="#" class="logo">Mo<span>Route</span></a>
+    <ul class="nav-links">
+      <li><a href="#">Home</a></li>
+      <li><a href="#">Features</a></li>
+      <li><a href="#">Safety Map</a></li>
+      <li><a href="#">Contact</a></li>
+    </ul>
+    <button class="nav-cta">Get the app</button>
+  </nav>
+
+  <!-- ── HERO ───────────────────────────────────────────────── -->
+  <section class="hero" style="padding-bottom: 70px;">
+    <div>
+      <div class="hero-badge">
+        <div class="badge-dot"></div>
+        Live safety monitoring
+      </div>
+      <h1>Travel safer.<br/>With <em>real-time</em><br/>intelligence.</h1>
+      <p>MoRoute monitors threats, incidents, and road conditions along your route — so you always know what's ahead before it's too late.</p>
+      <div class="hero-actions">
+        <a href="#" class="btn-primary">
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
+            <path d="M7 1L13 7L7 13M1 7H13" stroke="#080e1a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          Download free
+        </a>
+        <a href="#" class="btn-secondary">Watch demo</a>
+      </div>
+    </div>
+
+    <!-- MAP MOCKUP -->
+    <div class="map-frame">
+      <div class="map-grid"></div>
+      <svg class="map-roads" viewBox="0 0 520 400" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <!-- Background roads -->
+        <path d="M0 200 Q130 178 260 200 Q390 222 520 200" stroke="rgba(255,255,255,0.06)" stroke-width="16" fill="none"/>
+        <path d="M0 130 Q90 124 180 142 Q270 160 360 110 Q430 75 520 88" stroke="rgba(255,255,255,0.04)" stroke-width="11" fill="none"/>
+        <path d="M200 0 Q215 100 224 200 Q233 300 248 400" stroke="rgba(255,255,255,0.05)" stroke-width="9" fill="none"/>
+        <path d="M350 0 Q364 68 342 136 Q318 204 352 272 Q374 336 362 400" stroke="rgba(255,255,255,0.04)" stroke-width="7" fill="none"/>
+        <path d="M55 0 Q78 90 68 180 Q58 270 90 400" stroke="rgba(255,255,255,0.03)" stroke-width="7" fill="none"/>
+        <!-- Safe route -->
+        <path d="M45 295 Q135 248 226 236 Q316 224 396 182 Q440 158 475 136"
+              stroke="#3dff8f" stroke-width="3.5" fill="none" opacity="0.85"/>
+        <!-- Origin + destination markers -->
+        <circle cx="45"  cy="295" r="7" fill="#3dff8f"/>
+        <circle cx="45"  cy="295" r="13" fill="rgba(61,255,143,0.15)"/>
+        <circle cx="475" cy="136" r="7" fill="#3dff8f"/>
+        <circle cx="475" cy="136" r="13" fill="rgba(61,255,143,0.15)"/>
+        <!-- Danger zone 1 -->
+        <circle cx="330" cy="270" r="34" fill="rgba(255,77,77,0.07)" stroke="rgba(255,77,77,0.24)" stroke-width="1"/>
+        <circle cx="330" cy="270" r="6" fill="#ff4d4d"/>
+        <!-- Danger zone 2 (warning) -->
+        <circle cx="155" cy="178" r="25" fill="rgba(255,160,64,0.06)" stroke="rgba(255,160,64,0.2)" stroke-width="1"/>
+        <circle cx="155" cy="178" r="4.5" fill="#ffa040"/>
+      </svg>
+      <div class="map-overlay"></div>
+
+      <!-- Status chips -->
+      <div class="chip chip-green" style="top: 50px; left: 20px;">
+        <div class="chip-dot" style="background: #3dff8f;"></div>
+        Safe route active
+      </div>
+      <div class="chip chip-red" style="top: 50px; right: 20px;">
+        <div class="chip-dot" style="background: #ff4d4d;"></div>
+        Incident · 1.2 km ahead
+      </div>
+
+      <!-- Info card -->
+      <div class="map-info-card">
+        <div>
+          <div class="info-label">ETA via safe route</div>
+          <div class="info-val">24 min <span>· 18.4 km</span></div>
+        </div>
+        <div style="text-align: right;">
+          <div class="info-label">Safety score</div>
+          <div class="info-val" style="color: var(--green);">92 <span>/ 100</span></div>
+        </div>
+        <button class="sos-btn">SOS</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── STATS BAR ──────────────────────────────────────────── -->
+  <div class="stats-bar">
+    <div class="stat-item">
+      <div class="stat-num">87<span>K+</span></div>
+      <div class="stat-label">Kidnappings recorded globally in 2022</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-num">1.19<span>M+</span></div>
+      <div class="stat-label">Annual road deaths worldwide</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-num">50<span>M+</span></div>
+      <div class="stat-label">Annual non-fatal road injuries</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-num">23<span>%</span></div>
+      <div class="stat-label">Of travelers report fear of travel insecurity</div>
+    </div>
+  </div>
+
+  <!-- ── FEATURES ───────────────────────────────────────────── -->
+  <section>
+    <div class="section-tag">What we offer</div>
+    <div class="section-title">Every tool you need to travel with confidence</div>
+    <div class="features-grid">
+      <div class="feature-card">
+        <div class="feature-icon icon-red">🚨</div>
+        <div class="feature-name">SOS Emergency</div>
+        <div class="feature-desc">One-tap distress alert instantly sends your live location to emergency contacts and nearby first responders.</div>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon icon-green">🗺️</div>
+        <div class="feature-name">Live Safety Map</div>
+        <div class="feature-desc">A continuously updated heat map of incidents, road hazards, danger zones, and community reports.</div>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon icon-blue">📍</div>
+        <div class="feature-name">Route Planning</div>
+        <div class="feature-desc">Get the safest path to your destination, automatically rerouting around high-risk areas in real time.</div>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon icon-orange">📣</div>
+        <div class="feature-name">Report Incident</div>
+        <div class="feature-desc">Crowdsourced reporting keeps the entire community instantly informed of threats, blockades, and hazards.</div>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon icon-purple">✅</div>
+        <div class="feature-name">Checkpoint Verification</div>
+        <div class="feature-desc">Verified checkpoint data flags legitimate vs. suspicious roadblocks along your planned route.</div>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon icon-teal">📊</div>
+        <div class="feature-name">Trip Analytics</div>
+        <div class="feature-desc">Post-trip safety summaries with risk exposure data, route performance insights, and safety snapshots.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── THREATS + RISK INDEX ───────────────────────────────── -->
+  <div class="threats-section">
+    <div class="threats-header">
+      <div class="section-tag">Known threats</div>
+      <div class="section-title" style="font-size: 32px; margin-bottom: 24px;">We track every risk on the road</div>
+      <div class="threat-list">
+        <div class="threat-item">
+          <div class="threat-number">01</div>
+          <div>
+            <div class="threat-title">Kidnapping &amp; Abduction</div>
+            <div class="threat-desc">Bandit groups and militants targeting rural and intercity travelers with ambushes on isolated roads.</div>
+          </div>
+        </div>
+        <div class="threat-item">
+          <div class="threat-number">02</div>
+          <div>
+            <div class="threat-title">Highway Robbery &amp; Armed Assault</div>
+            <div class="threat-desc">Armed criminals using vehicle stop-overs, fake roadblocks, and ambushes to rob and harm travelers.</div>
+          </div>
+        </div>
+        <div class="threat-item">
+          <div class="threat-number">03</div>
+          <div>
+            <div class="threat-title">Violent Contact Crimes</div>
+            <div class="threat-desc">Physical assaults, mugging, and harassment occurring at stoplights, bus stops, and remote road stretches.</div>
+          </div>
+        </div>
+        <div class="threat-item">
+          <div class="threat-number">04</div>
+          <div>
+            <div class="threat-title">Road Traffic Crashes</div>
+            <div class="threat-desc">1.19M annual deaths globally. The leading cause of death for people aged 5–29 worldwide.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="risk-panel">
+      <div class="risk-panel-title">Global road risk index</div>
+
+      <div class="risk-row">
+        <div class="risk-row-top">
+          <span class="risk-row-label">West Africa</span>
+          <span class="risk-row-val" style="color: var(--red);">9.2</span>
+        </div>
+        <div class="bar-track"><div class="bar-fill" style="width: 92%; background: var(--red);"></div></div>
+      </div>
+
+      <div class="risk-row">
+        <div class="risk-row-top">
+          <span class="risk-row-label">Latin America</span>
+          <span class="risk-row-val" style="color: var(--orange);">8.4</span>
+        </div>
+        <div class="bar-track"><div class="bar-fill" style="width: 84%; background: var(--orange);"></div></div>
+      </div>
+
+      <div class="risk-row">
+        <div class="risk-row-top">
+          <span class="risk-row-label">Southern Africa</span>
+          <span class="risk-row-val" style="color: var(--orange);">7.8</span>
+        </div>
+        <div class="bar-track"><div class="bar-fill" style="width: 78%; background: var(--orange);"></div></div>
+      </div>
+
+      <div class="risk-row">
+        <div class="risk-row-top">
+          <span class="risk-row-label">Southeast Asia</span>
+          <span class="risk-row-val" style="color: var(--green);">5.1</span>
+        </div>
+        <div class="bar-track"><div class="bar-fill" style="width: 51%; background: var(--green);"></div></div>
+      </div>
+
+      <div class="risk-row">
+        <div class="risk-row-top">
+          <span class="risk-row-label">Eastern Europe</span>
+          <span class="risk-row-val" style="color: var(--green);">3.7</span>
+        </div>
+        <div class="bar-track"><div class="bar-fill" style="width: 37%; background: var(--green);"></div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── CTA ────────────────────────────────────────────────── -->
+  <div class="cta-section">
+    <h2>Your safety starts<br/>before you leave.</h2>
+    <p>Download MoRoute and travel with real-time intelligence in your pocket.</p>
+    <div class="store-btns">
+      <a href="#" class="store-btn">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <path d="M17 2C15.6 2 13.7 2.9 12.5 4.2c-1 1.2-1.9 3.1-1.5 4.8 1.5.1 3.2-.8 4.3-2.1C16.4 5.6 17.2 3.7 17 2zm.4 7.2c-2.2 0-3.1 1.3-4.6 1.3-1.5 0-2.9-1.2-4.8-1.2C4.9 9.3 2 12.1 2 16.6c0 2.8 1.1 5.6 2.4 7.5C5.4 25.5 6.5 26.4 7.8 26.4c1.3 0 1.9-.9 3.6-.9 1.8 0 2.3.9 3.7.9 1.3 0 2.3-.9 3.3-2.2.7-1 1.1-2 1.4-3.1-2-.8-3.4-2.8-3.4-5.1 0-2 1.1-3.7 2.7-4.7-.9-1.3-2.4-2.1-4.7-2.1z" fill="rgba(232,240,255,0.6)"/>
+        </svg>
+        <div>
+          <div class="store-btn-sub">Download on the</div>
+          <div class="store-btn-name">App Store</div>
+        </div>
+      </a>
+      <a href="#" class="store-btn">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <path d="M3.6 2.3L13.8 12.5 3.6 22.7M3.6 2.3L21.4 11l-7.6 1.5L3.6 2.3zM3.6 22.7L21.4 14l-7.6-1.5L3.6 22.7z" stroke="rgba(232,240,255,0.6)" stroke-width="1.6" stroke-linejoin="round"/>
+        </svg>
+        <div>
+          <div class="store-btn-sub">Get it on</div>
+          <div class="store-btn-name">Google Play</div>
+        </div>
+      </a>
+    </div>
+  </div>
+
+  <!-- ── FOOTER ─────────────────────────────────────────────── -->
+  <footer>
+    <a href="#" class="logo" style="font-size: 18px;">Mo<span>Route</span></a>
+    <ul class="footer-links">
+      <li><a href="#">Privacy</a></li>
+      <li><a href="#">Terms</a></li>
+      <li><a href="#">Contact</a></li>
+    </ul>
+    <div class="footer-copy">© 2025 MoRoute · Built for safer journeys</div>
+  </footer>
+
+</body>
+</html>
