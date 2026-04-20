@@ -1,0 +1,180 @@
+{
+  "brand": "MoRoute",
+  "assets": {
+    "brandLogoPath": "/images/brand/moroute-logo.svg",
+    "pageTexturePath": "/images/textures/page-noise.svg",
+    "heroTexturePath": "/images/textures/hero-lines.svg"
+  },
+  "meta": {
+    "title": "MoRoute - Travel Safer",
+    "description": "Travel with real-time route intelligence, incident awareness, and proactive safety guidance."
+  },
+  "nav": {
+    "links": [
+      { "label": "Home", "href": "#home" },
+      { "label": "Features", "href": "#features" },
+      { "label": "Safety Map", "href": "#safety-map" },
+      { "label": "Contact", "href": "#contact" }
+    ],
+    "cta": {
+      "label": "Get the app",
+      "href": "#download"
+    }
+  },
+  "hero": {
+    "badge": "Live safety monitoring",
+    "title": {
+      "lineOne": "Travel safer.",
+      "lineTwoPrefix": "With",
+      "lineTwoHighlight": "real-time",
+      "lineThree": "intelligence."
+    },
+    "description": "MoRoute monitors threats, incidents, and road conditions along your route so you always know what is ahead before it is too late.",
+    "actions": {
+      "primary": {
+        "label": "Download free",
+        "href": "#download"
+      },
+      "secondary": {
+        "label": "Watch demo",
+        "href": "#features"
+      }
+    },
+    "map": {
+      "texturePath": "/images/textures/map-noise.svg",
+      "safeChip": "Safe route active",
+      "incidentChip": "Incident - 1.2 km ahead",
+      "info": {
+        "etaLabel": "ETA via safe route",
+        "etaValue": "24 min",
+        "etaExtra": "18.4 km",
+        "safetyLabel": "Safety score",
+        "safetyValue": "92",
+        "safetyMax": "100"
+      },
+      "sosLabel": "SOS"
+    }
+  },
+  "stats": [
+    {
+      "value": "87",
+      "suffix": "K+",
+      "label": "Kidnappings recorded globally in 2022"
+    },
+    {
+      "value": "1.19",
+      "suffix": "M+",
+      "label": "Annual road deaths worldwide"
+    },
+    {
+      "value": "50",
+      "suffix": "M+",
+      "label": "Annual non-fatal road injuries"
+    },
+    {
+      "value": "23",
+      "suffix": "%",
+      "label": "Of travelers report fear of travel insecurity"
+    }
+  ],
+  "features": {
+    "sectionTag": "What we offer",
+    "sectionTitle": "Every tool you need to travel with confidence",
+    "items": [
+      {
+        "icon": "shield-alert",
+        "tone": "red",
+        "name": "SOS Emergency",
+        "description": "One-tap distress alert instantly sends your live location to emergency contacts and nearby first responders."
+      },
+      {
+        "icon": "map-pinned",
+        "tone": "green",
+        "name": "Live Safety Map",
+        "description": "A continuously updated heat map of incidents, road hazards, danger zones, and community reports."
+      },
+      {
+        "icon": "route",
+        "tone": "blue",
+        "name": "Route Planning",
+        "description": "Get the safest path to your destination, automatically rerouting around high-risk areas in real time."
+      },
+      {
+        "icon": "megaphone",
+        "tone": "orange",
+        "name": "Report Incident",
+        "description": "Crowdsourced reporting keeps the entire community instantly informed of threats, blockades, and hazards."
+      },
+      {
+        "icon": "shield-check",
+        "tone": "purple",
+        "name": "Checkpoint Verification",
+        "description": "Verified checkpoint data flags legitimate versus suspicious roadblocks along your planned route."
+      },
+      {
+        "icon": "chart-line",
+        "tone": "teal",
+        "name": "Trip Analytics",
+        "description": "Post-trip safety summaries with risk exposure data, route performance insights, and safety snapshots."
+      }
+    ]
+  },
+  "threats": {
+    "sectionTag": "Known threats",
+    "sectionTitle": "We track every risk on the road",
+    "items": [
+      {
+        "title": "Kidnapping and Abduction",
+        "description": "Bandit groups and militants target rural and intercity travelers with ambushes on isolated roads."
+      },
+      {
+        "title": "Highway Robbery and Armed Assault",
+        "description": "Armed criminals use vehicle stop-overs, fake roadblocks, and ambushes to rob and harm travelers."
+      },
+      {
+        "title": "Violent Contact Crimes",
+        "description": "Physical assaults, mugging, and harassment occur at stoplights, bus stops, and remote road stretches."
+      },
+      {
+        "title": "Road Traffic Crashes",
+        "description": "1.19M annual deaths globally. The leading cause of death for people aged 5 to 29 worldwide."
+      }
+    ],
+    "riskPanel": {
+      "title": "Global road risk index",
+      "regions": [
+        { "label": "West Africa", "score": 9.2, "color": "red" },
+        { "label": "Latin America", "score": 8.4, "color": "orange" },
+        { "label": "Southern Africa", "score": 7.8, "color": "orange" },
+        { "label": "Southeast Asia", "score": 5.1, "color": "green" },
+        { "label": "Eastern Europe", "score": 3.7, "color": "green" }
+      ]
+    }
+  },
+  "cta": {
+    "title": "Your safety starts before you leave.",
+    "description": "Download MoRoute and travel with real-time intelligence in your pocket.",
+    "stores": [
+      {
+        "name": "App Store",
+        "href": "#",
+        "badgePath": "/images/store/app-store-badge.svg",
+        "alt": "Download on the App Store"
+      },
+      {
+        "name": "Google Play",
+        "href": "#",
+        "badgePath": "/images/store/google-play-badge.svg",
+        "alt": "Get it on Google Play"
+      }
+    ]
+  },
+  "footer": {
+    "links": [
+      { "label": "Privacy", "href": "#" },
+      { "label": "Terms", "href": "#" },
+      { "label": "Contact", "href": "#contact" }
+    ],
+    "copyright": "Copyright 2026 MoRoute. Built for safer journeys"
+  }
+}
