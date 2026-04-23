@@ -170,13 +170,13 @@
     "stores": [
       {
         "name": "App Store",
-        "href": "#",
+        "href": "https://www.apple.com/app-store/",
         "badgePath": "/images/store/app-store-badge.svg",
         "alt": "Download on the App Store"
       },
       {
         "name": "Google Play",
-        "href": "#",
+        "href": "https://play.google.com/",
         "badgePath": "/images/store/google-play-badge.svg",
         "alt": "Get it on Google Play"
       }
