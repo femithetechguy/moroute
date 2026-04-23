@@ -8,7 +8,8 @@
   },
   "meta": {
     "title": "MoRoute - Road Safety App",
-    "description": "Find safer routes with real-time threat updates, SOS support, and trusted travel intelligence."
+    "description": "Find safer routes with real-time threat updates, SOS support, and trusted travel intelligence.",
+    "siteUrl": "https://moroute-demo.fttgsolutions.com"
   },
   "nav": {
     "links": [

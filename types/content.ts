@@ -79,6 +79,7 @@ export interface MorouteContent {
   meta: {
     title: string;
     description: string;
+    siteUrl: string;
   };
   nav: {
     links: LinkItem[];
