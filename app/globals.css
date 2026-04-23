@@ -101,15 +101,15 @@ nav {
   border-radius: 18px;
   background: rgba(255, 255, 255, 0.84);
   box-shadow: var(--shadow-soft);
-  position: sticky;
-  top: 12px;
-  z-index: 100;
+  position: relative;
+  z-index: 1;
   backdrop-filter: blur(12px);
   animation: navSlideIn 540ms var(--ease-smooth) both;
 }
 
 .nav-shell {
-  position: relative;
+  position: sticky;
+  top: 12px;
   z-index: 140;
 }
 
@@ -206,7 +206,8 @@ nav {
   gap: 10px;
 }
 
-.nav-toggle {
+.nav-toggle,
+.nav-fab-toggle {
   display: none;
   width: 40px;
   height: 40px;
@@ -220,7 +221,19 @@ nav {
   cursor: pointer;
 }
 
-.nav-toggle span {
+.nav-fab-toggle {
+  position: fixed;
+  left: 12px;
+  bottom: 14px;
+  z-index: 145;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.86);
+  backdrop-filter: blur(12px);
+  box-shadow: 0 8px 22px rgba(12, 32, 58, 0.2);
+}
+
+.nav-toggle span,
+.nav-fab-toggle span {
   display: block;
   width: 16px;
   height: 2px;
@@ -229,15 +242,18 @@ nav {
   transition: transform 0.22s ease, opacity 0.22s ease;
 }
 
-.nav-toggle.is-open span:nth-child(1) {
+.nav-toggle.is-open span:nth-child(1),
+.nav-fab-toggle.is-open span:nth-child(1) {
   transform: translateY(6px) rotate(45deg);
 }
 
-.nav-toggle.is-open span:nth-child(2) {
+.nav-toggle.is-open span:nth-child(2),
+.nav-fab-toggle.is-open span:nth-child(2) {
   opacity: 0;
 }
 
-.nav-toggle.is-open span:nth-child(3) {
+.nav-toggle.is-open span:nth-child(3),
+.nav-fab-toggle.is-open span:nth-child(3) {
   transform: translateY(-6px) rotate(-45deg);
 }
 
@@ -1748,11 +1764,19 @@ footer {
 }
 
 @media (max-width: 920px) {
+  .nav-shell {
+    top: max(8px, env(safe-area-inset-top));
+  }
+
   .nav-links {
     display: none;
   }
 
   .nav-toggle {
+    display: inline-flex;
+  }
+
+  .nav-fab-toggle {
     display: inline-flex;
   }
 
@@ -1922,6 +1946,11 @@ footer {
     bottom: 12px;
   }
 
+  .nav-fab-toggle {
+    left: 10px;
+    bottom: 12px;
+  }
+
   footer {
     flex-direction: column;
     text-align: center;
@@ -1954,6 +1983,29 @@ footer {
     opacity: 1 !important;
     transform: none !important;
     filter: none !important;
+  }
+
+  .hero h1 span,
+  .hero-line-soft,
+  .hero p,
+  .hero-actions,
+  .map-frame,
+  .map-mini-shot,
+  .map-info-card-reveal,
+  .stat-item,
+  .feature-showcase-card,
+  .feature-card,
+  .threat-item,
+  .risk-row,
+  .cta-phone,
+  .store-btn-link {
+    opacity: 1 !important;
+    transform: none !important;
+    filter: none !important;
+  }
+
+  .route-path {
+    stroke-dashoffset: 0 !important;
   }
 }
 

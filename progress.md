@@ -17,6 +17,9 @@
 - Added SEO foundation with `sitemap.xml`, `robots.txt`, and homepage JSON-LD structured data.
 - Centralized SEO URL resolution in shared helper logic to keep metadata and crawler routes in sync.
 - Added `vercel.json` for Vercel deployment configuration.
+- Fixed graphics visibility for users with reduced-motion preferences by forcing animation-dependent elements to render in their final visible state.
+- Added persistent mobile navigation access with a floating hamburger trigger and restored top navbar hamburger visibility.
+- Improved mobile sticky navigation behavior so menu access remains natural and reachable while scrolling.
 - Verified clean production builds after changes (`rm -rf .next && npm run build`).
 
 ## Pending
