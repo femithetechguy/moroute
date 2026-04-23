@@ -10,10 +10,12 @@ function clampPercent(score: number): number {
 }
 
 export default function ThreatsRiskSection({ threats }: ThreatsRiskSectionProps) {
+  const hasSectionTag = threats.sectionTag.trim().length > 0;
+
   return (
     <section className="threats-section" data-reveal>
       <div className="threats-header">
-        <div className="section-tag">{threats.sectionTag}</div>
+        {hasSectionTag ? <div className="section-tag">{threats.sectionTag}</div> : null}
         <div className="section-title threat-title-main">{threats.sectionTitle}</div>
 
         <div className="threat-list">

@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useId, useMemo, useState, type CSSProperties } from "react";
+import { useEffect, useId, useMemo, useState, type CSSProperties, type MouseEvent } from "react";
 import type { MorouteContent } from "@/types/content";
 
 type NavBarProps = {
@@ -89,6 +89,43 @@ export default function NavBar({ brand, nav, logoPath, logoAlt }: NavBarProps) {
 
   const closeMenu = () => setIsOpen(false);
 
+  const scrollToSection = (hash: string) => {
+    const section = document.querySelector(hash);
+    if (!(section instanceof HTMLElement)) {
+      return;
+    }
+
+    const navShell = document.querySelector(".nav-shell");
+    const navHeight = navShell instanceof HTMLElement ? navShell.offsetHeight : 0;
+    const navTop = navShell instanceof HTMLElement ? Number.parseFloat(window.getComputedStyle(navShell).top) || 0 : 0;
+    const breathingSpace = window.innerWidth <= 920 ? 14 : 10;
+    const totalOffset = navTop + navHeight + breathingSpace;
+    const targetTop = section.getBoundingClientRect().top + window.scrollY - totalOffset;
+
+    window.scrollTo({ top: Math.max(targetTop, 0), behavior: "smooth" });
+  };
+
+  const handleNavClick = (event: MouseEvent<HTMLAnchorElement>, href: string) => {
+    if (!href.startsWith("#")) {
+      closeMenu();
+      return;
+    }
+
+    event.preventDefault();
+    setActiveHash(href);
+    setIsOpen(false);
+
+    if (window.location.hash !== href) {
+      window.history.pushState(null, "", href);
+    }
+
+    window.requestAnimationFrame(() => {
+      window.requestAnimationFrame(() => {
+        scrollToSection(href);
+      });
+    });
+  };
+
   return (
     <header className="nav-shell">
       <nav>
@@ -99,7 +136,11 @@ export default function NavBar({ brand, nav, logoPath, logoAlt }: NavBarProps) {
         <ul className="nav-links">
           {nav.links.map((link) => (
             <li key={link.label}>
-              <a href={link.href} className={link.href === activeHash ? "is-active" : undefined}>
+              <a
+                href={link.href}
+                className={link.href === activeHash ? "is-active" : undefined}
+                onClick={(event) => handleNavClick(event, link.href)}
+              >
                 {link.label}
               </a>
             </li>
@@ -107,7 +148,7 @@ export default function NavBar({ brand, nav, logoPath, logoAlt }: NavBarProps) {
         </ul>
 
         <div className="nav-controls">
-          <a className="nav-cta" href={nav.cta.href}>
+          <a className="nav-cta" href={nav.cta.href} onClick={(event) => handleNavClick(event, nav.cta.href)}>
             {nav.cta.label}
           </a>
 
@@ -154,12 +195,7 @@ export default function NavBar({ brand, nav, logoPath, logoAlt }: NavBarProps) {
               <a
                 href={link.href}
                 className={link.href === activeHash ? "is-active" : undefined}
-                onClick={() => {
-                  if (link.href.startsWith("#")) {
-                    setActiveHash(link.href);
-                  }
-                  closeMenu();
-                }}
+                onClick={(event) => handleNavClick(event, link.href)}
               >
                 <span className="nav-mobile-link-main">{link.label}</span>
                 <span className="nav-mobile-link-meta">section {String(index + 1).padStart(2, "0")}</span>
@@ -168,7 +204,7 @@ export default function NavBar({ brand, nav, logoPath, logoAlt }: NavBarProps) {
           ))}
         </ul>
 
-        <a className="nav-mobile-cta" href={nav.cta.href} onClick={closeMenu}>
+        <a className="nav-mobile-cta" href={nav.cta.href} onClick={(event) => handleNavClick(event, nav.cta.href)}>
           {nav.cta.label}
         </a>
       </div>

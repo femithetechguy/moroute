@@ -10,6 +10,7 @@ type ContactSectionProps = {
 export default function ContactSection({ contact }: ContactSectionProps) {
   const [submitState, setSubmitState] = useState<"idle" | "sending" | "sent">("idle");
   const timeoutRef = useRef<number | null>(null);
+  const hasSectionTag = contact.sectionTag.trim().length > 0;
 
   useEffect(() => {
     return () => {
@@ -45,7 +46,7 @@ export default function ContactSection({ contact }: ContactSectionProps) {
 
   return (
     <section className="contact-section" id="contact" data-reveal>
-      <p className="section-tag">{contact.sectionTag}</p>
+      {hasSectionTag ? <p className="section-tag">{contact.sectionTag}</p> : null}
       <h2 className="contact-title">{contact.title}</h2>
       <p className="contact-description">{contact.description}</p>
 
