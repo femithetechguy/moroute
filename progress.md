@@ -1,17 +1,18 @@
 # Progress
 
 ## Date
-- 2026-04-19
+- 2026-04-23
 
 ## Completed
-- Added brand logo asset and integrated it in navigation and footer.
-- Added real-style App Store and Google Play badge SVG assets and integrated them in CTA.
-- Added Lucide icon pack and replaced placeholder feature letters with icon-based rendering.
-- Added optional page, hero, and map texture image assets and integrated them in styles/components.
-- Extended JSON content schema to hold asset paths and updated type definitions.
-- Ran production build successfully after all updates.
-- Committed changes as `116059f` on `develop`.
-- Pushed updates to `origin/develop`.
+- Integrated newly provided app screenshots across hero, features, and CTA sections.
+- Fixed broken image references and removed unintended mobile horizontal gallery scrolling.
+- Improved mobile responsiveness and visual density in CTA and showcase areas.
+- Added `ContactSection`, `MobileBackToTop`, and richer navigation behavior.
+- Added scroll-reveal motion system via `MotionEnhancer` and modernized hover/ambient animations.
+- Polished typography contrast, spacing, and card/shadow consistency across sections.
+- Updated content JSON copy to include service-request feature messaging.
+- Added `vercel.json` for Vercel deployment configuration.
+- Verified clean production builds after changes (`rm -rf .next && npm run build`).
 
 ## Pending
-- None.
+- Deploy to Vercel production.

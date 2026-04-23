@@ -7,8 +7,10 @@ type HeroSectionProps = {
 };
 
 export default function HeroSection({ hero, texturePath }: HeroSectionProps) {
+  const lineTwoPrefix = hero.title.lineTwoPrefix ? `${hero.title.lineTwoPrefix} ` : "";
+
   return (
-    <section className="hero" id="home">
+    <section className="hero" id="home" data-reveal>
       <div className="hero-texture" style={{ backgroundImage: `url(${texturePath})` }} />
       <div>
         <div className="hero-badge">
@@ -17,12 +19,14 @@ export default function HeroSection({ hero, texturePath }: HeroSectionProps) {
         </div>
 
         <h1>
-          {hero.title.lineOne}
-          <br />
-          {hero.title.lineTwoPrefix} <em>{hero.title.lineTwoHighlight}</em>
-          <br />
-          {hero.title.lineThree}
+          <span>{hero.title.lineOne}</span>
+          <span>
+            {lineTwoPrefix}
+            <em>{hero.title.lineTwoHighlight}</em>
+          </span>
         </h1>
+
+        <p className="hero-line-soft">{hero.title.lineThree}</p>
 
         <p>{hero.description}</p>
 

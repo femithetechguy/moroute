@@ -1,4 +1,5 @@
 import type { MorouteContent } from "@/types/content";
+import type { CSSProperties } from "react";
 
 type ThreatsRiskSectionProps = {
   threats: MorouteContent["threats"];
@@ -10,14 +11,18 @@ function clampPercent(score: number): number {
 
 export default function ThreatsRiskSection({ threats }: ThreatsRiskSectionProps) {
   return (
-    <section className="threats-section">
+    <section className="threats-section" data-reveal>
       <div className="threats-header">
         <div className="section-tag">{threats.sectionTag}</div>
         <div className="section-title threat-title-main">{threats.sectionTitle}</div>
 
         <div className="threat-list">
           {threats.items.map((item, index) => (
-            <article className="threat-item" key={item.title}>
+            <article
+              className="threat-item"
+              key={item.title}
+              style={{ "--stagger": `${index * 70 + 120}ms` } as CSSProperties}
+            >
               <div className="threat-number">{String(index + 1).padStart(2, "0")}</div>
               <div>
                 <div className="threat-title">{item.title}</div>
@@ -31,8 +36,12 @@ export default function ThreatsRiskSection({ threats }: ThreatsRiskSectionProps)
       <aside className="risk-panel">
         <div className="risk-panel-title">{threats.riskPanel.title}</div>
 
-        {threats.riskPanel.regions.map((region) => (
-          <div className="risk-row" key={region.label}>
+        {threats.riskPanel.regions.map((region, index) => (
+          <div
+            className="risk-row"
+            key={region.label}
+            style={{ "--stagger": `${index * 85 + 220}ms` } as CSSProperties}
+          >
             <div className="risk-row-top">
               <span className="risk-row-label">{region.label}</span>
               <span className="risk-row-val" style={{ color: `var(--${region.color})` }}>

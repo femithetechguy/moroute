@@ -57,6 +57,7 @@ export interface FeatureItem {
 
 export interface AppAssets {
   brandLogoPath: string;
+  brandLogoAlt: string;
   pageTexturePath: string;
   heroTexturePath: string;
 }
@@ -108,6 +109,29 @@ export interface MorouteContent {
       badgePath: string;
       alt: string;
     }>;
+  };
+  contact: {
+    sectionTag: string;
+    title: string;
+    description: string;
+    form: {
+      nameLabel: string;
+      namePlaceholder: string;
+      emailLabel: string;
+      emailPlaceholder: string;
+      messageLabel: string;
+      messagePlaceholder: string;
+      submitLabel: string;
+      sendingLabel: string;
+      sentLabel: string;
+      helperText: string;
+      sendingMessage: string;
+      successMessage: string;
+    };
+  };
+  ui: {
+    backToTopLabel: string;
+    backToTopAriaLabel: string;
   };
   footer: {
     links: LinkItem[];

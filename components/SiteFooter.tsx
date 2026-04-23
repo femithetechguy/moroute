@@ -4,13 +4,14 @@ type SiteFooterProps = {
   brand: string;
   footer: MorouteContent["footer"];
   logoPath: string;
+  logoAlt: string;
 };
 
-export default function SiteFooter({ brand, footer, logoPath }: SiteFooterProps) {
+export default function SiteFooter({ brand, footer, logoPath, logoAlt }: SiteFooterProps) {
   return (
-    <footer id="contact">
+    <footer data-reveal>
       <a href="#home" className="logo logo-small" aria-label={brand}>
-        <img src={logoPath} alt={`${brand} logo`} className="brand-logo brand-logo-footer" />
+        <img src={logoPath} alt={logoAlt} className="brand-logo brand-logo-footer" />
       </a>
 
       <ul className="footer-links">
