@@ -126,6 +126,19 @@ export default function NavBar({ brand, nav, logoPath, logoAlt }: NavBarProps) {
         </div>
       </nav>
 
+      <button
+        className={`nav-fab-toggle${isOpen ? " is-open" : ""}`}
+        type="button"
+        aria-expanded={isOpen}
+        aria-controls={mobileMenuId}
+        aria-label={isOpen ? "Close navigation menu" : "Open navigation menu"}
+        onClick={() => setIsOpen((previous) => !previous)}
+      >
+        <span />
+        <span />
+        <span />
+      </button>
+
       <div className={`nav-mobile-menu${isOpen ? " is-open" : ""}`} id={mobileMenuId} aria-hidden={!isOpen}>
         <div className="nav-mobile-head">
           <div className="nav-mobile-kicker">Quick Navigate</div>
