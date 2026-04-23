@@ -7,8 +7,8 @@
     "heroTexturePath": "/images/textures/hero-lines.svg"
   },
   "meta": {
-    "title": "MoRoute - Road Safety App",
-    "description": "Find safer routes with real-time threat updates, SOS support, and trusted travel intelligence.",
+    "title": "MoRoute | Safer Travel Intelligence for Every Journey",
+    "description": "Travel safer anywhere with live road alerts, safer route guidance, SOS support, and offline-ready tools.",
     "siteUrl": "https://moroute-demo.fttgsolutions.com"
   },
   "nav": {
@@ -18,35 +18,35 @@
       { "label": "Contact", "href": "#contact" }
     ],
     "cta": {
-      "label": "Get the app",
+      "label": "Download App",
       "href": "#download"
     }
   },
   "hero": {
-    "badge": "Real-time safety monitoring for travelers.",
+    "badge": "Safer travel, anywhere you go.",
     "title": {
-      "lineOne": "Find the safest way to your",
+      "lineOne": "Choose smarter, safer",
       "lineTwoPrefix": "",
-      "lineTwoHighlight": "destination",
-      "lineThree": "Your safety and peace of mind always come first."
+      "lineTwoHighlight": "route",
+      "lineThree": "See risks early and travel with more confidence."
     },
-    "description": "Whether you need route risk alerts, live incident updates, or emergency support, MoRoute helps you stay aware and protected on every trip.",
+    "description": "Get live incident alerts, route safety scores, and one-tap SOS support. Built for global use, with strong current use cases in Nigeria.",
     "actions": {
       "primary": {
-        "label": "playstore",
+        "label": "Android App",
         "href": "#download"
       },
       "secondary": {
-        "label": "applestore",
+        "label": "iOS App",
         "href": "#download"
       }
     },
     "map": {
       "texturePath": "/images/textures/map-noise.svg",
-      "safeChip": "Safe route active",
-      "incidentChip": "Incident - 1.2 km ahead",
+      "safeChip": "Safer route selected",
+      "incidentChip": "Alert - 1.2 km ahead",
       "info": {
-        "etaLabel": "ETA via safe route",
+        "etaLabel": "Safer ETA",
         "etaValue": "18 min",
         "etaExtra": "12.6 km",
         "safetyLabel": "Safety score",
@@ -60,114 +60,114 @@
     {
       "value": "87,321",
       "suffix": "+",
-      "label": "Kidnappings reported globally in 2022"
+      "label": "Kidnapping cases documented globally in one recent year"
     },
     {
       "value": "1.19",
       "suffix": "m+",
-      "label": "Annual road deaths worldwide"
+      "label": "Road traffic deaths globally each year"
     },
     {
       "value": "3",
       "suffix": "%",
-      "label": "Estimated risk level for monitored high-alert corridors"
+      "label": "Monitored roads flagged high risk"
     }
   ],
   "features": {
-    "sectionTag": "App Features",
-    "sectionTitle": "MoRoute is a mobile application designed to enhance road safety and security for travelers in Nigeria. The app integrates incident reporting, proactive ahead-of-route alerts, emergency SOS features, and resilience in low connectivity or low battery conditions. We also have a feature where road users can request service when they need it on the app.",
+    "sectionTag": "",
+    "sectionTitle": "Everything you need to plan safer trips, avoid risk, and get help fast.",
     "items": [
       {
         "icon": "megaphone",
         "tone": "orange",
         "name": "Report Incident",
-        "description": "Report and view kidnappings, robberies, accidents, roadblocks, and checkpoints."
+        "description": "Report suspicious activity, crashes, and roadblocks in seconds."
       },
       {
         "icon": "shield-alert",
         "tone": "red",
         "name": "SOS Emergency",
-        "description": "One-tap distress signal to emergency contacts and authorities with GPS location."
+        "description": "Send a one-tap SOS with your live location."
       },
       {
         "icon": "megaphone",
         "tone": "blue",
         "name": "Community Reports",
-        "description": "Crowdsourced real-time safety information from other users."
+        "description": "See real-time reports from nearby road users."
       },
       {
         "icon": "route",
         "tone": "orange",
         "name": "Route Planning",
-        "description": "Compare routes by safety score, get weather updates, and use offline maps."
+        "description": "Compare routes by safety, time, and road conditions."
       },
       {
         "icon": "shield-check",
         "tone": "purple",
         "name": "Checkpoint Verification",
-        "description": "Verify if police or military checkpoints are legitimate to avoid fake checkpoints."
+        "description": "Identify verified checkpoints and avoid suspicious stops."
       },
       {
         "icon": "chart-line",
         "tone": "teal",
         "name": "Trip Analytics",
-        "description": "Track journey safety, view trip history, and understand route risk patterns."
+        "description": "Review trip history and spot repeat risk patterns."
       },
       {
         "icon": "shield-check",
         "tone": "green",
         "name": "Safety Snapshots",
-        "description": "Capture and store evidence such as photos and videos with location context."
+        "description": "Save location-tagged photo and video evidence quickly."
       },
       {
         "icon": "map-pinned",
         "tone": "blue",
         "name": "Live Safety Map",
-        "description": "Visual map showing active incidents, danger zones, and verified checkpoints."
+        "description": "Track incidents and safer corridors on a live map."
       },
       {
         "icon": "shield-alert",
         "tone": "red",
         "name": "Emergency Contacts",
-        "description": "Store and auto-alert trusted contacts during emergencies."
+        "description": "Auto-alert trusted contacts during emergencies."
       }
     ]
   },
   "threats": {
-    "sectionTag": "Threat Intelligence",
-    "sectionTitle": "We monitor critical road threats in real time",
+    "sectionTag": "",
+    "sectionTitle": "Know the main road risks before you set out.",
     "items": [
       {
-        "title": "Kidnapping / Abduction",
-        "description": "Direct kidnappings and militant ambushes in high-risk road corridors target both rural and intercity travelers. Examples include repeated incidents along isolated highways where weak patrol coverage enables fast escape routes."
+        "title": "Kidnapping and Abduction",
+        "description": "Remote or low-monitoring corridors can become abduction hotspots. Early alerts help you reroute sooner."
       },
       {
         "title": "Highway Robbery and Armed Assault",
-        "description": "Criminal groups target vehicles at fake checkpoints, road choke points, and low-visibility areas. Attackers use stop-and-search tactics, forced passenger transfers, and rapid escape support vehicles."
+        "description": "Robberies often happen at choke points and fake checkpoints. Incident alerts help you avoid high-risk areas."
       },
       {
-        "title": "Assaults and Violent Contact Crimes",
-        "description": "Street-level violent attacks, robbery, and harassment occur around bus stops, market zones, and roadside wait points. These incidents increase where lighting, surveillance, and emergency response are limited."
+        "title": "Violent Street and Transit Incidents",
+        "description": "Assault and harassment risk can rise around transit points and unlit zones, especially at night."
       },
       {
-        "title": "Road Traffic Crashes and Injuries",
-        "description": "Global road crashes cause over 1 million deaths yearly and millions of serious injuries. High-speed corridors and poor lane discipline remain major contributors in many monitored regions."
+        "title": "Road Traffic Crashes and Serious Injuries",
+        "description": "Poor visibility and unstable road conditions increase crash risk. Safer route suggestions reduce exposure."
       }
     ],
     "riskPanel": {
-      "title": "Regional safety trend index",
+      "title": "Regional risk trend index (illustrative)",
       "regions": [
-        { "label": "West Africa", "score": 9.2, "color": "red" },
-        { "label": "Latin America", "score": 8.4, "color": "orange" },
-        { "label": "Southern Africa", "score": 7.8, "color": "orange" },
-        { "label": "Southeast Asia", "score": 5.1, "color": "green" },
-        { "label": "Eastern Europe", "score": 3.7, "color": "green" }
+        { "label": "Low-visibility highway corridors", "score": 8.8, "color": "red" },
+        { "label": "Peri-urban transit routes", "score": 7.9, "color": "orange" },
+        { "label": "Border and checkpoint approaches", "score": 7.1, "color": "orange" },
+        { "label": "Major city interstates", "score": 5.3, "color": "green" },
+        { "label": "Well-monitored metro corridors", "score": 3.9, "color": "green" }
       ]
     }
   },
   "cta": {
-    "title": "Get in Touch and Download the App",
-    "description": "Whether you want to stay informed about potential risks or access real-time safety features, we are here to protect you. Download our app to monitor your surroundings or send us a message if you need assistance.",
+    "title": "Download MoRoute",
+    "description": "Get safer route guidance, live road alerts, and one-tap emergency support.",
     "stores": [
       {
         "name": "App Store",
@@ -184,22 +184,22 @@
     ]
   },
   "contact": {
-    "sectionTag": "Contact Us",
-    "title": "Send us a message",
-    "description": "Need help, want to partner, or have safety feedback? Fill the form and our team will get back to you quickly.",
+    "sectionTag": "",
+    "title": "Need Help or Want to Partner?",
+    "description": "Send us a message. We usually respond within 24 hours.",
     "form": {
       "nameLabel": "Full name",
-      "namePlaceholder": "Enter your full name",
+      "namePlaceholder": "Jane Doe",
       "emailLabel": "Email address",
-      "emailPlaceholder": "you@example.com",
+      "emailPlaceholder": "name@company.com",
       "messageLabel": "Message",
-      "messagePlaceholder": "Tell us how we can help you...",
-      "submitLabel": "Send message",
+      "messagePlaceholder": "Share your question, feedback, or support request...",
+      "submitLabel": "Send Request",
       "sendingLabel": "Sending...",
-      "sentLabel": "Sent",
-      "helperText": "We usually reply within 24 hours.",
-      "sendingMessage": "Submitting your message...",
-      "successMessage": "Thanks! Your message has been received."
+      "sentLabel": "Request Sent",
+      "helperText": "Response time: usually within 24 hours.",
+      "sendingMessage": "Sending your request...",
+      "successMessage": "Thanks for reaching out. Our team will contact you shortly."
     }
   },
   "ui": {
@@ -212,6 +212,6 @@
       { "label": "Features", "href": "#features" },
       { "label": "Contact", "href": "#contact" }
     ],
-    "copyright": "Copyright 2026 MoRoute. Safe travel for every journey."
+    "copyright": "Copyright 2026 MoRoute. Safer routes. Stronger journeys."
   }
 }

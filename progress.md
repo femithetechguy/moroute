@@ -21,6 +21,15 @@
 - Added persistent mobile navigation access with a floating hamburger trigger and restored top navbar hamburger visibility.
 - Improved mobile sticky navigation behavior so menu access remains natural and reachable while scrolling.
 - Verified clean production builds after changes (`rm -rf .next && npm run build`).
+- Rewrote site copy for global clarity while preserving Nigeria as current primary use-case context.
+- Made section kicker labels optional and simplified section headings for cleaner one-page scanning.
+- Improved anchor navigation behavior so clicked sections align below sticky navigation on desktop and mobile.
+- Applied consistent offset-aware scrolling for header, mobile menu, and footer links.
+- Converted features screenshot block into a horizontal, snap-scrolling gallery for quick browsing.
+- Added gallery affordances: edge-fade cues and live viewed-percentage progress indicator.
+- Added full-screen screenshot lightbox with keyboard navigation, swipe support, and explicit close controls.
+- Rendered lightbox via body-level portal to prevent clipping/centering issues from transformed section context.
+- Separated quick-browse and expand actions by introducing explicit per-card expand controls.
 
 ## Pending
 - Deploy to Vercel production.
