@@ -14,6 +14,8 @@
 - Updated CTA store links in JSON to temporary official destinations for App Store and Google Play.
 - Added Open Graph and Twitter metadata/image routes for stronger cross-platform share previews (including WhatsApp).
 - Made production site URL JSON-driven via `meta.siteUrl` and wired metadata to read from content.
+- Added SEO foundation with `sitemap.xml`, `robots.txt`, and homepage JSON-LD structured data.
+- Centralized SEO URL resolution in shared helper logic to keep metadata and crawler routes in sync.
 - Added `vercel.json` for Vercel deployment configuration.
 - Verified clean production builds after changes (`rm -rf .next && npm run build`).
 
