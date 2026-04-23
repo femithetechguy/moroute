@@ -2,28 +2,11 @@ import type { Metadata } from "next";
 import { Plus_Jakarta_Sans, Sora } from "next/font/google";
 import contentData from "@/content/moroute-content.json";
 import type { MorouteContent } from "@/types/content";
+import { getMetadataBase } from "@/lib/seo";
 import "./globals.css";
 
 const content = contentData as MorouteContent;
-
-const fallbackSiteUrl = "https://moroute-demo.fttgsolutions.com";
-
-function resolveMetadataBase() {
-  const rawSiteUrl = content.meta.siteUrl?.trim();
-  if (!rawSiteUrl) {
-    return new URL(fallbackSiteUrl);
-  }
-
-  const siteUrl = /^https?:\/\//i.test(rawSiteUrl) ? rawSiteUrl : `https://${rawSiteUrl}`;
-
-  try {
-    return new URL(siteUrl);
-  } catch {
-    return new URL(fallbackSiteUrl);
-  }
-}
-
-const metadataBase = resolveMetadataBase();
+const metadataBase = getMetadataBase();
 
 const plusJakartaSans = Plus_Jakarta_Sans({
   subsets: ["latin"],
