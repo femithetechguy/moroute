@@ -6,6 +6,25 @@ import "./globals.css";
 
 const content = contentData as MorouteContent;
 
+const fallbackSiteUrl = "https://moroute-demo.fttgsolutions.com";
+
+function resolveMetadataBase() {
+  const rawSiteUrl = content.meta.siteUrl?.trim();
+  if (!rawSiteUrl) {
+    return new URL(fallbackSiteUrl);
+  }
+
+  const siteUrl = /^https?:\/\//i.test(rawSiteUrl) ? rawSiteUrl : `https://${rawSiteUrl}`;
+
+  try {
+    return new URL(siteUrl);
+  } catch {
+    return new URL(fallbackSiteUrl);
+  }
+}
+
+const metadataBase = resolveMetadataBase();
+
 const plusJakartaSans = Plus_Jakarta_Sans({
   subsets: ["latin"],
   variable: "--font-body",
@@ -19,8 +38,34 @@ const sora = Sora({
 });
 
 export const metadata: Metadata = {
+  metadataBase,
+  applicationName: content.brand,
   title: content.meta.title,
-  description: content.meta.description
+  description: content.meta.description,
+  alternates: {
+    canonical: "/"
+  },
+  openGraph: {
+    type: "website",
+    siteName: content.brand,
+    title: content.meta.title,
+    description: content.meta.description,
+    url: "/",
+    images: [
+      {
+        url: "/opengraph-image",
+        width: 1200,
+        height: 630,
+        alt: `${content.brand} app preview`
+      }
+    ]
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: content.meta.title,
+    description: content.meta.description,
+    images: ["/twitter-image"]
+  }
 };
 
 export default function RootLayout({
