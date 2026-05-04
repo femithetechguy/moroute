@@ -63,5 +63,10 @@
 - Added shimmer sweep (`::after` pseudo-element) and lift + green shadow on hover; guarded with `@media (hover: hover)` to avoid sticky states on touch devices; `scale(0.97)` active press for mobile feedback.
 - Added "or send a message" ruled divider between contact detail chips and the form to visually separate the two interaction paths.
 
+- Created `docs/google-workspace-email.md` — full setup guide for sending contact form emails via the Gmail API (service account + domain-wide delegation as primary path; OAuth2 refresh token as fallback), including required env vars, Workspace Admin steps, and planned API route structure.
+
 ## Pending
+- Obtain Google Cloud service account credentials and add to `.env.local` / Vercel env vars.
+- Implement `app/api/contact/route.ts` to send form submissions via Gmail API.
+- Wire `ContactSection.tsx` form to POST to the API route (replace current timeout simulation).
 - Deploy to Vercel production.
