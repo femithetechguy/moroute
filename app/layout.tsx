@@ -2,11 +2,12 @@ import type { Metadata } from "next";
 import { Plus_Jakarta_Sans, Sora } from "next/font/google";
 import contentData from "@/content/moroute-content.json";
 import type { MorouteContent } from "@/types/content";
-import { getMetadataBase } from "@/lib/seo";
+import { getMetadataBase, getSiteUrl } from "@/lib/seo";
 import "./globals.css";
 
 const content = contentData as MorouteContent;
 const metadataBase = getMetadataBase();
+const siteUrl = getSiteUrl();
 
 const plusJakartaSans = Plus_Jakarta_Sans({
   subsets: ["latin"],
@@ -36,10 +37,18 @@ export const metadata: Metadata = {
     url: "/",
     images: [
       {
-        url: "/opengraph-image",
+        url: `${siteUrl}/images/brand/preview_portrait.png`,
+        width: 1080,
+        height: 1080,
+        alt: `${content.brand} - Smarter routes. Safer trips. Better outcomes.`,
+        type: "image/png"
+      },
+      {
+        url: `${siteUrl}/images/brand/preview_landscape.png`,
         width: 1200,
         height: 630,
-        alt: `${content.brand} app preview`
+        alt: `${content.brand} app preview`,
+        type: "image/png"
       }
     ]
   },
@@ -47,7 +56,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: content.meta.title,
     description: content.meta.description,
-    images: ["/twitter-image"]
+    images: [`${siteUrl}/images/brand/preview_landscape.png`]
   }
 };
 
