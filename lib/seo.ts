@@ -21,6 +21,11 @@ function normalizeSiteUrl(rawSiteUrl?: string) {
 }
 
 export function getSiteUrl() {
+  // Check env var first (Vercel), fall back to content.json
+  const envUrl = process.env.NEXT_PUBLIC_SITE_URL;
+  if (envUrl?.trim()) {
+    return normalizeSiteUrl(envUrl);
+  }
   return normalizeSiteUrl(content.meta.siteUrl);
 }
 

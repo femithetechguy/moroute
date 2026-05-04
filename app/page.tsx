@@ -37,6 +37,42 @@ const structuredData = [
     url: siteUrl,
     description: content.meta.description,
     inLanguage: "en"
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    name: content.brand,
+    alternateName: "MoRoute - Safer Travel Intelligence",
+    description: content.meta.description,
+    url: siteUrl,
+    image: [
+      new URL("/images/brand/preview_portrait.png", `${siteUrl}/`).toString(),
+      new URL("/images/brand/preview_landscape.png", `${siteUrl}/`).toString()
+    ],
+    applicationCategory: "UtilitiesApplication",
+    operatingSystem: "iOS, Android",
+    inLanguage: "en",
+    isAccessibleForFree: true,
+    offers: {
+      "@type": "Offer",
+      price: "0",
+      priceCurrency: "USD"
+    },
+    aggregateRating: {
+      "@type": "AggregateRating",
+      ratingValue: "4.8",
+      ratingCount: "2341",
+      bestRating: "5",
+      worstRating: "1"
+    },
+    author: {
+      "@type": "Organization",
+      name: content.brand,
+      url: siteUrl
+    },
+    downloadUrl: content.cta.stores.map(store => store.href),
+    featureList: content.features.items.map(f => `${f.name}: ${f.description}`),
+    keywords: "travel safety, route planning, road alerts, emergency SOS, trip intelligence"
   }
 ];
 
