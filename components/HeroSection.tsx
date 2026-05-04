@@ -1,12 +1,14 @@
 import type { HeroContent } from "@/types/content";
+import type { MorouteContent } from "@/types/content";
 import MapMockup from "@/components/MapMockup";
 
 type HeroSectionProps = {
   hero: HeroContent;
   texturePath: string;
+  screenshots: MorouteContent["screenshots"];
 };
 
-export default function HeroSection({ hero, texturePath }: HeroSectionProps) {
+export default function HeroSection({ hero, texturePath, screenshots }: HeroSectionProps) {
   const lineTwoPrefix = hero.title.lineTwoPrefix ? `${hero.title.lineTwoPrefix} ` : "";
 
   return (
@@ -44,7 +46,7 @@ export default function HeroSection({ hero, texturePath }: HeroSectionProps) {
         </div>
       </div>
 
-      <MapMockup map={hero.map} />
+      <MapMockup map={hero.map} screenshots={screenshots} />
     </section>
   );
 }

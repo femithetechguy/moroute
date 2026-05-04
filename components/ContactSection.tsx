@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState, type FormEvent } from "react";
+import { Mail, Phone } from "lucide-react";
 import type { MorouteContent } from "@/types/content";
 
 type ContactSectionProps = {
@@ -49,6 +50,33 @@ export default function ContactSection({ contact }: ContactSectionProps) {
       {hasSectionTag ? <p className="section-tag">{contact.sectionTag}</p> : null}
       <h2 className="contact-title">{contact.title}</h2>
       <p className="contact-description">{contact.description}</p>
+
+      <div className="contact-details">
+        <a href={contact.phone.href} className="contact-detail-item">
+          <span className="contact-detail-icon contact-detail-icon--phone" aria-hidden="true">
+            <Phone size={16} strokeWidth={2.3} />
+          </span>
+          <span className="contact-detail-body">
+            <span className="contact-detail-label">{contact.phone.label}</span>
+            <span className="contact-detail-value">{contact.phone.value}</span>
+          </span>
+        </a>
+        <a href={contact.email.href} className="contact-detail-item">
+          <span className="contact-detail-icon contact-detail-icon--email" aria-hidden="true">
+            <Mail size={16} strokeWidth={2.3} />
+          </span>
+          <span className="contact-detail-body">
+            <span className="contact-detail-label">{contact.email.label}</span>
+            <span className="contact-detail-value">{contact.email.value}</span>
+          </span>
+        </a>
+      </div>
+
+      <div className="contact-divider" aria-hidden="true">
+        <span />
+        <p>or send a message</p>
+        <span />
+      </div>
 
       <form className="contact-form" onSubmit={handleSubmit}>
         <div className="contact-grid">
