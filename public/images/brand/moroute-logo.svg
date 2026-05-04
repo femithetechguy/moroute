@@ -1,0 +1,7 @@
+<svg width="168" height="32" viewBox="0 0 168 32" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="morouteTitle">
+  <title id="morouteTitle">MoRoute logo</title>
+  <rect x="1" y="4" width="24" height="24" rx="7" fill="#0D1829" stroke="#2AFB8A"/>
+  <path d="M8 20V12H10.2L13.1 16.8L16 12H18.2V20H16.2V15.4L13.9 19.1H12.3L10 15.4V20H8Z" fill="#E8F0FF"/>
+  <circle cx="20.5" cy="10.5" r="2.5" fill="#2AFB8A"/>
+  <text x="34" y="22" fill="#E8F0FF" font-family="Syne, sans-serif" font-size="22" font-weight="800" letter-spacing="-0.5">Mo<tspan fill="#2AFB8A">Route</tspan></text>
+</svg>
