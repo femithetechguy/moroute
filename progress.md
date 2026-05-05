@@ -51,6 +51,22 @@
   - Download URLs for App Store and Google Play
   - Keywords for better SERP visibility
 - **SEO now includes rich snippets for app discovery** ✅
+- Fixed lingering references to old dynamic OG image routes; confirmed all metadata now uses static images from `/public/`
+- Added phone and email contact details rendering to ContactSection component (previously defined in JSON but not displayed on page)
+- Centralized all screenshot configuration into `content/moroute-content.json` under a new `screenshots` key (`primaryGallery`, `mainMapShot`, `floatingShots`, `screenShotAltPrefix`) — previously hardcoded in component files.
+- Refactored `MapMockup` and `HeroSection` to accept a `screenshots` prop instead of using hardcoded image paths, making hero visuals content-driven.
+- Refactored `FeaturesSection` gallery to derive primary shots and alt text prefix from the `screenshots` content config rather than inline constants.
+- Added `phone` and `email` contact fields (label, value, href) to `content/moroute-content.json`.
+- Extended TypeScript types (`types/content.ts`) with `ImageItem`, `ScreenshotConfig` interfaces and `phone`/`email` fields on the `contact` type.
+- Added `Phone` and `Mail` lucide icons to contact detail items; restructured each item as icon bubble + label/value body (horizontal layout).
+- Styled icon bubbles with tinted backgrounds (green for phone, blue for email) and a micro-rotation animation on hover.
+- Added shimmer sweep (`::after` pseudo-element) and lift + green shadow on hover; guarded with `@media (hover: hover)` to avoid sticky states on touch devices; `scale(0.97)` active press for mobile feedback.
+- Added "or send a message" ruled divider between contact detail chips and the form to visually separate the two interaction paths.
+
+- Created `docs/google-workspace-email.md` — full setup guide for sending contact form emails via the Gmail API (service account + domain-wide delegation as primary path; OAuth2 refresh token as fallback), including required env vars, Workspace Admin steps, and planned API route structure.
 
 ## Pending
+- Obtain Google Cloud service account credentials and add to `.env.local` / Vercel env vars.
+- Implement `app/api/contact/route.ts` to send form submissions via Gmail API.
+- Wire `ContactSection.tsx` form to POST to the API route (replace current timeout simulation).
 - Deploy to Vercel production.

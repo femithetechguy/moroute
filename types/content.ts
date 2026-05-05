@@ -62,6 +62,18 @@ export interface AppAssets {
   heroTexturePath: string;
 }
 
+export interface ImageItem {
+  src: string;
+  alt: string;
+}
+
+export interface ScreenshotConfig {
+  primaryGallery: ImageItem[];
+  mainMapShot: ImageItem;
+  floatingShots: ImageItem[];
+  screenShotAltPrefix: string;
+}
+
 export interface ThreatItem {
   title: string;
   description: string;
@@ -76,6 +88,7 @@ export interface RiskRegion {
 export interface MorouteContent {
   brand: string;
   assets: AppAssets;
+  screenshots: ScreenshotConfig;
   meta: {
     title: string;
     description: string;
@@ -128,6 +141,16 @@ export interface MorouteContent {
       helperText: string;
       sendingMessage: string;
       successMessage: string;
+    };
+    phone: {
+      label: string;
+      value: string;
+      href: string;
+    };
+    email: {
+      label: string;
+      value: string;
+      href: string;
     };
   };
   ui: {

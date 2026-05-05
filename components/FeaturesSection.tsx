@@ -9,6 +9,7 @@ import { ChartLine, ChevronLeft, ChevronRight, MapPinned, Maximize2, Megaphone, 
 
 type FeaturesSectionProps = {
   features: MorouteContent["features"];
+  screenshots: MorouteContent["screenshots"];
 };
 
 const ICONS: Record<FeatureIconName, LucideIcon> = {
@@ -35,20 +36,20 @@ const EXTRA_SCREENSHOT_NAMES = [
   "creenshot61.jpeg"
 ];
 
-const FEATURE_SHOWCASE_SHOTS = [
-  { src: "/images/homescreen.jpg", alt: "MoRoute dashboard home screen" },
-  { src: "/images/manage_service_feature.png", alt: "MoRoute services and incident actions" },
+const buildFeatureShowcaseShots = (screenshots: MorouteContent["screenshots"]) => [
+  ...screenshots.primaryGallery,
   ...SCREENSHOT_NUMBERS.map((number) => ({
     src: `/images/somescreenshot/screenshot${number}.jpeg`,
-    alt: `MoRoute app screen ${number}`
+    alt: `${screenshots.screenShotAltPrefix} ${number}`
   })),
   ...EXTRA_SCREENSHOT_NAMES.map((name, index) => ({
     src: `/images/somescreenshot/${name}`,
-    alt: `MoRoute app screen ${SCREENSHOT_NUMBERS.length + index + 1}`
+    alt: `${screenshots.screenShotAltPrefix} ${SCREENSHOT_NUMBERS.length + index + 1}`
   }))
 ];
 
-export default function FeaturesSection({ features }: FeaturesSectionProps) {
+export default function FeaturesSection({ features, screenshots }: FeaturesSectionProps) {
+  const FEATURE_SHOWCASE_SHOTS = buildFeatureShowcaseShots(screenshots);
   const isLongSectionCopy = features.sectionTitle.length > 120;
   const hasSectionTag = features.sectionTag.trim().length > 0;
   const showcaseRef = useRef<HTMLDivElement | null>(null);
