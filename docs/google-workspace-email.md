@@ -26,31 +26,41 @@ Gmail API is enabled on the `MorouteApp` Google Cloud project.
 
 ---
 
-## Step 2 — OAuth 2.0 Client ID (already done ✅)
+## Step 2 — OAuth 2.0 Client IDs (already done ✅)
 
 OAuth consent screen configured as **Internal** (Workspace org users only, no verification needed).
 
-OAuth 2.0 Client ID created:
-- **Name:** `moroute-contact`
-- **Type:** Desktop app
-- **Client ID:** `707469193370-ln4mnbpm9o5blc3jh9bumhoas1bcf544.apps.googleusercontent.com`
-- **Client Secret:** stored in `.env.local` as `GOOGLE_CLIENT_SECRET`
+Two OAuth clients created — one for the app, one just to generate the refresh token via OAuth Playground:
+
+| Name | Type | Purpose |
+|------|------|---------|
+| `moroute-contact` | Desktop app | Used by the Next.js API route in production |
+| `moroute-playground` | Web application | Used only in OAuth Playground to get the refresh token |
+
+**Why two clients?** Desktop app clients don't support custom redirect URIs, so OAuth Playground (which needs `https://developers.google.com/oauthplayground` as a redirect URI) rejects them with `redirect_uri_mismatch`. The Web app client has that URI whitelisted. The refresh token generated via either client works the same way in the app.
+
+- **`moroute-contact` Client ID:** `707469193370-ln4mnbpm9o5blc3jh9bumhoas1bcf544.apps.googleusercontent.com`
+- **`moroute-contact` Client Secret:** stored in `.env.local` as `GOOGLE_CLIENT_SECRET`
+- **`moroute-playground`** credentials: used only in OAuth Playground, not stored in `.env.local`
 
 ---
 
 ## Step 3 — Get a refresh token (pending ⏳)
 
+Use the **`moroute-playground`** (Web app) Client ID + Secret in OAuth Playground — not the Desktop app credentials.
+
 1. Go to [OAuth 2.0 Playground](https://developers.google.com/oauthplayground)
-2. Click the **gear icon** (top right) → check **"Use your own OAuth credentials"** → paste Client ID + Secret
+2. Click the **gear icon** (top right) → check **"Use your own OAuth credentials"** → paste the `moroute-playground` Client ID + Secret
 3. In the scope input paste:
    ```
    https://www.googleapis.com/auth/gmail.send
    ```
-4. Click **Authorize APIs** → sign in with the Workspace account that will send emails → allow access
+4. Click **Authorize APIs** → sign in with `support@moroute.com` → allow access
 5. Click **Exchange authorization code for tokens**
 6. Copy the **Refresh token** → paste into `GOOGLE_REFRESH_TOKEN` in `.env.local`
 
-> The refresh token does not expire unless the user revokes access or the OAuth client is deleted.
+> The refresh token does not expire unless the user revokes access or the OAuth client is deleted.  
+> The token works with the `moroute-contact` Desktop app client in production even though it was generated via the Web app client.
 
 ---
 
@@ -100,8 +110,9 @@ The rest of the route (RFC 2822 email building, validation, error handling) stay
 | Enable Gmail API | ✅ Done |
 | Create service account | ✅ Done (unused — blocked by org policy) |
 | Create OAuth consent screen | ✅ Done (Internal) |
-| Create OAuth 2.0 Client ID | ✅ Done |
-| Get refresh token via OAuth Playground | ⏳ Pending |
+| Create OAuth 2.0 Client ID (`moroute-contact` Desktop app) | ✅ Done |
+| Create OAuth 2.0 Client ID (`moroute-playground` Web app) | ✅ Done |
+| Get refresh token via OAuth Playground | ⏳ Pending — use `moroute-playground` credentials |
 | Fill `GOOGLE_SEND_AS` + `CONTACT_FORM_TO` | ⏳ Pending |
 | Update API route to use OAuth2 | ⏳ Pending |
 | Add env vars to Vercel | ⏳ Pending |

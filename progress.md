@@ -70,6 +70,16 @@
 - Added portal-based toast notifications (bottom-right, slide-up entry) with success/error variants, animated shrinking progress bar, auto-dismiss after 5 s, and manual close button.
 - Installed `googleapis` dependency.
 
+- Pivoted Gmail API auth from service account to OAuth2 refresh token — org policy `iam.disableServiceAccountKeyCreation` blocked JSON key downloads on the MorouteApp Workspace org.
+- Created OAuth consent screen (Internal) on `MorouteApp` Google Cloud project.
+- Created `moroute-contact` OAuth 2.0 client (Desktop app) — used by the Next.js API route; Client ID + Secret stored in `.env.local`.
+- Created `moroute-playground` OAuth 2.0 client (Web app) with `https://developers.google.com/oauthplayground` redirect URI — used only to generate the refresh token via OAuth Playground (Desktop app type doesn't support custom redirect URIs).
+- Updated `.env.local` with OAuth2 keys (`GOOGLE_CLIENT_ID`, `GOOGLE_CLIENT_SECRET`, `GOOGLE_REFRESH_TOKEN`, `GOOGLE_SEND_AS`, `CONTACT_FORM_TO`); Client ID + Secret filled in, remaining values pending.
+- Updated `docs/google-workspace-email.md` with full strategy history, two-client rationale, and step-by-step resume instructions.
+
 ## Pending
-- Obtain Google Cloud service account credentials and add to `.env.local` / Vercel env vars.
+- Get refresh token from OAuth Playground using `moroute-playground` credentials → add to `GOOGLE_REFRESH_TOKEN` in `.env.local`.
+- Fill `GOOGLE_SEND_AS` and `CONTACT_FORM_TO` in `.env.local`.
+- Update `app/api/contact/route.ts` to use OAuth2 (`google.auth.OAuth2`) instead of service account JWT.
+- Add all env vars to Vercel environment variables.
 - Deploy to Vercel production.
