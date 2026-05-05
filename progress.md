@@ -65,8 +65,11 @@
 
 - Created `docs/google-workspace-email.md` — full setup guide for sending contact form emails via the Gmail API (service account + domain-wide delegation as primary path; OAuth2 refresh token as fallback), including required env vars, Workspace Admin steps, and planned API route structure.
 
+- Implemented `app/api/contact/route.ts` — validates POST body, builds RFC 2822 email, sends via Gmail API using service account JWT; returns `503` gracefully when credentials are not yet configured.
+- Wired `ContactSection.tsx` form to POST to `/api/contact`; handles success, API error, and network error branches.
+- Added portal-based toast notifications (bottom-right, slide-up entry) with success/error variants, animated shrinking progress bar, auto-dismiss after 5 s, and manual close button.
+- Installed `googleapis` dependency.
+
 ## Pending
 - Obtain Google Cloud service account credentials and add to `.env.local` / Vercel env vars.
-- Implement `app/api/contact/route.ts` to send form submissions via Gmail API.
-- Wire `ContactSection.tsx` form to POST to the API route (replace current timeout simulation).
 - Deploy to Vercel production.
