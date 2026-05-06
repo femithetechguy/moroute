@@ -119,6 +119,9 @@
 
 - Created `app/icon.svg` — favicon extracted from the logo icon (dark rounded square + M letterform + green dot accent); Next.js 15 picks this up automatically via file-based convention, no layout.tsx changes needed. Full wordmark text excluded since it's unreadable at favicon size.
 
+- Deployed to Vercel Preview (demo) via CLI — build passed, all features verified working: contact form modal, favicon, clean URL navigation, email sending.
+- Preview URL: `https://moroute-euy0upej3-tech-guys-projects-4a517b26.vercel.app`
+
 ## Pending
-- Redeploy to Vercel production.
-- Verify contact form, navigation, and favicon on `https://www.moroute.com` after deploy.
+- Deploy to production (`vercel --prod`) when ready.
+- Verify on `https://www.moroute.com` after production deploy.
