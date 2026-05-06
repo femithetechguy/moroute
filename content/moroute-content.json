@@ -6,6 +6,33 @@
     "pageTexturePath": "/images/textures/page-noise.svg",
     "heroTexturePath": "/images/textures/hero-lines.svg"
   },
+  "screenshots": {
+    "primaryGallery": [
+      {
+        "src": "/images/homescreen.jpg",
+        "alt": "MoRoute dashboard home screen"
+      },
+      {
+        "src": "/images/manage_service_feature.png",
+        "alt": "MoRoute services and incident actions"
+      }
+    ],
+    "mainMapShot": {
+      "src": "/images/somescreenshot/screenshot27.jpeg",
+      "alt": "MoRoute route risk map in the app"
+    },
+    "floatingShots": [
+      {
+        "src": "/images/homescreen.jpg",
+        "alt": "MoRoute home dashboard"
+      },
+      {
+        "src": "/images/manage_service_feature.png",
+        "alt": "MoRoute service actions"
+      }
+    ],
+    "screenShotAltPrefix": "MoRoute app screen"
+  },
   "meta": {
     "title": "MoRoute | Safer Travel Intelligence for Every Journey",
     "description": "Travel safer anywhere with live road alerts, safer route guidance, SOS support, and offline-ready tools.",
@@ -157,11 +184,27 @@
     "riskPanel": {
       "title": "Regional risk trend index (illustrative)",
       "regions": [
-        { "label": "Low-visibility highway corridors", "score": 8.8, "color": "red" },
-        { "label": "Peri-urban transit routes", "score": 7.9, "color": "orange" },
-        { "label": "Border and checkpoint approaches", "score": 7.1, "color": "orange" },
+        {
+          "label": "Low-visibility highway corridors",
+          "score": 8.8,
+          "color": "red"
+        },
+        {
+          "label": "Peri-urban transit routes",
+          "score": 7.9,
+          "color": "orange"
+        },
+        {
+          "label": "Border and checkpoint approaches",
+          "score": 7.1,
+          "color": "orange"
+        },
         { "label": "Major city interstates", "score": 5.3, "color": "green" },
-        { "label": "Well-monitored metro corridors", "score": 3.9, "color": "green" }
+        {
+          "label": "Well-monitored metro corridors",
+          "score": 3.9,
+          "color": "green"
+        }
       ]
     }
   },
@@ -200,6 +243,16 @@
       "helperText": "Response time: usually within 24 hours.",
       "sendingMessage": "Sending your request...",
       "successMessage": "Thanks for reaching out. Our team will contact you shortly."
+    },
+    "phone": {
+      "label": "Call us",
+      "value": "+1 (404) 404-6099",
+      "href": "tel:+14044046099"
+    },
+    "email": {
+      "label": "Email us",
+      "value": "support@moroute.com",
+      "href": "mailto:support@moroute.com"
     }
   },
   "ui": {

@@ -1,7 +1,7 @@
 # Progress
 
 ## Date
-- 2026-05-04 (latest session)
+- 2026-05-05 (latest session)
 
 ## Completed
 - Integrated newly provided app screenshots across hero, features, and CTA sections.
@@ -51,6 +51,45 @@
   - Download URLs for App Store and Google Play
   - Keywords for better SERP visibility
 - **SEO now includes rich snippets for app discovery** ✅
+- Fixed lingering references to old dynamic OG image routes; confirmed all metadata now uses static images from `/public/`
+- Added phone and email contact details rendering to ContactSection component (previously defined in JSON but not displayed on page)
+- Centralized all screenshot configuration into `content/moroute-content.json` under a new `screenshots` key (`primaryGallery`, `mainMapShot`, `floatingShots`, `screenShotAltPrefix`) — previously hardcoded in component files.
+- Refactored `MapMockup` and `HeroSection` to accept a `screenshots` prop instead of using hardcoded image paths, making hero visuals content-driven.
+- Refactored `FeaturesSection` gallery to derive primary shots and alt text prefix from the `screenshots` content config rather than inline constants.
+- Added `phone` and `email` contact fields (label, value, href) to `content/moroute-content.json`.
+- Extended TypeScript types (`types/content.ts`) with `ImageItem`, `ScreenshotConfig` interfaces and `phone`/`email` fields on the `contact` type.
+- Added `Phone` and `Mail` lucide icons to contact detail items; restructured each item as icon bubble + label/value body (horizontal layout).
+- Styled icon bubbles with tinted backgrounds (green for phone, blue for email) and a micro-rotation animation on hover.
+- Added shimmer sweep (`::after` pseudo-element) and lift + green shadow on hover; guarded with `@media (hover: hover)` to avoid sticky states on touch devices; `scale(0.97)` active press for mobile feedback.
+- Added "or send a message" ruled divider between contact detail chips and the form to visually separate the two interaction paths.
+
+- Created `docs/google-workspace-email.md` — full setup guide for sending contact form emails via the Gmail API (service account + domain-wide delegation as primary path; OAuth2 refresh token as fallback), including required env vars, Workspace Admin steps, and planned API route structure.
+
+- Implemented `app/api/contact/route.ts` — validates POST body, builds RFC 2822 email, sends via Gmail API using service account JWT; returns `503` gracefully when credentials are not yet configured.
+- Wired `ContactSection.tsx` form to POST to `/api/contact`; handles success, API error, and network error branches.
+- Added portal-based toast notifications (bottom-right, slide-up entry) with success/error variants, animated shrinking progress bar, auto-dismiss after 5 s, and manual close button.
+- Installed `googleapis` dependency.
+
+- Pivoted Gmail API auth from service account to OAuth2 refresh token — org policy `iam.disableServiceAccountKeyCreation` blocked JSON key downloads on the MorouteApp Workspace org.
+- Created OAuth consent screen (Internal) on `MorouteApp` Google Cloud project.
+- Created `moroute-contact` OAuth 2.0 client (Desktop app) — used by the Next.js API route; Client ID + Secret stored in `.env.local`.
+- Created `moroute-playground` OAuth 2.0 client (Web app) with `https://developers.google.com/oauthplayground` redirect URI — used only to generate the refresh token via OAuth Playground (Desktop app type doesn't support custom redirect URIs).
+- Updated `.env.local` with OAuth2 keys (`GOOGLE_CLIENT_ID`, `GOOGLE_CLIENT_SECRET`, `GOOGLE_REFRESH_TOKEN`, `GOOGLE_SEND_AS`, `CONTACT_FORM_TO`); Client ID + Secret filled in, remaining values pending.
+- Updated `docs/google-workspace-email.md` with full strategy history, two-client rationale, and step-by-step resume instructions.
+
+- **Gmail API contact form fully working end-to-end** ✅
+- Obtained refresh token via OAuth Playground using `moroute-playground` (Web app) client credentials — Desktop app clients reject custom redirect URIs so a separate Web app client was required to generate the token.
+- Discovered and fixed `unauthorized_client` error: refresh token is bound to the OAuth client that generated it. Updated `.env.local` `GOOGLE_CLIENT_ID` + `GOOGLE_CLIENT_SECRET` to use `moroute-playground` credentials (not `moroute-contact`) so they match the refresh token.
+- Filled all remaining `.env.local` values: `GOOGLE_REFRESH_TOKEN`, `GOOGLE_SEND_AS=support@moroute.com`, `CONTACT_FORM_TO=support@moroute.com`.
+- Rewrote `app/api/contact/route.ts` to use `google.auth.OAuth2` with `setCredentials({ refresh_token })` — removes all service account JWT code; library handles automatic access token refresh transparently.
+- Created `app/api/contact/email-templates.ts` with two branded HTML email template functions:
+  - `adminEmailHtml(name, email, message)` — internal notification sent to `support@moroute.com`; dark navy header, green-accented field rows, one-click "Reply to [name]" CTA button.
+  - `confirmationEmailHtml(name, message)` — confirmation sent to the form submitter; dark hero with checkmark, message summary, visit moroute.com CTA.
+  - Both templates use HTML-entity escaping (`esc`) and `nl2br` for user input; table-based layout with inline styles for broad email client compatibility; brand colors (`#0a1e36`, `#16c784`, `#f3f7fb`) matching the site design system.
+- Updated `buildRfc2822` in `route.ts` to accept a `contentType` parameter (defaults to `text/plain`); admin and confirmation emails now sent as `text/html`.
+- Route now sends both emails concurrently via `Promise.all` — one to the team, one to the submitter.
+- Confirmed working: `POST /api/contact 200` with both emails delivered correctly in Gmail.
 
 ## Pending
+- Add all env vars (`GOOGLE_CLIENT_ID`, `GOOGLE_CLIENT_SECRET`, `GOOGLE_REFRESH_TOKEN`, `GOOGLE_SEND_AS`, `CONTACT_FORM_TO`) to Vercel environment variables.
 - Deploy to Vercel production.

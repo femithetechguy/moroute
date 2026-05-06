@@ -89,9 +89,9 @@ export default function Home() {
         logoPath={content.assets.brandLogoPath}
         logoAlt={content.assets.brandLogoAlt}
       />
-      <HeroSection hero={content.hero} texturePath={content.assets.heroTexturePath} />
+      <HeroSection hero={content.hero} texturePath={content.assets.heroTexturePath} screenshots={content.screenshots} />
       <StatsBar stats={content.stats} />
-      <FeaturesSection features={content.features} />
+      <FeaturesSection features={content.features} screenshots={content.screenshots} />
       <ThreatsRiskSection threats={content.threats} />
       <CtaSection cta={content.cta} />
       <ContactSection contact={content.contact} />

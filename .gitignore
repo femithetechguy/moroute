@@ -13,3 +13,9 @@ yarn-error.log*
 pnpm-debug.log*
 .DS_Store
 Thumbs.db
+
+# TypeScript build cache
+tsconfig.tsbuildinfo
+
+# Claude Code local settings (personal permissions, not team-shared)
+.claude/settings.local.json

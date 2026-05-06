@@ -1,27 +1,24 @@
 import type { HeroContent } from "@/types/content";
+import type { MorouteContent } from "@/types/content";
 import type { CSSProperties } from "react";
 
 type MapMockupProps = {
   map: HeroContent["map"];
+  screenshots: MorouteContent["screenshots"];
 };
 
-export default function MapMockup({ map }: MapMockupProps) {
-  const floatingShots = [
-    { src: "/images/homescreen.jpg", alt: "MoRoute home dashboard" },
-    { src: "/images/manage_service_feature.png", alt: "MoRoute service actions" }
-  ];
-
+export default function MapMockup({ map, screenshots }: MapMockupProps) {
   return (
     <div className="map-frame" id="safety-map">
       <div className="map-phone-surface">
-        <img src="/images/somescreenshot/screenshot27.jpeg" alt="MoRoute route risk map in the app" className="map-main-shot" />
+        <img src={screenshots.mainMapShot.src} alt={screenshots.mainMapShot.alt} className="map-main-shot" />
       </div>
       <div className="map-texture" style={{ backgroundImage: `url(${map.texturePath})` }} />
       <div className="map-main-overlay" />
       <div className="map-overlay" />
 
       <div className="map-floating-shots" aria-hidden="true">
-        {floatingShots.map((shot, index) => (
+        {screenshots.floatingShots.map((shot, index) => (
           <div className="map-mini-shot" key={shot.src} style={{ "--stagger": `${index * 150 + 620}ms` } as CSSProperties}>
             <img src={shot.src} alt={shot.alt} loading="lazy" />
           </div>
