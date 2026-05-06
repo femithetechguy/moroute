@@ -45,9 +45,9 @@ Two OAuth clients created — one for the app, one just to generate the refresh 
 
 ---
 
-## Step 3 — Get a refresh token (pending ⏳)
+## Step 3 — Get a refresh token ✅
 
-Use the **`moroute-playground`** (Web app) Client ID + Secret in OAuth Playground — not the Desktop app credentials.
+Used the **`moroute-playground`** (Web app) Client ID + Secret in OAuth Playground.
 
 1. Go to [OAuth 2.0 Playground](https://developers.google.com/oauthplayground)
 2. Click the **gear icon** (top right) → check **"Use your own OAuth credentials"** → paste the `moroute-playground` Client ID + Secret
@@ -57,49 +57,66 @@ Use the **`moroute-playground`** (Web app) Client ID + Secret in OAuth Playgroun
    ```
 4. Click **Authorize APIs** → sign in with `support@moroute.com` → allow access
 5. Click **Exchange authorization code for tokens**
-6. Copy the **Refresh token** → paste into `GOOGLE_REFRESH_TOKEN` in `.env.local`
+6. Copy the **Refresh token** (the `refresh_token` field — not `expires_in` which is just the short-lived access token) → paste into `GOOGLE_REFRESH_TOKEN` in `.env.local`
 
-> The refresh token does not expire unless the user revokes access or the OAuth client is deleted.  
-> The token works with the `moroute-contact` Desktop app client in production even though it was generated via the Web app client.
+> **Important:** A refresh token is bound to the OAuth client that generated it. The `.env.local` `GOOGLE_CLIENT_ID` and `GOOGLE_CLIENT_SECRET` **must match the `moroute-playground` credentials**, not `moroute-contact`. Using mismatched credentials causes an `unauthorized_client` 401 error.
+
+> The refresh token does not expire unless the user revokes access or the OAuth client is deleted.
 
 ---
 
-## Step 4 — Fill remaining environment variables
+## Step 4 — Fill remaining environment variables ✅
 
-Add to `.env.local` and to Vercel environment variables for production:
+All values are set in `.env.local`. Also add these to Vercel environment variables for production:
 
 ```env
-# OAuth 2.0 credentials
-GOOGLE_CLIENT_ID=707469193370-ln4mnbpm9o5blc3jh9bumhoas1bcf544.apps.googleusercontent.com
-GOOGLE_CLIENT_SECRET=<from .env.local>
+# OAuth 2.0 credentials — use moroute-playground client (matches the refresh token)
+GOOGLE_CLIENT_ID=<moroute-playground client ID>
+GOOGLE_CLIENT_SECRET=<moroute-playground client secret>
 GOOGLE_REFRESH_TOKEN=<from OAuth Playground>
 
 # The Gmail/Workspace address emails are sent from
-GOOGLE_SEND_AS=noreply@moroute.com
+GOOGLE_SEND_AS=support@moroute.com
 
 # The inbox that receives contact form submissions
-CONTACT_FORM_TO=hello@moroute.com
+CONTACT_FORM_TO=support@moroute.com
 ```
 
-> `GOOGLE_SEND_AS` must be a real mailbox the authenticated user has access to send from.
+> `GOOGLE_SEND_AS` must be a real mailbox the authenticated user (`support@moroute.com`) has send-as access to.
 
 ---
 
-## Step 5 — Update the API route
+## Step 5 — Update the API route ✅
 
-Once `GOOGLE_REFRESH_TOKEN` is in `.env.local`, update `app/api/contact/route.ts` to use OAuth2 instead of the service account JWT:
+`app/api/contact/route.ts` uses OAuth2 with automatic token refresh:
 
 ```ts
-const oauth2Client = new google.auth.OAuth2(
+const auth = new google.auth.OAuth2(
   process.env.GOOGLE_CLIENT_ID,
   process.env.GOOGLE_CLIENT_SECRET,
 );
-oauth2Client.setCredentials({ refresh_token: process.env.GOOGLE_REFRESH_TOKEN });
+auth.setCredentials({ refresh_token: process.env.GOOGLE_REFRESH_TOKEN });
 
-const gmail = google.gmail({ version: "v1", auth: oauth2Client });
+const gmail = google.gmail({ version: "v1", auth });
 ```
 
-The rest of the route (RFC 2822 email building, validation, error handling) stays the same.
+The `googleapis` library handles access token refresh automatically — the short-lived access token (`expires_in: 3599`) is fetched and refreshed behind the scenes; only the refresh token needs to be stored.
+
+### Email templates
+
+`app/api/contact/email-templates.ts` exports two branded HTML email functions:
+
+| Function | Recipient | Content |
+|----------|-----------|---------|
+| `adminEmailHtml(name, email, message)` | `CONTACT_FORM_TO` | Internal notification with name, email, message fields and a one-click Reply CTA |
+| `confirmationEmailHtml(name, message)` | Form submitter | Branded confirmation with checkmark hero, message summary, and moroute.com CTA |
+
+Both templates:
+- HTML-escape all user input to prevent injection
+- Use table-based layout with inline styles for email client compatibility
+- Match site brand colors (`#0a1e36` navy header, `#16c784` green accents, `#f3f7fb` backgrounds)
+
+The route sends both emails concurrently via `Promise.all`.
 
 ---
 
@@ -112,10 +129,13 @@ The rest of the route (RFC 2822 email building, validation, error handling) stay
 | Create OAuth consent screen | ✅ Done (Internal) |
 | Create OAuth 2.0 Client ID (`moroute-contact` Desktop app) | ✅ Done |
 | Create OAuth 2.0 Client ID (`moroute-playground` Web app) | ✅ Done |
-| Get refresh token via OAuth Playground | ⏳ Pending — use `moroute-playground` credentials |
-| Fill `GOOGLE_SEND_AS` + `CONTACT_FORM_TO` | ⏳ Pending |
-| Update API route to use OAuth2 | ⏳ Pending |
+| Get refresh token via OAuth Playground | ✅ Done — using `moroute-playground` credentials |
+| Fill `GOOGLE_SEND_AS` + `CONTACT_FORM_TO` | ✅ Done — both `support@moroute.com` |
+| Update API route to use OAuth2 | ✅ Done |
+| Create branded HTML email templates | ✅ Done |
+| Confirmed end-to-end email delivery | ✅ Done — `POST /api/contact 200` |
 | Add env vars to Vercel | ⏳ Pending |
+| Deploy to production | ⏳ Pending |
 
 ---
 

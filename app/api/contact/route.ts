@@ -1,14 +1,15 @@
 import { NextRequest, NextResponse } from "next/server";
 import { google } from "googleapis";
+import { adminEmailHtml, confirmationEmailHtml } from "./email-templates";
 
-function buildRfc2822(from: string, to: string, replyTo: string, subject: string, body: string): string {
+function buildRfc2822(from: string, to: string, replyTo: string, subject: string, body: string, contentType = "text/plain"): string {
   const lines = [
     `From: MoRoute <${from}>`,
     `To: ${to}`,
     `Reply-To: ${replyTo}`,
     `Subject: ${subject}`,
     `MIME-Version: 1.0`,
-    `Content-Type: text/plain; charset=utf-8`,
+    `Content-Type: ${contentType}; charset=utf-8`,
     ``,
     body,
   ];
@@ -35,38 +36,40 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: "Message is required." }, { status: 400 });
   }
 
-  const serviceEmail = process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL;
-  const privateKey = process.env.GOOGLE_PRIVATE_KEY?.replace(/\\n/g, "\n");
   const sendAs = process.env.GOOGLE_SEND_AS;
   const sendTo = process.env.CONTACT_FORM_TO;
 
-  if (!serviceEmail || !privateKey || !sendAs || !sendTo) {
+  if (!process.env.GOOGLE_CLIENT_ID || !process.env.GOOGLE_CLIENT_SECRET || !process.env.GOOGLE_REFRESH_TOKEN || !sendAs || !sendTo) {
     console.warn("[contact] Gmail credentials not configured — check env vars.");
     return NextResponse.json({ error: "Email service is not configured yet." }, { status: 503 });
   }
 
   try {
-    const auth = new google.auth.JWT({
-      email: serviceEmail,
-      key: privateKey,
-      scopes: ["https://www.googleapis.com/auth/gmail.send"],
-      subject: sendAs,
-    });
+    const auth = new google.auth.OAuth2(
+      process.env.GOOGLE_CLIENT_ID,
+      process.env.GOOGLE_CLIENT_SECRET,
+    );
+    auth.setCredentials({ refresh_token: process.env.GOOGLE_REFRESH_TOKEN });
 
     const gmail = google.gmail({ version: "v1", auth });
 
-    const subject = `New message from ${name.trim()} via MoRoute`;
-    const emailBody = [
-      `Name:    ${name.trim()}`,
-      `Email:   ${email.trim()}`,
-      ``,
-      `Message:`,
-      message.trim(),
-    ].join("\n");
+    const adminRaw = buildRfc2822(
+      sendAs, sendTo, email.trim(),
+      `New message from ${name.trim()} via MoRoute`,
+      adminEmailHtml(name.trim(), email.trim(), message.trim()),
+      "text/html",
+    );
+    const confirmRaw = buildRfc2822(
+      sendAs, email.trim(), sendAs,
+      `We received your message`,
+      confirmationEmailHtml(name.trim(), message.trim()),
+      "text/html",
+    );
 
-    const raw = buildRfc2822(sendAs, sendTo, email.trim(), subject, emailBody);
-
-    await gmail.users.messages.send({ userId: "me", requestBody: { raw } });
+    await Promise.all([
+      gmail.users.messages.send({ userId: "me", requestBody: { raw: adminRaw } }),
+      gmail.users.messages.send({ userId: "me", requestBody: { raw: confirmRaw } }),
+    ]);
 
     return NextResponse.json({ ok: true });
   } catch (error) {

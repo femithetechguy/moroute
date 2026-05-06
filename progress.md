@@ -1,7 +1,7 @@
 # Progress
 
 ## Date
-- 2026-05-04 (latest session)
+- 2026-05-05 (latest session)
 
 ## Completed
 - Integrated newly provided app screenshots across hero, features, and CTA sections.
@@ -77,9 +77,19 @@
 - Updated `.env.local` with OAuth2 keys (`GOOGLE_CLIENT_ID`, `GOOGLE_CLIENT_SECRET`, `GOOGLE_REFRESH_TOKEN`, `GOOGLE_SEND_AS`, `CONTACT_FORM_TO`); Client ID + Secret filled in, remaining values pending.
 - Updated `docs/google-workspace-email.md` with full strategy history, two-client rationale, and step-by-step resume instructions.
 
+- **Gmail API contact form fully working end-to-end** ✅
+- Obtained refresh token via OAuth Playground using `moroute-playground` (Web app) client credentials — Desktop app clients reject custom redirect URIs so a separate Web app client was required to generate the token.
+- Discovered and fixed `unauthorized_client` error: refresh token is bound to the OAuth client that generated it. Updated `.env.local` `GOOGLE_CLIENT_ID` + `GOOGLE_CLIENT_SECRET` to use `moroute-playground` credentials (not `moroute-contact`) so they match the refresh token.
+- Filled all remaining `.env.local` values: `GOOGLE_REFRESH_TOKEN`, `GOOGLE_SEND_AS=support@moroute.com`, `CONTACT_FORM_TO=support@moroute.com`.
+- Rewrote `app/api/contact/route.ts` to use `google.auth.OAuth2` with `setCredentials({ refresh_token })` — removes all service account JWT code; library handles automatic access token refresh transparently.
+- Created `app/api/contact/email-templates.ts` with two branded HTML email template functions:
+  - `adminEmailHtml(name, email, message)` — internal notification sent to `support@moroute.com`; dark navy header, green-accented field rows, one-click "Reply to [name]" CTA button.
+  - `confirmationEmailHtml(name, message)` — confirmation sent to the form submitter; dark hero with checkmark, message summary, visit moroute.com CTA.
+  - Both templates use HTML-entity escaping (`esc`) and `nl2br` for user input; table-based layout with inline styles for broad email client compatibility; brand colors (`#0a1e36`, `#16c784`, `#f3f7fb`) matching the site design system.
+- Updated `buildRfc2822` in `route.ts` to accept a `contentType` parameter (defaults to `text/plain`); admin and confirmation emails now sent as `text/html`.
+- Route now sends both emails concurrently via `Promise.all` — one to the team, one to the submitter.
+- Confirmed working: `POST /api/contact 200` with both emails delivered correctly in Gmail.
+
 ## Pending
-- Get refresh token from OAuth Playground using `moroute-playground` credentials → add to `GOOGLE_REFRESH_TOKEN` in `.env.local`.
-- Fill `GOOGLE_SEND_AS` and `CONTACT_FORM_TO` in `.env.local`.
-- Update `app/api/contact/route.ts` to use OAuth2 (`google.auth.OAuth2`) instead of service account JWT.
-- Add all env vars to Vercel environment variables.
+- Add all env vars (`GOOGLE_CLIENT_ID`, `GOOGLE_CLIENT_SECRET`, `GOOGLE_REFRESH_TOKEN`, `GOOGLE_SEND_AS`, `CONTACT_FORM_TO`) to Vercel environment variables.
 - Deploy to Vercel production.
