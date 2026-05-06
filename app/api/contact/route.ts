@@ -1,3 +1,4 @@
+import { after } from "next/server";
 import { NextRequest, NextResponse } from "next/server";
 import { google } from "googleapis";
 import { adminEmailHtml, confirmationEmailHtml } from "./email-templates";
@@ -92,22 +93,28 @@ export async function POST(request: NextRequest) {
       "text/html",
     );
 
-    const timeout = new Promise<never>((_, reject) =>
-      setTimeout(() => reject(new Error("Gmail API timeout")), 10_000)
-    );
-
-    await Promise.race([
-      Promise.all([
-        gmail.users.messages.send({ userId: "me", requestBody: { raw: adminRaw } }),
-        gmail.users.messages.send({ userId: "me", requestBody: { raw: confirmRaw } }),
-      ]),
-      timeout,
-    ]);
+    after(async () => {
+      const timeout = new Promise<never>((_, reject) =>
+        setTimeout(() => reject(new Error("Gmail API timeout")), 10_000)
+      );
+      try {
+        await Promise.race([
+          Promise.all([
+            gmail.users.messages.send({ userId: "me", requestBody: { raw: adminRaw } }),
+            gmail.users.messages.send({ userId: "me", requestBody: { raw: confirmRaw } }),
+          ]),
+          timeout,
+        ]);
+      } catch (err) {
+        const msg = err instanceof Error ? err.message : "unknown error";
+        console.error("[contact] Gmail API error:", msg);
+      }
+    });
 
     return NextResponse.json({ ok: true });
   } catch (error) {
-    const message = error instanceof Error ? error.message : "unknown error";
-    console.error("[contact] Gmail API error:", message);
+    const msg = error instanceof Error ? error.message : "unknown error";
+    console.error("[contact] setup error:", msg);
     return NextResponse.json({ error: "Failed to send your message. Please try again." }, { status: 500 });
   }
 }

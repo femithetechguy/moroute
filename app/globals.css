@@ -159,6 +159,7 @@ nav {
   text-decoration: none;
   position: relative;
   transition: color 0.2s ease;
+  cursor: pointer;
 }
 
 .nav-links a:hover {
@@ -220,8 +221,8 @@ nav {
 .nav-toggle,
 .nav-fab-toggle {
   display: none;
-  width: 40px;
-  height: 40px;
+  width: 44px;
+  height: 44px;
   border: 1px solid rgba(20, 57, 96, 0.2);
   border-radius: 10px;
   background: rgba(255, 255, 255, 0.86);
@@ -393,6 +394,7 @@ nav {
   border: 1px solid transparent;
   background: rgba(255, 255, 255, 0.58);
   transition: border-color 0.2s ease, background 0.2s ease, transform 0.2s ease;
+  cursor: pointer;
 }
 
 .nav-mobile-link-main {
@@ -1190,8 +1192,8 @@ section {
 }
 
 .feature-lightbox-close {
-  width: 32px;
-  height: 32px;
+  width: 44px;
+  height: 44px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -1228,8 +1230,8 @@ section {
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
-  width: 36px;
-  height: 36px;
+  width: 44px;
+  height: 44px;
   border-radius: 999px;
   border: 1px solid rgba(154, 197, 245, 0.28);
   background: rgba(13, 37, 64, 0.76);
@@ -1881,130 +1883,91 @@ section {
   line-height: 1.4;
 }
 
-/* ── Toast ──────────────────────────────────────────────────── */
+/* ── Contact modal ───────────────────────────────────────────── */
 
-@keyframes toast-slide-in {
-  from {
-    opacity: 0;
-    transform: translateY(14px) scale(0.96);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0) scale(1);
-  }
-}
-
-@keyframes toast-progress-shrink {
-  from { width: 100%; }
-  to   { width: 0%; }
-}
-
-.toast {
+.contact-modal-backdrop {
   position: fixed;
-  bottom: 24px;
-  right: 24px;
-  z-index: 300;
-  display: flex;
-  align-items: flex-start;
-  gap: 10px;
-  padding: 14px 14px 14px 14px;
-  border-radius: 14px;
-  max-width: 340px;
-  width: calc(100vw - 32px);
-  box-shadow: 0 20px 48px rgba(10, 25, 47, 0.18), 0 4px 12px rgba(10, 25, 47, 0.1);
-  animation: toast-slide-in 0.3s var(--ease-smooth) forwards;
-  overflow: hidden;
-}
-
-.toast--success {
-  background: linear-gradient(135deg, #f2fdf8 0%, #e8faf2 100%);
-  border: 1px solid rgba(22, 199, 132, 0.28);
-}
-
-.toast--error {
-  background: linear-gradient(135deg, #fff5f6 0%, #feeef0 100%);
-  border: 1px solid rgba(248, 91, 107, 0.28);
-}
-
-.toast-icon {
+  inset: 0;
+  background: rgba(4, 14, 28, 0.58);
+  backdrop-filter: blur(4px);
+  z-index: 400;
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 34px;
-  height: 34px;
-  border-radius: 9px;
-  flex-shrink: 0;
-  margin-top: 1px;
+  padding: 16px;
+  animation: revealFade 0.22s ease forwards;
 }
 
-.toast--success .toast-icon {
-  background: rgba(22, 199, 132, 0.16);
-  color: #0b7a54;
+.contact-modal {
+  background: #ffffff;
+  border-radius: 20px;
+  border: 1px solid rgba(22, 199, 132, 0.22);
+  box-shadow: 0 24px 48px rgba(10, 25, 47, 0.22);
+  padding: 36px 32px;
+  max-width: 400px;
+  width: 100%;
+  text-align: center;
+  animation: revealUp 0.26s var(--ease-smooth) forwards;
 }
 
-.toast--error .toast-icon {
-  background: rgba(248, 91, 107, 0.14);
-  color: #c0192d;
-}
-
-.toast-body {
+.contact-modal-icon {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: rgba(22, 199, 132, 0.13);
+  color: #0f8f62;
   display: flex;
-  flex-direction: column;
-  gap: 2px;
-  flex: 1;
-  min-width: 0;
-  padding-top: 2px;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 18px;
 }
 
-.toast-title {
-  font-size: 0.83rem;
+.contact-modal-title {
+  font-family: var(--font-display), sans-serif;
+  font-size: 1.7rem;
   font-weight: 700;
   color: var(--ink-900);
-  line-height: 1.2;
+  letter-spacing: -0.025em;
+  margin-bottom: 10px;
 }
 
-.toast-message {
-  font-size: 0.78rem;
+.contact-modal-body {
+  font-size: 0.96rem;
   color: var(--ink-700);
-  line-height: 1.45;
+  line-height: 1.72;
+  margin-bottom: 26px;
 }
 
-.toast-close {
-  display: flex;
+.contact-modal-btn {
+  display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 26px;
-  height: 26px;
+  background: linear-gradient(120deg, #0fd180 0%, #4ae7a9 100%);
+  color: #053b2a;
+  font-size: 0.85rem;
+  font-weight: 700;
+  padding: 12px 32px;
+  border-radius: 10px;
   border: none;
-  background: none;
   cursor: pointer;
-  color: var(--ink-500);
-  border-radius: 7px;
-  flex-shrink: 0;
-  margin-top: 1px;
-  transition: background 0.15s ease, color 0.15s ease;
+  box-shadow: 0 8px 16px rgba(22, 199, 132, 0.24);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
-.toast-close:hover {
-  background: rgba(20, 57, 96, 0.08);
-  color: var(--ink-900);
+.contact-modal-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 10px 20px rgba(22, 199, 132, 0.28);
 }
 
-.toast-progress {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  height: 3px;
-  border-radius: 0 0 0 14px;
-  animation: toast-progress-shrink var(--toast-duration, 5000ms) linear forwards;
+.contact-error {
+  color: var(--red);
+  font-size: 0.8rem;
+  line-height: 1.4;
 }
 
-.toast--success .toast-progress {
-  background: rgba(22, 199, 132, 0.55);
-}
-
-.toast--error .toast-progress {
-  background: rgba(248, 91, 107, 0.5);
+@keyframes revealFade {
+  from { opacity: 0; }
+  to { opacity: 1; }
 }
 
 .mobile-top-btn {
@@ -2018,8 +1981,8 @@ section {
   color: #0f8f62;
   backdrop-filter: blur(10px);
   box-shadow: 0 8px 22px rgba(12, 32, 58, 0.18);
-  height: 38px;
-  padding: 0 12px;
+  height: 44px;
+  padding: 0 14px;
   display: inline-flex;
   align-items: center;
   gap: 6px;
@@ -2072,6 +2035,7 @@ footer {
   text-transform: uppercase;
   letter-spacing: 0.06em;
   transition: color 0.2s ease;
+  cursor: pointer;
 }
 
 .footer-links a:hover {
@@ -2341,8 +2305,8 @@ footer {
   }
 
   .nav-toggle {
-    width: 36px;
-    height: 36px;
+    width: 44px;
+    height: 44px;
   }
 
   .nav-mobile-menu {
@@ -2436,12 +2400,12 @@ footer {
   }
 
   .feature-lightbox-close {
-    width: 30px;
-    height: 30px;
+    width: 44px;
+    height: 44px;
   }
 
   .feature-lightbox-stage {
-    padding: 2px 34px;
+    padding: 2px 20px;
   }
 
   .feature-lightbox-figure {
@@ -2453,8 +2417,8 @@ footer {
   }
 
   .feature-lightbox-nav {
-    width: 32px;
-    height: 32px;
+    width: 44px;
+    height: 44px;
   }
 
   .feature-lightbox-prev {

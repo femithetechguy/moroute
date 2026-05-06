@@ -115,7 +115,7 @@ export default function NavBar({ brand, nav, logoPath, logoAlt }: NavBarProps) {
   return (
     <header className="nav-shell">
       <nav>
-        <a href="#home" className="logo" aria-label={brand}>
+        <a href="/" className="logo" aria-label={brand} onClick={(event) => handleNavClick(event, "#home")}>
           <img src={logoPath} alt={logoAlt} className="brand-logo" />
         </a>
 
@@ -123,7 +123,7 @@ export default function NavBar({ brand, nav, logoPath, logoAlt }: NavBarProps) {
           {nav.links.map((link) => (
             <li key={link.label}>
               <a
-                href={link.href}
+                href={link.href.startsWith("#") ? undefined : link.href}
                 className={link.href === activeHash ? "is-active" : undefined}
                 onClick={(event) => handleNavClick(event, link.href)}
               >
@@ -134,7 +134,7 @@ export default function NavBar({ brand, nav, logoPath, logoAlt }: NavBarProps) {
         </ul>
 
         <div className="nav-controls">
-          <a className="nav-cta" href={nav.cta.href} onClick={(event) => handleNavClick(event, nav.cta.href)}>
+          <a className="nav-cta" href={nav.cta.href.startsWith("#") ? undefined : nav.cta.href} onClick={(event) => handleNavClick(event, nav.cta.href)}>
             {nav.cta.label}
           </a>
 
@@ -179,7 +179,7 @@ export default function NavBar({ brand, nav, logoPath, logoAlt }: NavBarProps) {
           {nav.links.map((link, index) => (
             <li className="nav-mobile-item" key={link.label} style={{ "--menu-stagger": `${index * 55 + 70}ms` } as CSSProperties}>
               <a
-                href={link.href}
+                href={link.href.startsWith("#") ? undefined : link.href}
                 className={link.href === activeHash ? "is-active" : undefined}
                 onClick={(event) => handleNavClick(event, link.href)}
               >
@@ -190,7 +190,7 @@ export default function NavBar({ brand, nav, logoPath, logoAlt }: NavBarProps) {
           ))}
         </ul>
 
-        <a className="nav-mobile-cta" href={nav.cta.href} onClick={(event) => handleNavClick(event, nav.cta.href)}>
+        <a className="nav-mobile-cta" href={nav.cta.href.startsWith("#") ? undefined : nav.cta.href} onClick={(event) => handleNavClick(event, nav.cta.href)}>
           {nav.cta.label}
         </a>
       </div>

@@ -117,7 +117,7 @@ Both templates:
 - Match site brand colors (`#0a1e36` navy header, `#16c784` green accents, `#f3f7fb` backgrounds)
 - Declare `color-scheme: light` via `<meta name="color-scheme" content="light">`, `<meta name="supported-color-schemes" content="light">`, and `:root { color-scheme: light }` CSS — prevents Canary and other dark-mode-aware email clients from auto-inverting dark sections to light colors
 
-The route sends both emails concurrently via `Promise.all`.
+The route uses Next.js 15 `after()` to send emails **after the response is returned** — the form resolves in ~100ms instead of waiting 3–4s for Gmail API round trips. Both emails are sent concurrently via `Promise.all` inside the `after()` callback, with a 10s timeout. Failures are logged server-side.
 
 ---
 
@@ -135,6 +135,8 @@ The route sends both emails concurrently via `Promise.all`.
 | Update API route to use OAuth2 | ✅ Done |
 | Create branded HTML email templates | ✅ Done |
 | Confirmed end-to-end email delivery | ✅ Done — `POST /api/contact 200` |
+| Fire-and-forget email sending via `after()` | ✅ Done — form responds in ~100ms |
+| In-page success modal (replaced toast) | ✅ Done |
 | Add env vars to Vercel | ✅ Done — all 5 vars added to Production and Preview |
 | Fix dark mode rendering (Canary) | ✅ Done — `color-scheme: light` in both templates |
 | Deploy to production | ⏳ Pending |

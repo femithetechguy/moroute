@@ -101,6 +101,24 @@
 - Removed `hashchange` listener and initial `window.location.hash` check — no longer needed since hash is not written to the URL.
 - Fixed `sitemap.ts` `lastModified` from `new Date()` (changes every build) to a static date `2026-05-05`.
 
+- Replaced bottom-right toast with a centered in-page success modal — shows checkmark icon, "Message sent!" heading, success message, and a "Done" button that closes the modal and resets the form. Error messages now shown inline below the submit button instead of a toast.
+- Removed all toast state, timers, and portal logic from `ContactSection.tsx`; removed all toast CSS from `globals.css`; added `.contact-modal-backdrop`, `.contact-modal`, `.contact-modal-icon`, `.contact-modal-title`, `.contact-modal-body`, `.contact-modal-btn`, `.contact-error` styles and `revealFade` keyframe.
+- Changed submit button label from "Send Request" → "Send Message" in `content/moroute-content.json`.
+- Switched contact route to use Next.js 15 `after()` for fire-and-forget email sending — route now returns `200` immediately (~100ms) and sends both emails in the background after the response; failures logged server-side. Previously took 3–4s waiting on Gmail API.
+- Timeout and error handling moved inside the `after()` callback.
+
+- Fixed URL hash appearing in address bar when clicking nav and footer links on mobile — removed `href="#section"` from all hash navigation `<a>` elements in `NavBar.tsx` and `SiteFooter.tsx`; browser now has nothing to follow so URL stays clean at `moroute.com`. Click handlers still manage smooth scrolling and active state.
+- Also removed stale `pushState` and double RAF from `SiteFooter.tsx` `handleFooterLinkClick`.
+- Added `cursor: pointer` to `.nav-links a` and `.nav-mobile-links a` in `globals.css` so links still look clickable without an `href`.
+- Logo links changed from `href="#home"` to `href="/"` in both NavBar and SiteFooter.
+- Raised all touch targets to 44px minimum (WCAG): `nav-toggle`, `nav-fab-toggle`, `mobile-top-btn`, `feature-lightbox-close`, `feature-lightbox-nav` — both desktop and mobile CSS overrides updated.
+- Loosened feature lightbox stage padding on mobile from `2px 34px` → `2px 20px` for better usability on small screens.
+- Added `cursor: pointer` to `.footer-links a` in `globals.css` (links no longer have `href` attribute so browser default cursor wouldn't apply).
+- Removed duplicate inline `style={{ cursor: "pointer" }}` from `SiteFooter.tsx` footer link elements.
+- Confirmed hero `h1 span max-width: 16ch` is already correctly overridden to `100%` at the 1080px breakpoint, which cascades down to 760px — no change needed.
+
+- Created `app/icon.svg` — favicon extracted from the logo icon (dark rounded square + M letterform + green dot accent); Next.js 15 picks this up automatically via file-based convention, no layout.tsx changes needed. Full wordmark text excluded since it's unreadable at favicon size.
+
 ## Pending
-- Redeploy to Vercel production to pick up all recent fixes.
-- Verify contact form end-to-end on `https://www.moroute.com` after deploy.
+- Redeploy to Vercel production.
+- Verify contact form, navigation, and favicon on `https://www.moroute.com` after deploy.
