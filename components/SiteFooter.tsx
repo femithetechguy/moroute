@@ -33,28 +33,24 @@ export default function SiteFooter({ brand, footer, logoPath, logoAlt }: SiteFoo
     }
 
     event.preventDefault();
-
-    if (window.location.hash !== href) {
-      window.history.pushState(null, "", href);
-    }
-
-    window.requestAnimationFrame(() => {
-      window.requestAnimationFrame(() => {
-        scrollToSection(href);
-      });
-    });
+    requestAnimationFrame(() => scrollToSection(href));
   };
 
   return (
     <footer data-reveal>
-      <a href="#home" className="logo logo-small" aria-label={brand} onClick={(event) => handleFooterLinkClick(event, "#home")}>
+      <a href="/" className="logo logo-small" aria-label={brand} onClick={(event) => handleFooterLinkClick(event, "#home")}>
         <img src={logoPath} alt={logoAlt} className="brand-logo brand-logo-footer" />
       </a>
 
       <ul className="footer-links">
         {footer.links.map((link) => (
           <li key={link.label}>
-            <a href={link.href} onClick={(event) => handleFooterLinkClick(event, link.href)}>{link.label}</a>
+            <a
+              href={link.href.startsWith("#") ? undefined : link.href}
+              onClick={(event) => handleFooterLinkClick(event, link.href)}
+            >
+              {link.label}
+            </a>
           </li>
         ))}
       </ul>
