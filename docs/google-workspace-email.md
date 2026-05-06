@@ -115,6 +115,7 @@ Both templates:
 - HTML-escape all user input to prevent injection
 - Use table-based layout with inline styles for email client compatibility
 - Match site brand colors (`#0a1e36` navy header, `#16c784` green accents, `#f3f7fb` backgrounds)
+- Declare `color-scheme: light` via `<meta name="color-scheme" content="light">`, `<meta name="supported-color-schemes" content="light">`, and `:root { color-scheme: light }` CSS — prevents Canary and other dark-mode-aware email clients from auto-inverting dark sections to light colors
 
 The route sends both emails concurrently via `Promise.all`.
 
@@ -134,7 +135,8 @@ The route sends both emails concurrently via `Promise.all`.
 | Update API route to use OAuth2 | ✅ Done |
 | Create branded HTML email templates | ✅ Done |
 | Confirmed end-to-end email delivery | ✅ Done — `POST /api/contact 200` |
-| Add env vars to Vercel | ⏳ Pending |
+| Add env vars to Vercel | ✅ Done — all 5 vars added to Production and Preview |
+| Fix dark mode rendering (Canary) | ✅ Done — `color-scheme: light` in both templates |
 | Deploy to production | ⏳ Pending |
 
 ---

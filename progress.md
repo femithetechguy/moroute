@@ -89,7 +89,9 @@
 - Updated `buildRfc2822` in `route.ts` to accept a `contentType` parameter (defaults to `text/plain`); admin and confirmation emails now sent as `text/html`.
 - Route now sends both emails concurrently via `Promise.all` — one to the team, one to the submitter.
 - Confirmed working: `POST /api/contact 200` with both emails delivered correctly in Gmail.
+- Added all 5 env vars to Vercel (Production and Preview environments): `GOOGLE_CLIENT_ID`, `GOOGLE_CLIENT_SECRET`, `GOOGLE_REFRESH_TOKEN`, `GOOGLE_SEND_AS`, `CONTACT_FORM_TO`.
+- Fixed email dark mode rendering issue in Canary (Chromium-based client) — dark navy hero section was being auto-inverted to light lavender; added `color-scheme: light` meta tags and `:root { color-scheme: light }` CSS to both templates to opt out of automatic dark mode adaptation. Gmail web renders correctly in both cases.
 
 ## Pending
-- Add all env vars (`GOOGLE_CLIENT_ID`, `GOOGLE_CLIENT_SECRET`, `GOOGLE_REFRESH_TOKEN`, `GOOGLE_SEND_AS`, `CONTACT_FORM_TO`) to Vercel environment variables.
-- Deploy to Vercel production.
+- Redeploy to Vercel production to pick up the dark mode fix.
+- Verify contact form end-to-end on `https://www.moroute.com` after deploy.
