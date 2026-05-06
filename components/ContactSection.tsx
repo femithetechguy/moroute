@@ -1,48 +1,87 @@
 "use client";
 
 import { useEffect, useRef, useState, type FormEvent } from "react";
-import { Mail, Phone } from "lucide-react";
+import { createPortal } from "react-dom";
+import { CheckCircle, Mail, Phone, XCircle, X } from "lucide-react";
 import type { MorouteContent } from "@/types/content";
 
 type ContactSectionProps = {
   contact: MorouteContent["contact"];
 };
 
+type ToastState = { type: "success" | "error"; title: string; message: string } | null;
+
+const TOAST_DURATION = 5000;
+
 export default function ContactSection({ contact }: ContactSectionProps) {
   const [submitState, setSubmitState] = useState<"idle" | "sending" | "sent">("idle");
-  const timeoutRef = useRef<number | null>(null);
+  const [toast, setToast] = useState<ToastState>(null);
+  const [isMounted, setIsMounted] = useState(false);
+  const submitTimerRef = useRef<number | null>(null);
+  const toastTimerRef = useRef<number | null>(null);
   const hasSectionTag = contact.sectionTag.trim().length > 0;
 
   useEffect(() => {
+    setIsMounted(true);
     return () => {
-      if (timeoutRef.current !== null) {
-        window.clearTimeout(timeoutRef.current);
-      }
+      if (submitTimerRef.current !== null) window.clearTimeout(submitTimerRef.current);
+      if (toastTimerRef.current !== null) window.clearTimeout(toastTimerRef.current);
     };
   }, []);
 
-  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    if (submitState === "sending") {
-      return;
+  const showToast = (type: "success" | "error", title: string, message: string) => {
+    if (toastTimerRef.current !== null) window.clearTimeout(toastTimerRef.current);
+    setToast({ type, title, message });
+    toastTimerRef.current = window.setTimeout(() => {
+      setToast(null);
+      toastTimerRef.current = null;
+    }, TOAST_DURATION);
+  };
+
+  const dismissToast = () => {
+    if (toastTimerRef.current !== null) {
+      window.clearTimeout(toastTimerRef.current);
+      toastTimerRef.current = null;
     }
+    setToast(null);
+  };
+
+  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    if (submitState === "sending") return;
 
     const form = event.currentTarget;
+    const data = new FormData(form);
+    const name = (data.get("name") as string).trim();
+    const email = (data.get("email") as string).trim();
+    const message = (data.get("message") as string).trim();
+
     setSubmitState("sending");
 
-    if (timeoutRef.current !== null) {
-      window.clearTimeout(timeoutRef.current);
-    }
+    try {
+      const response = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name, email, message }),
+      });
 
-    timeoutRef.current = window.setTimeout(() => {
-      setSubmitState("sent");
-      form.reset();
-
-      timeoutRef.current = window.setTimeout(() => {
+      if (response.ok) {
+        setSubmitState("sent");
+        form.reset();
+        showToast("success", "Message sent!", contact.form.successMessage);
+        submitTimerRef.current = window.setTimeout(() => {
+          setSubmitState("idle");
+          submitTimerRef.current = null;
+        }, 2500);
+      } else {
+        const payload = await response.json().catch(() => ({}));
         setSubmitState("idle");
-        timeoutRef.current = null;
-      }, 2300);
-    }, 850);
+        showToast("error", "Couldn't send message", payload.error ?? "Something went wrong. Please try again.");
+      }
+    } catch {
+      setSubmitState("idle");
+      showToast("error", "Network error", "Check your connection and try again.");
+    }
   };
 
   return (
@@ -137,13 +176,7 @@ export default function ContactSection({ contact }: ContactSectionProps) {
             </span>
           </button>
           <p
-            className={
-              submitState === "sent"
-                ? "contact-success"
-                : submitState === "sending"
-                  ? "contact-pending"
-                  : "contact-hint"
-            }
+            className={submitState === "sent" ? "contact-success" : submitState === "sending" ? "contact-pending" : "contact-hint"}
             aria-live="polite"
           >
             {submitState === "sent"
@@ -154,6 +187,32 @@ export default function ContactSection({ contact }: ContactSectionProps) {
           </p>
         </div>
       </form>
+
+      {toast && isMounted
+        ? createPortal(
+            <div
+              className={`toast toast--${toast.type}`}
+              role="alert"
+              aria-live="assertive"
+              style={{ "--toast-duration": `${TOAST_DURATION}ms` } as React.CSSProperties}
+            >
+              <span className="toast-icon" aria-hidden="true">
+                {toast.type === "success"
+                  ? <CheckCircle size={18} strokeWidth={2.2} />
+                  : <XCircle size={18} strokeWidth={2.2} />}
+              </span>
+              <span className="toast-body">
+                <span className="toast-title">{toast.title}</span>
+                <span className="toast-message">{toast.message}</span>
+              </span>
+              <button type="button" className="toast-close" onClick={dismissToast} aria-label="Dismiss notification">
+                <X size={14} />
+              </button>
+              <span className="toast-progress" aria-hidden="true" />
+            </div>,
+            document.body
+          )
+        : null}
     </section>
   );
 }
