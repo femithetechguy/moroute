@@ -2,6 +2,24 @@ import { NextRequest, NextResponse } from "next/server";
 import { google } from "googleapis";
 import { adminEmailHtml, confirmationEmailHtml } from "./email-templates";
 
+// In-memory rate limiter — 3 submissions per IP per minute.
+// Per-instance only (serverless), but sufficient to block basic bursts.
+const rateLimitMap = new Map<string, { count: number; reset: number }>();
+const RATE_LIMIT = 3;
+const RATE_WINDOW_MS = 60 * 1000;
+
+function isRateLimited(ip: string): boolean {
+  const now = Date.now();
+  const entry = rateLimitMap.get(ip);
+  if (!entry || now > entry.reset) {
+    rateLimitMap.set(ip, { count: 1, reset: now + RATE_WINDOW_MS });
+    return false;
+  }
+  if (entry.count >= RATE_LIMIT) return true;
+  entry.count++;
+  return false;
+}
+
 function buildRfc2822(from: string, to: string, replyTo: string, subject: string, body: string, contentType = "text/plain"): string {
   const lines = [
     `From: MoRoute <${from}>`,
@@ -17,6 +35,11 @@ function buildRfc2822(from: string, to: string, replyTo: string, subject: string
 }
 
 export async function POST(request: NextRequest) {
+  const ip = request.headers.get("x-forwarded-for")?.split(",")[0].trim() ?? "unknown";
+  if (isRateLimited(ip)) {
+    return NextResponse.json({ error: "Too many requests. Please wait a moment and try again." }, { status: 429 });
+  }
+
   let body: unknown;
   try {
     body = await request.json();
@@ -34,6 +57,9 @@ export async function POST(request: NextRequest) {
   }
   if (typeof message !== "string" || !message.trim()) {
     return NextResponse.json({ error: "Message is required." }, { status: 400 });
+  }
+  if (message.length > 2000) {
+    return NextResponse.json({ error: "Message must be 2000 characters or fewer." }, { status: 400 });
   }
 
   const sendAs = process.env.GOOGLE_SEND_AS;
@@ -66,14 +92,22 @@ export async function POST(request: NextRequest) {
       "text/html",
     );
 
-    await Promise.all([
-      gmail.users.messages.send({ userId: "me", requestBody: { raw: adminRaw } }),
-      gmail.users.messages.send({ userId: "me", requestBody: { raw: confirmRaw } }),
+    const timeout = new Promise<never>((_, reject) =>
+      setTimeout(() => reject(new Error("Gmail API timeout")), 10_000)
+    );
+
+    await Promise.race([
+      Promise.all([
+        gmail.users.messages.send({ userId: "me", requestBody: { raw: adminRaw } }),
+        gmail.users.messages.send({ userId: "me", requestBody: { raw: confirmRaw } }),
+      ]),
+      timeout,
     ]);
 
     return NextResponse.json({ ok: true });
   } catch (error) {
-    console.error("[contact] Gmail API error:", error);
+    const message = error instanceof Error ? error.message : "unknown error";
+    console.error("[contact] Gmail API error:", message);
     return NextResponse.json({ error: "Failed to send your message. Please try again." }, { status: 500 });
   }
 }

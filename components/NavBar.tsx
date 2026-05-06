@@ -51,10 +51,7 @@ export default function NavBar({ brand, nav, logoPath, logoAlt }: NavBarProps) {
 
       for (const hash of trackedHashes) {
         const section = document.querySelector(hash);
-        if (!section) {
-          continue;
-        }
-
+        if (!section) continue;
         if (window.scrollY + offset >= section.getBoundingClientRect().top + window.scrollY) {
           current = hash;
         }
@@ -63,27 +60,24 @@ export default function NavBar({ brand, nav, logoPath, logoAlt }: NavBarProps) {
       setActiveHash(current);
     };
 
-    const handleHashChange = () => {
-      const currentHash = window.location.hash;
-      if (trackedHashes.includes(currentHash)) {
-        setActiveHash(currentHash);
-      }
+    findActiveHash();
+
+    let rafId: number | null = null;
+    const onScroll = () => {
+      if (rafId !== null) return;
+      rafId = requestAnimationFrame(() => {
+        findActiveHash();
+        rafId = null;
+      });
     };
 
-    if (trackedHashes.includes(window.location.hash)) {
-      setActiveHash(window.location.hash);
-    } else {
-      findActiveHash();
-    }
-
-    window.addEventListener("scroll", findActiveHash, { passive: true });
+    window.addEventListener("scroll", onScroll, { passive: true });
     window.addEventListener("resize", findActiveHash);
-    window.addEventListener("hashchange", handleHashChange);
 
     return () => {
-      window.removeEventListener("scroll", findActiveHash);
+      window.removeEventListener("scroll", onScroll);
       window.removeEventListener("resize", findActiveHash);
-      window.removeEventListener("hashchange", handleHashChange);
+      if (rafId !== null) cancelAnimationFrame(rafId);
     };
   }, [trackedHashes]);
 
@@ -115,15 +109,7 @@ export default function NavBar({ brand, nav, logoPath, logoAlt }: NavBarProps) {
     setActiveHash(href);
     setIsOpen(false);
 
-    if (window.location.hash !== href) {
-      window.history.pushState(null, "", href);
-    }
-
-    window.requestAnimationFrame(() => {
-      window.requestAnimationFrame(() => {
-        scrollToSection(href);
-      });
-    });
+    requestAnimationFrame(() => scrollToSection(href));
   };
 
   return (
