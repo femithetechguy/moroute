@@ -92,6 +92,15 @@
 - Added all 5 env vars to Vercel (Production and Preview environments): `GOOGLE_CLIENT_ID`, `GOOGLE_CLIENT_SECRET`, `GOOGLE_REFRESH_TOKEN`, `GOOGLE_SEND_AS`, `CONTACT_FORM_TO`.
 - Fixed email dark mode rendering issue in Canary (Chromium-based client) — dark navy hero section was being auto-inverted to light lavender; added `color-scheme: light` meta tags and `:root { color-scheme: light }` CSS to both templates to opt out of automatic dark mode adaptation. Gmail web renders correctly in both cases.
 
+- Added in-memory IP rate limiter to `/api/contact` — 3 submissions per IP per minute; returns 429 on excess. Per-instance only (serverless limitation) but sufficient to block basic bursts.
+- Added 10-second timeout to Gmail API `Promise.all` via `Promise.race` — prevents serverless function from hanging if Gmail stalls.
+- Added 2000-character cap on message field and sanitized error logging (only logs `error.message`, not the full object).
+- RAF-throttled the NavBar scroll listener — `findActiveHash` now runs at most once per animation frame instead of on every scroll event.
+- Removed `window.history.pushState` from nav click handler — URL stays clean at `moroute.com` when navigating sections (no `#section` appended).
+- Removed double `requestAnimationFrame` in `handleNavClick` — reduced to a single RAF.
+- Removed `hashchange` listener and initial `window.location.hash` check — no longer needed since hash is not written to the URL.
+- Fixed `sitemap.ts` `lastModified` from `new Date()` (changes every build) to a static date `2026-05-05`.
+
 ## Pending
-- Redeploy to Vercel production to pick up the dark mode fix.
+- Redeploy to Vercel production to pick up all recent fixes.
 - Verify contact form end-to-end on `https://www.moroute.com` after deploy.
