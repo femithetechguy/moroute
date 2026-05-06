@@ -2,48 +2,34 @@
 
 import { useEffect, useRef, useState, type FormEvent } from "react";
 import { createPortal } from "react-dom";
-import { CheckCircle, Mail, Phone, XCircle, X } from "lucide-react";
+import { CheckCircle, Mail, Phone } from "lucide-react";
 import type { MorouteContent } from "@/types/content";
 
 type ContactSectionProps = {
   contact: MorouteContent["contact"];
 };
 
-type ToastState = { type: "success" | "error"; title: string; message: string } | null;
-
-const TOAST_DURATION = 5000;
-
 export default function ContactSection({ contact }: ContactSectionProps) {
   const [submitState, setSubmitState] = useState<"idle" | "sending" | "sent">("idle");
-  const [toast, setToast] = useState<ToastState>(null);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [showModal, setShowModal] = useState(false);
   const [isMounted, setIsMounted] = useState(false);
-  const submitTimerRef = useRef<number | null>(null);
-  const toastTimerRef = useRef<number | null>(null);
+  const formRef = useRef<HTMLFormElement | null>(null);
   const hasSectionTag = contact.sectionTag.trim().length > 0;
 
   useEffect(() => {
     setIsMounted(true);
-    return () => {
-      if (submitTimerRef.current !== null) window.clearTimeout(submitTimerRef.current);
-      if (toastTimerRef.current !== null) window.clearTimeout(toastTimerRef.current);
-    };
   }, []);
 
-  const showToast = (type: "success" | "error", title: string, message: string) => {
-    if (toastTimerRef.current !== null) window.clearTimeout(toastTimerRef.current);
-    setToast({ type, title, message });
-    toastTimerRef.current = window.setTimeout(() => {
-      setToast(null);
-      toastTimerRef.current = null;
-    }, TOAST_DURATION);
-  };
+  useEffect(() => {
+    if (!showModal) return;
+    document.body.style.overflow = "hidden";
+    return () => { document.body.style.overflow = ""; };
+  }, [showModal]);
 
-  const dismissToast = () => {
-    if (toastTimerRef.current !== null) {
-      window.clearTimeout(toastTimerRef.current);
-      toastTimerRef.current = null;
-    }
-    setToast(null);
+  const closeModal = () => {
+    setShowModal(false);
+    setSubmitState("idle");
   };
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
@@ -57,6 +43,7 @@ export default function ContactSection({ contact }: ContactSectionProps) {
     const message = (data.get("message") as string).trim();
 
     setSubmitState("sending");
+    setErrorMessage(null);
 
     try {
       const response = await fetch("/api/contact", {
@@ -66,21 +53,17 @@ export default function ContactSection({ contact }: ContactSectionProps) {
       });
 
       if (response.ok) {
-        setSubmitState("sent");
         form.reset();
-        showToast("success", "Message sent!", contact.form.successMessage);
-        submitTimerRef.current = window.setTimeout(() => {
-          setSubmitState("idle");
-          submitTimerRef.current = null;
-        }, 2500);
+        setSubmitState("sent");
+        setShowModal(true);
       } else {
         const payload = await response.json().catch(() => ({}));
         setSubmitState("idle");
-        showToast("error", "Couldn't send message", payload.error ?? "Something went wrong. Please try again.");
+        setErrorMessage(payload.error ?? "Something went wrong. Please try again.");
       }
     } catch {
       setSubmitState("idle");
-      showToast("error", "Network error", "Check your connection and try again.");
+      setErrorMessage("Check your connection and try again.");
     }
   };
 
@@ -117,7 +100,7 @@ export default function ContactSection({ contact }: ContactSectionProps) {
         <span />
       </div>
 
-      <form className="contact-form" onSubmit={handleSubmit}>
+      <form className="contact-form" ref={formRef} onSubmit={handleSubmit}>
         <div className="contact-grid">
           <label className="field-wrap" htmlFor="contact-name">
             <span>{contact.form.nameLabel}</span>
@@ -158,57 +141,47 @@ export default function ContactSection({ contact }: ContactSectionProps) {
         <div className="contact-actions">
           <button
             type="submit"
-            className={`contact-submit${submitState === "sending" ? " is-sending" : ""}${submitState === "sent" ? " is-sent" : ""}`}
+            className={`contact-submit${submitState === "sending" ? " is-sending" : ""}`}
             disabled={submitState === "sending"}
           >
             {submitState === "sending" ? <span className="submit-spinner" aria-hidden="true" /> : null}
-            {submitState === "sent" ? (
-              <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
-                <path d="M2.5 7.4L5.6 10.5L11.5 4.4" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-              </svg>
-            ) : null}
             <span>
-              {submitState === "sending"
-                ? contact.form.sendingLabel
-                : submitState === "sent"
-                  ? contact.form.sentLabel
-                  : contact.form.submitLabel}
+              {submitState === "sending" ? contact.form.sendingLabel : contact.form.submitLabel}
             </span>
           </button>
+
           <p
-            className={submitState === "sent" ? "contact-success" : submitState === "sending" ? "contact-pending" : "contact-hint"}
+            className={errorMessage ? "contact-error" : "contact-hint"}
             aria-live="polite"
           >
-            {submitState === "sent"
-              ? contact.form.successMessage
-              : submitState === "sending"
-                ? contact.form.sendingMessage
-                : contact.form.helperText}
+            {errorMessage ?? contact.form.helperText}
           </p>
         </div>
       </form>
 
-      {toast && isMounted
+      {showModal && isMounted
         ? createPortal(
             <div
-              className={`toast toast--${toast.type}`}
-              role="alert"
-              aria-live="assertive"
-              style={{ "--toast-duration": `${TOAST_DURATION}ms` } as React.CSSProperties}
+              className="contact-modal-backdrop"
+              role="presentation"
+              onClick={closeModal}
             >
-              <span className="toast-icon" aria-hidden="true">
-                {toast.type === "success"
-                  ? <CheckCircle size={18} strokeWidth={2.2} />
-                  : <XCircle size={18} strokeWidth={2.2} />}
-              </span>
-              <span className="toast-body">
-                <span className="toast-title">{toast.title}</span>
-                <span className="toast-message">{toast.message}</span>
-              </span>
-              <button type="button" className="toast-close" onClick={dismissToast} aria-label="Dismiss notification">
-                <X size={14} />
-              </button>
-              <span className="toast-progress" aria-hidden="true" />
+              <div
+                className="contact-modal"
+                role="dialog"
+                aria-modal="true"
+                aria-labelledby="contact-modal-title"
+                onClick={(e) => e.stopPropagation()}
+              >
+                <div className="contact-modal-icon" aria-hidden="true">
+                  <CheckCircle size={30} strokeWidth={2} />
+                </div>
+                <h3 id="contact-modal-title" className="contact-modal-title">Message sent!</h3>
+                <p className="contact-modal-body">{contact.form.successMessage}</p>
+                <button type="button" className="contact-modal-btn" onClick={closeModal}>
+                  Done
+                </button>
+              </div>
             </div>,
             document.body
           )

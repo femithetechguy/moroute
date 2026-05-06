@@ -12,7 +12,13 @@ export function adminEmailHtml(name: string, email: string, message: string): st
   const m = nl2br(message);
   return `<!DOCTYPE html>
 <html lang="en">
-<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"></head>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light">
+<meta name="supported-color-schemes" content="light">
+<style>:root{color-scheme:light}</style>
+</head>
 <body style="margin:0;padding:0;background:#f3f7fb;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif;">
 <table width="100%" cellpadding="0" cellspacing="0" border="0" style="background:#f3f7fb;padding:32px 16px;">
 <tr><td align="center">
@@ -69,7 +75,13 @@ export function confirmationEmailHtml(name: string, message: string): string {
   const m = nl2br(message);
   return `<!DOCTYPE html>
 <html lang="en">
-<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"></head>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light">
+<meta name="supported-color-schemes" content="light">
+<style>:root{color-scheme:light}</style>
+</head>
 <body style="margin:0;padding:0;background:#f3f7fb;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif;">
 <table width="100%" cellpadding="0" cellspacing="0" border="0" style="background:#f3f7fb;padding:32px 16px;">
 <tr><td align="center">

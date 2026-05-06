@@ -237,9 +237,9 @@
       "emailPlaceholder": "name@company.com",
       "messageLabel": "Message",
       "messagePlaceholder": "Share your question, feedback, or support request...",
-      "submitLabel": "Send Request",
+      "submitLabel": "Send Message",
       "sendingLabel": "Sending...",
-      "sentLabel": "Request Sent",
+      "sentLabel": "Message Sent",
       "helperText": "Response time: usually within 24 hours.",
       "sendingMessage": "Sending your request...",
       "successMessage": "Thanks for reaching out. Our team will contact you shortly."

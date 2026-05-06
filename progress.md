@@ -89,7 +89,36 @@
 - Updated `buildRfc2822` in `route.ts` to accept a `contentType` parameter (defaults to `text/plain`); admin and confirmation emails now sent as `text/html`.
 - Route now sends both emails concurrently via `Promise.all` — one to the team, one to the submitter.
 - Confirmed working: `POST /api/contact 200` with both emails delivered correctly in Gmail.
+- Added all 5 env vars to Vercel (Production and Preview environments): `GOOGLE_CLIENT_ID`, `GOOGLE_CLIENT_SECRET`, `GOOGLE_REFRESH_TOKEN`, `GOOGLE_SEND_AS`, `CONTACT_FORM_TO`.
+- Fixed email dark mode rendering issue in Canary (Chromium-based client) — dark navy hero section was being auto-inverted to light lavender; added `color-scheme: light` meta tags and `:root { color-scheme: light }` CSS to both templates to opt out of automatic dark mode adaptation. Gmail web renders correctly in both cases.
+
+- Added in-memory IP rate limiter to `/api/contact` — 3 submissions per IP per minute; returns 429 on excess. Per-instance only (serverless limitation) but sufficient to block basic bursts.
+- Added 10-second timeout to Gmail API `Promise.all` via `Promise.race` — prevents serverless function from hanging if Gmail stalls.
+- Added 2000-character cap on message field and sanitized error logging (only logs `error.message`, not the full object).
+- RAF-throttled the NavBar scroll listener — `findActiveHash` now runs at most once per animation frame instead of on every scroll event.
+- Removed `window.history.pushState` from nav click handler — URL stays clean at `moroute.com` when navigating sections (no `#section` appended).
+- Removed double `requestAnimationFrame` in `handleNavClick` — reduced to a single RAF.
+- Removed `hashchange` listener and initial `window.location.hash` check — no longer needed since hash is not written to the URL.
+- Fixed `sitemap.ts` `lastModified` from `new Date()` (changes every build) to a static date `2026-05-05`.
+
+- Replaced bottom-right toast with a centered in-page success modal — shows checkmark icon, "Message sent!" heading, success message, and a "Done" button that closes the modal and resets the form. Error messages now shown inline below the submit button instead of a toast.
+- Removed all toast state, timers, and portal logic from `ContactSection.tsx`; removed all toast CSS from `globals.css`; added `.contact-modal-backdrop`, `.contact-modal`, `.contact-modal-icon`, `.contact-modal-title`, `.contact-modal-body`, `.contact-modal-btn`, `.contact-error` styles and `revealFade` keyframe.
+- Changed submit button label from "Send Request" → "Send Message" in `content/moroute-content.json`.
+- Switched contact route to use Next.js 15 `after()` for fire-and-forget email sending — route now returns `200` immediately (~100ms) and sends both emails in the background after the response; failures logged server-side. Previously took 3–4s waiting on Gmail API.
+- Timeout and error handling moved inside the `after()` callback.
+
+- Fixed URL hash appearing in address bar when clicking nav and footer links on mobile — removed `href="#section"` from all hash navigation `<a>` elements in `NavBar.tsx` and `SiteFooter.tsx`; browser now has nothing to follow so URL stays clean at `moroute.com`. Click handlers still manage smooth scrolling and active state.
+- Also removed stale `pushState` and double RAF from `SiteFooter.tsx` `handleFooterLinkClick`.
+- Added `cursor: pointer` to `.nav-links a` and `.nav-mobile-links a` in `globals.css` so links still look clickable without an `href`.
+- Logo links changed from `href="#home"` to `href="/"` in both NavBar and SiteFooter.
+- Raised all touch targets to 44px minimum (WCAG): `nav-toggle`, `nav-fab-toggle`, `mobile-top-btn`, `feature-lightbox-close`, `feature-lightbox-nav` — both desktop and mobile CSS overrides updated.
+- Loosened feature lightbox stage padding on mobile from `2px 34px` → `2px 20px` for better usability on small screens.
+- Added `cursor: pointer` to `.footer-links a` in `globals.css` (links no longer have `href` attribute so browser default cursor wouldn't apply).
+- Removed duplicate inline `style={{ cursor: "pointer" }}` from `SiteFooter.tsx` footer link elements.
+- Confirmed hero `h1 span max-width: 16ch` is already correctly overridden to `100%` at the 1080px breakpoint, which cascades down to 760px — no change needed.
+
+- Created `app/icon.svg` — favicon extracted from the logo icon (dark rounded square + M letterform + green dot accent); Next.js 15 picks this up automatically via file-based convention, no layout.tsx changes needed. Full wordmark text excluded since it's unreadable at favicon size.
 
 ## Pending
-- Add all env vars (`GOOGLE_CLIENT_ID`, `GOOGLE_CLIENT_SECRET`, `GOOGLE_REFRESH_TOKEN`, `GOOGLE_SEND_AS`, `CONTACT_FORM_TO`) to Vercel environment variables.
-- Deploy to Vercel production.
+- Redeploy to Vercel production.
+- Verify contact form, navigation, and favicon on `https://www.moroute.com` after deploy.
