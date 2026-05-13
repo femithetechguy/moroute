@@ -36,7 +36,7 @@
   "meta": {
     "title": "MoRoute | Safer Travel Intelligence for Every Journey",
     "description": "Travel safer anywhere with live road alerts, safer route guidance, SOS support, and offline-ready tools.",
-    "siteUrl": "https://moroute-demo.fttgsolutions.com"
+    "siteUrl": "https://moroute.com"
   },
   "nav": {
     "links": [
@@ -50,22 +50,34 @@
     }
   },
   "hero": {
-    "badge": "Safer travel, anywhere you go.",
+    "badge": "Because every life matters.",
     "title": {
-      "lineOne": "Choose smarter, safer",
+      "lineOne": "Get home safely,",
       "lineTwoPrefix": "",
-      "lineTwoHighlight": "route",
-      "lineThree": "See risks early and travel with more confidence."
+      "lineTwoHighlight": "Every time.",
+      "lineThree": ""
     },
-    "description": "Get live incident alerts, route safety scores, and one-tap SOS support. Built for global use, with strong current use cases in Nigeria.",
+    "description": "On Nigerian roads, anything can happen. Accidents. Hold-ups. Bad spots. But with the right information, you can make better decisions and protect what matters most.",
+    "tagline": "MoRoute keeps you informed, so you can stay alert and arrive safely.",
+    "pills": [
+      "Live incident alerts",
+      "Community updates",
+      "Safer route guidance",
+      "One-tap SOS help"
+    ],
+    "footnote": "Built for Nigeria. Made for our roads. Powered by people like you.",
+    "quote": {
+      "text": "Someone is waiting for you at home. Give them a reason to smile today.",
+      "tagline": "Travel safe, arrive secure."
+    },
     "actions": {
       "primary": {
-        "label": "Android App",
-        "href": "#download"
+        "label": "Get early alerts",
+        "href": "#contact"
       },
       "secondary": {
-        "label": "iOS App",
-        "href": "#download"
+        "label": "Learn more",
+        "href": "#features"
       }
     },
     "map": {

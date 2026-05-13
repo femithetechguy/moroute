@@ -94,6 +94,19 @@
 
 - Added in-memory IP rate limiter to `/api/contact` — 3 submissions per IP per minute; returns 429 on excess. Per-instance only (serverless limitation) but sufficient to block basic bursts.
 
+- Updated hero section copy and added new content elements to match new design brief:
+  - Badge: "Because every life matters."
+  - Headline: "Get home safely, Every time." (highlight in green)
+  - Body: "On Nigerian roads, anything can happen. Accidents. Hold-ups. Bad spots..."
+  - Green tagline with heart icon: "MoRoute keeps you informed, so you can stay alert and arrive safely."
+  - Four feature pills with icons: Live incident alerts, Community updates, Safer route guidance, One-tap SOS help
+  - CTA buttons: "Get early alerts" → `#contact`, "Learn more" → `#features`
+  - Footnote: "Built for Nigeria. Made for our roads. Powered by people like you."
+  - Quote card: "Someone is waiting for you at home. Give them a reason to smile today. / Travel safe, arrive secure."
+  - Extended `HeroContent` type and JSON with `tagline`, `pills`, `footnote`, `quote` fields
+  - Added CSS for `.hero-tagline`, `.hero-pills`, `.hero-pill`, `.hero-pill-icon`, `.hero-footnote`, `.hero-right`, `.hero-quote`, `.hero-quote-mark`, `.hero-quote-text`, `.hero-quote-tagline`
+  - Added new elements to `prefers-reduced-motion` override block
+
 - **Bot protection added to contact form** ✅ — detected live spam submissions with random alphanumeric strings (no spaces, no real words). Added three layered defenses:
   - **Honeypot field** — hidden off-screen `<input name="_hp">` in the form; if it contains any value, the request is silently accepted without sending email (bots fill every field, humans never see it).
   - **Timing check** — client sends `_t` (page load timestamp) with submission; server rejects if elapsed < 1.5s (too fast = bot) or > 2h (stale/replayed). Missing `_t` (raw API bots) also caught since elapsed would be ~55 years.
