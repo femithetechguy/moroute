@@ -22,6 +22,13 @@ export interface HeroContent {
     lineThree: string;
   };
   description: string;
+  tagline: string;
+  pills: string[];
+  footnote: string;
+  quote: {
+    text: string;
+    tagline: string;
+  };
   actions: {
     primary: LinkItem;
     secondary: LinkItem;

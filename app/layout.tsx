@@ -67,7 +67,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${plusJakartaSans.variable} ${sora.variable}`}>{children}</body>
+      <body className={`${plusJakartaSans.variable} ${sora.variable}`} suppressHydrationWarning>{children}</body>
     </html>
   );
 }
