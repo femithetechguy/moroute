@@ -15,10 +15,12 @@ export default function ContactSection({ contact }: ContactSectionProps) {
   const [showModal, setShowModal] = useState(false);
   const [isMounted, setIsMounted] = useState(false);
   const formRef = useRef<HTMLFormElement | null>(null);
+  const loadedAtRef = useRef<number>(Date.now());
   const hasSectionTag = contact.sectionTag.trim().length > 0;
 
   useEffect(() => {
     setIsMounted(true);
+    loadedAtRef.current = Date.now();
   }, []);
 
   useEffect(() => {
@@ -49,7 +51,7 @@ export default function ContactSection({ contact }: ContactSectionProps) {
       const response = await fetch("/api/contact", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name, email, message }),
+        body: JSON.stringify({ name, email, message, _hp: "", _t: loadedAtRef.current }),
       });
 
       if (response.ok) {
@@ -101,6 +103,10 @@ export default function ContactSection({ contact }: ContactSectionProps) {
       </div>
 
       <form className="contact-form" ref={formRef} onSubmit={handleSubmit}>
+        <label style={{ position: "absolute", left: "-9999px", width: "1px", height: "1px", overflow: "hidden" }} aria-hidden="true">
+          <span>Leave this blank</span>
+          <input name="_hp" type="text" tabIndex={-1} autoComplete="off" />
+        </label>
         <div className="contact-grid">
           <label className="field-wrap" htmlFor="contact-name">
             <span>{contact.form.nameLabel}</span>

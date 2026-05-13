@@ -1,7 +1,7 @@
 # Progress
 
 ## Date
-- 2026-05-05 (latest session)
+- 2026-05-13 (latest session)
 
 ## Completed
 - Integrated newly provided app screenshots across hero, features, and CTA sections.
@@ -93,6 +93,40 @@
 - Fixed email dark mode rendering issue in Canary (Chromium-based client) — dark navy hero section was being auto-inverted to light lavender; added `color-scheme: light` meta tags and `:root { color-scheme: light }` CSS to both templates to opt out of automatic dark mode adaptation. Gmail web renders correctly in both cases.
 
 - Added in-memory IP rate limiter to `/api/contact` — 3 submissions per IP per minute; returns 429 on excess. Per-instance only (serverless limitation) but sufficient to block basic bursts.
+
+- Hero section redesigned with full-bleed photo background (`hero.png`):
+  - Replaced light gradient card with `hero.png` cover image + left-to-right dark overlay for text readability
+  - All hero text updated to white; `h1`, body, pills, footnote, secondary button scoped for dark background
+  - Pills rendered as a bordered row with vertical dividers; wraps to 2×2 grid on mobile
+  - Quote card ("Someone is waiting for you at home…") moved out of the right column — now spans full hero width as a bottom row with green top accent border, preventing overlap with the phone mockup
+  - Mobile: `background-position: left center` shows the dark rainy windshield (phone pushed off-screen), solid `rgba(4,12,24,0.88)` overlay keeps content readable
+  - Mobile: empty `.hero-right` spacer hidden; pills wrap to 2×2
+  - Removed hero texture layer (redundant over photo); suppressed `::after` ambient pulse on dark background
+
+- Button animations added to hero CTAs:
+  - Primary ("get early alerts"): recurring shimmer sweep (`::before`), glow pulse (`btnGlowPulse`), Bell icon ring animation (`bellRing`) — all suppressed under `prefers-reduced-motion`
+  - Secondary ("learn more"): green border glow + box-shadow trace on hover
+  - Switched primary button icon from custom SVG to Lucide `Bell` component for clean CSS animation targeting
+
+- Updated hero section copy and added new content elements to match new design brief:
+  - Badge: "Because every life matters."
+  - Headline: "Get home safely, Every time." (highlight in green)
+  - Body: "On Nigerian roads, anything can happen. Accidents. Hold-ups. Bad spots..."
+  - Green tagline with heart icon: "MoRoute keeps you informed, so you can stay alert and arrive safely."
+  - Four feature pills with icons: Live incident alerts, Community updates, Safer route guidance, One-tap SOS help
+  - CTA buttons: "Get early alerts" → `#contact`, "Learn more" → `#features`
+  - Footnote: "Built for Nigeria. Made for our roads. Powered by people like you."
+  - Quote card: "Someone is waiting for you at home. Give them a reason to smile today. / Travel safe, arrive secure."
+  - Extended `HeroContent` type and JSON with `tagline`, `pills`, `footnote`, `quote` fields
+  - Added CSS for `.hero-tagline`, `.hero-pills`, `.hero-pill`, `.hero-pill-icon`, `.hero-footnote`, `.hero-right`, `.hero-quote`, `.hero-quote-mark`, `.hero-quote-text`, `.hero-quote-tagline`
+  - Added new elements to `prefers-reduced-motion` override block
+
+- **Bot protection added to contact form** ✅ — detected live spam submissions with random alphanumeric strings (no spaces, no real words). Added three layered defenses:
+  - **Honeypot field** — hidden off-screen `<input name="_hp">` in the form; if it contains any value, the request is silently accepted without sending email (bots fill every field, humans never see it).
+  - **Timing check** — client sends `_t` (page load timestamp) with submission; server rejects if elapsed < 1.5s (too fast = bot) or > 2h (stale/replayed). Missing `_t` (raw API bots) also caught since elapsed would be ~55 years.
+  - **No-space message check** — real messages contain spaces; bot-generated random strings don't. Messages with no spaces return a 400 error.
+  - All bot defenses silently return `{ ok: true }` (except no-space which gives a user-visible error) to avoid enumeration by adapting bots.
+  - All 5 test scenarios verified locally via curl: honeypot block ✅, timing block ✅, no-space block ✅, missing `_t` block ✅, legitimate submission email delivered ✅.
 - Added 10-second timeout to Gmail API `Promise.all` via `Promise.race` — prevents serverless function from hanging if Gmail stalls.
 - Added 2000-character cap on message field and sanitized error logging (only logs `error.message`, not the full object).
 - RAF-throttled the NavBar scroll listener — `findActiveHash` now runs at most once per animation frame instead of on every scroll event.
@@ -119,6 +153,9 @@
 
 - Created `app/icon.svg` — favicon extracted from the logo icon (dark rounded square + M letterform + green dot accent); Next.js 15 picks this up automatically via file-based convention, no layout.tsx changes needed. Full wordmark text excluded since it's unreadable at favicon size.
 
+- Deployed to Vercel Preview (demo) via CLI — build passed, all features verified working: contact form modal, favicon, clean URL navigation, email sending.
+- Preview URL: `https://moroute-euy0upej3-tech-guys-projects-4a517b26.vercel.app`
+
 ## Pending
-- Redeploy to Vercel production.
-- Verify contact form, navigation, and favicon on `https://www.moroute.com` after deploy.
+- Deploy to production (`vercel --prod`) when ready.
+- Verify on `https://www.moroute.com` after production deploy.
