@@ -48,7 +48,19 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: "Invalid request body." }, { status: 400 });
   }
 
-  const { name, email, message } = body as Record<string, unknown>;
+  const { name, email, message, _hp, _t } = body as Record<string, unknown>;
+
+  // Honeypot: bots fill hidden fields, humans don't
+  if (typeof _hp === "string" && _hp.length > 0) {
+    return NextResponse.json({ ok: true }); // silently accept so bots don't know they failed
+  }
+
+  // Timing: reject submissions under 1.5s (bots) or over 2h (stale/replayed)
+  const loadedAt = typeof _t === "number" ? _t : 0;
+  const elapsed = Date.now() - loadedAt;
+  if (elapsed < 1500 || elapsed > 2 * 60 * 60 * 1000) {
+    return NextResponse.json({ ok: true }); // silent accept to avoid enumeration
+  }
 
   if (typeof name !== "string" || !name.trim()) {
     return NextResponse.json({ error: "Name is required." }, { status: 400 });
@@ -61,6 +73,10 @@ export async function POST(request: NextRequest) {
   }
   if (message.length > 2000) {
     return NextResponse.json({ error: "Message must be 2000 characters or fewer." }, { status: 400 });
+  }
+  // Bot messages are random strings with no spaces; real messages almost always have spaces
+  if (!message.includes(" ")) {
+    return NextResponse.json({ error: "Please enter a complete message." }, { status: 400 });
   }
 
   const sendAs = process.env.GOOGLE_SEND_AS;

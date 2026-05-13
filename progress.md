@@ -1,7 +1,7 @@
 # Progress
 
 ## Date
-- 2026-05-05 (latest session)
+- 2026-05-13 (latest session)
 
 ## Completed
 - Integrated newly provided app screenshots across hero, features, and CTA sections.
@@ -93,6 +93,13 @@
 - Fixed email dark mode rendering issue in Canary (Chromium-based client) — dark navy hero section was being auto-inverted to light lavender; added `color-scheme: light` meta tags and `:root { color-scheme: light }` CSS to both templates to opt out of automatic dark mode adaptation. Gmail web renders correctly in both cases.
 
 - Added in-memory IP rate limiter to `/api/contact` — 3 submissions per IP per minute; returns 429 on excess. Per-instance only (serverless limitation) but sufficient to block basic bursts.
+
+- **Bot protection added to contact form** ✅ — detected live spam submissions with random alphanumeric strings (no spaces, no real words). Added three layered defenses:
+  - **Honeypot field** — hidden off-screen `<input name="_hp">` in the form; if it contains any value, the request is silently accepted without sending email (bots fill every field, humans never see it).
+  - **Timing check** — client sends `_t` (page load timestamp) with submission; server rejects if elapsed < 1.5s (too fast = bot) or > 2h (stale/replayed). Missing `_t` (raw API bots) also caught since elapsed would be ~55 years.
+  - **No-space message check** — real messages contain spaces; bot-generated random strings don't. Messages with no spaces return a 400 error.
+  - All bot defenses silently return `{ ok: true }` (except no-space which gives a user-visible error) to avoid enumeration by adapting bots.
+  - All 5 test scenarios verified locally via curl: honeypot block ✅, timing block ✅, no-space block ✅, missing `_t` block ✅, legitimate submission email delivered ✅.
 - Added 10-second timeout to Gmail API `Promise.all` via `Promise.race` — prevents serverless function from hanging if Gmail stalls.
 - Added 2000-character cap on message field and sanitized error logging (only logs `error.message`, not the full object).
 - RAF-throttled the NavBar scroll listener — `findActiveHash` now runs at most once per animation frame instead of on every scroll event.
