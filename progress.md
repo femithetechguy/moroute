@@ -94,6 +94,20 @@
 
 - Added in-memory IP rate limiter to `/api/contact` — 3 submissions per IP per minute; returns 429 on excess. Per-instance only (serverless limitation) but sufficient to block basic bursts.
 
+- Hero section redesigned with full-bleed photo background (`hero.png`):
+  - Replaced light gradient card with `hero.png` cover image + left-to-right dark overlay for text readability
+  - All hero text updated to white; `h1`, body, pills, footnote, secondary button scoped for dark background
+  - Pills rendered as a bordered row with vertical dividers; wraps to 2×2 grid on mobile
+  - Quote card ("Someone is waiting for you at home…") moved out of the right column — now spans full hero width as a bottom row with green top accent border, preventing overlap with the phone mockup
+  - Mobile: `background-position: left center` shows the dark rainy windshield (phone pushed off-screen), solid `rgba(4,12,24,0.88)` overlay keeps content readable
+  - Mobile: empty `.hero-right` spacer hidden; pills wrap to 2×2
+  - Removed hero texture layer (redundant over photo); suppressed `::after` ambient pulse on dark background
+
+- Button animations added to hero CTAs:
+  - Primary ("get early alerts"): recurring shimmer sweep (`::before`), glow pulse (`btnGlowPulse`), Bell icon ring animation (`bellRing`) — all suppressed under `prefers-reduced-motion`
+  - Secondary ("learn more"): green border glow + box-shadow trace on hover
+  - Switched primary button icon from custom SVG to Lucide `Bell` component for clean CSS animation targeting
+
 - Updated hero section copy and added new content elements to match new design brief:
   - Badge: "Because every life matters."
   - Headline: "Get home safely, Every time." (highlight in green)
