@@ -2337,9 +2337,25 @@ footer {
 
 }
 
+@media (max-width: 820px) {
+  .hero-visual {
+    transform: scale(0.75);
+    transform-origin: center top;
+    margin-bottom: -120px;
+  }
+
+  .hero-alert-card {
+    display: none;
+  }
+
+  .hero-inner {
+    gap: 0;
+  }
+}
+
 @media (max-width: 760px) {
   main {
-    padding: 8px;
+    padding: 68px 8px 8px; /* 68px = mobile fixed nav clearance */
   }
 
   main::before,
@@ -2395,30 +2411,79 @@ footer {
   }
 
   .hero-inner {
-    padding: 40px 16px 60px;
-    gap: 40px;
+    padding: 20px 20px 48px 28px;
+    gap: 0;
+  }
+
+  .hero-visual {
+    transform: scale(0.65);
+    transform-origin: center top;
+    margin-bottom: -140px; /* compensate for scale shrinking layout space */
+  }
+
+  .hero-alert-card {
+    display: none;
+  }
+
+  .hero-glow-blob {
+    width: 220px;
+    height: 220px;
+  }
+
+  .hero-phone-main {
+    width: 178px;
+    height: 382px;
+  }
+
+  .hero-phone-side {
+    width: 142px;
+    height: 305px;
+    margin-right: -45px;
+    margin-bottom: 31px;
   }
 
   .hero-h1 {
-    font-size: clamp(2.3rem, 9vw, 3rem);
+    font-size: clamp(2.2rem, 9vw, 2.8rem);
+  }
+
+  .hero-lede {
+    font-size: 0.95rem;
+  }
+
+  .hero-reassure {
+    font-size: 0.9rem;
   }
 
   .hero-stat {
-    padding: 16px 12px;
+    padding: 14px 12px;
   }
 
   .hero-stats {
-    grid-template-columns: 1fr;
+    grid-template-columns: repeat(3, 1fr);
     border-radius: 12px;
   }
 
   .hero-stat {
-    border-right: none;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+    border-right: 1px solid rgba(255, 255, 255, 0.07);
+    border-bottom: none;
   }
 
   .hero-stat:last-child {
-    border-bottom: none;
+    border-right: none;
+  }
+
+  .hero-stat-num {
+    font-size: 1.3rem;
+  }
+
+  .hero-stat-lbl {
+    font-size: 10px;
+  }
+
+  .btn-primary,
+  .hero-btn-ghost {
+    padding: 13px 18px;
+    font-size: 14px;
   }
 
   .feature-showcase {
@@ -2621,11 +2686,16 @@ footer {
 
   .trust-band-inner {
     justify-content: flex-start;
-    gap: 20px;
+    gap: 16px;
+    flex-wrap: wrap;
   }
 
   .trust-item {
-    flex: 0 0 calc(50% - 10px);
+    flex: 0 0 calc(50% - 8px);
+  }
+
+  .site-base {
+    border-radius: 16px;
   }
 
   footer {
