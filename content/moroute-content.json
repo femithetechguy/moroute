@@ -40,9 +40,18 @@
   },
   "nav": {
     "links": [
-      { "label": "Home", "href": "#home" },
-      { "label": "Features", "href": "#features" },
-      { "label": "Contact", "href": "#contact" }
+      {
+        "label": "Home",
+        "href": "#home"
+      },
+      {
+        "label": "Features",
+        "href": "#features"
+      },
+      {
+        "label": "Contact",
+        "href": "#contact"
+      }
     ],
     "cta": {
       "label": "Download App",
@@ -50,49 +59,84 @@
     }
   },
   "hero": {
-    "badge": "Because every life matters.",
+    "eyebrow": "Because every life matters",
     "title": {
-      "lineOne": "Get home safely,",
-      "lineTwoPrefix": "",
-      "lineTwoHighlight": "Every time.",
-      "lineThree": ""
+      "lineOne": "Get home safely.",
+      "lineTwo": "Every single time."
     },
-    "description": "On Nigerian roads, anything can happen. Accidents. Hold-ups. Bad spots. But with the right information, you can make better decisions and protect what matters most.",
-    "tagline": "MoRoute keeps you informed, so you can stay alert and arrive safely.",
-    "pills": [
-      "Live incident alerts",
-      "Community updates",
-      "Safer route guidance",
-      "One-tap SOS help"
+    "lede": "On Nigerian roads, the danger is real — accidents, hold-ups, kidnap corridors, sudden road closures.",
+    "ledeBold": "The difference between a safe trip and a tragedy is often just knowing what’s ahead.",
+    "reassure": "MoRoute keeps you informed in real time — so you stay alert, choose safer routes, and arrive secure.",
+    "statsStrip": [
+      {
+        "num": "5,289",
+        "lbl": "road deaths in 2025 alone (FRSC)"
+      },
+      {
+        "num": "2.2M",
+        "lbl": "Nigerians abducted in one year (NBS)"
+      },
+      {
+        "num": "1 app",
+        "lbl": "built to warn you before it’s too late"
+      }
     ],
     "footnote": "Built for Nigeria. Made for our roads. Powered by people like you.",
-    "quote": {
-      "text": "Someone is waiting for you at home. Give them a reason to smile today.",
-      "tagline": "Travel safe, arrive secure."
-    },
     "actions": {
       "primary": {
         "label": "Get early alerts",
         "href": "#contact"
       },
       "secondary": {
-        "label": "Learn more",
+        "label": "See how it works",
         "href": "#features"
       }
     },
-    "map": {
-      "texturePath": "/images/textures/map-noise.svg",
-      "safeChip": "Safer route selected",
-      "incidentChip": "Alert - 1.2 km ahead",
-      "info": {
-        "etaLabel": "Safer ETA",
-        "etaValue": "18 min",
-        "etaExtra": "12.6 km",
-        "safetyLabel": "Safety score",
-        "safetyValue": "90",
-        "safetyMax": "100"
+    "ticker": [
+      "5,289 Nigerians killed on the roads in 2025 — FRSC",
+      "Lagos–Ibadan Expressway abductions rose 2,767% since 2019",
+      "₦2.2 trillion paid in ransom in 12 months — NBS",
+      "10,446 road crashes recorded in 2025 — FRSC",
+      "Abuja–Kaduna & Enugu–Port Harcourt flagged as active kidnap corridors"
+    ],
+    "alertCards": [
+      {
+        "type": "red",
+        "icon": "⚠️",
+        "title": "High Alert",
+        "desc": "Hold-up reported",
+        "location": "Ikeja–Ojodu Rd",
+        "timeAgo": "Just now",
+        "count": "24"
       },
-      "sosLabel": "SOS"
+      {
+        "type": "amber",
+        "icon": "🚗",
+        "title": "Accident",
+        "desc": "Road partially blocked",
+        "location": "Third Mainland Bridge",
+        "timeAgo": "10 min ago",
+        "count": "18"
+      },
+      {
+        "type": "teal",
+        "icon": "🛡️",
+        "title": "Checkpoint",
+        "desc": "Drive with caution",
+        "location": "Lekki–Epe Expressway",
+        "timeAgo": "25 min ago",
+        "count": "12"
+      }
+    ],
+    "phoneScreens": {
+      "main": {
+        "src": "/images/screenshots/screen-live-feed.png",
+        "alt": "MoRoute Live Road Feed"
+      },
+      "side": {
+        "src": "/images/screenshots/screen-on-route.png",
+        "alt": "MoRoute On-Route safety map"
+      }
     }
   },
   "stats": [
@@ -211,7 +255,11 @@
           "score": 7.1,
           "color": "orange"
         },
-        { "label": "Major city interstates", "score": 5.3, "color": "green" },
+        {
+          "label": "Major city interstates",
+          "score": 5.3,
+          "color": "green"
+        },
         {
           "label": "Well-monitored metro corridors",
           "score": 3.9,
@@ -258,8 +306,8 @@
     },
     "phone": {
       "label": "Call us",
-      "value": "+1 (404) 404-6099",
-      "href": "tel:+14044046099"
+      "value": "09034464384",
+      "href": "tel:+2349034464384"
     },
     "email": {
       "label": "Email us",
@@ -272,10 +320,42 @@
     "backToTopAriaLabel": "Scroll back to top"
   },
   "footer": {
+    "trustItems": [
+      {
+        "icon": "📡",
+        "title": "Real-time alerts",
+        "sub": "Live incidents on your route"
+      },
+      {
+        "icon": "👥",
+        "title": "Community-powered",
+        "sub": "Verified by travelers like you"
+      },
+      {
+        "icon": "🧭",
+        "title": "Safer routing",
+        "sub": "Avoid corridors with active risk"
+      },
+      {
+        "icon": "🆘",
+        "title": "One-tap SOS",
+        "sub": "Reach help and your contacts fast"
+      }
+    ],
+    "sources": "Sources: Federal Road Safety Corps (FRSC) 2025 Annual Road Traffic Crash Report — 10,446 crashes, 5,289 deaths; National Bureau of Statistics (NBS) Crime Experience & Security Perception Survey 2024 — 2.2m abductions, ₦2.2tn ransom paid (May 2023–Apr 2024); SBM Intelligence / road-corridor kidnapping analyses 2025. Figures shown for awareness; MoRoute provides community safety information, not a guarantee of safety.",
     "links": [
-      { "label": "Home", "href": "#home" },
-      { "label": "Features", "href": "#features" },
-      { "label": "Contact", "href": "#contact" }
+      {
+        "label": "Home",
+        "href": "#home"
+      },
+      {
+        "label": "Features",
+        "href": "#features"
+      },
+      {
+        "label": "Contact",
+        "href": "#contact"
+      }
     ],
     "copyright": "Copyright 2026 MoRoute. Safer routes. Stronger journeys."
   }

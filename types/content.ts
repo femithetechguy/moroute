@@ -13,39 +13,41 @@ export interface LinkItem {
   href: string;
 }
 
+export interface HeroStatItem {
+  num: string;
+  lbl: string;
+}
+
+export interface HeroAlertCard {
+  type: "red" | "amber" | "teal";
+  icon: string;
+  title: string;
+  desc: string;
+  location: string;
+  timeAgo: string;
+  count: string;
+}
+
 export interface HeroContent {
-  badge: string;
+  eyebrow: string;
   title: {
     lineOne: string;
-    lineTwoPrefix: string;
-    lineTwoHighlight: string;
-    lineThree: string;
+    lineTwo: string;
   };
-  description: string;
-  tagline: string;
-  pills: string[];
+  lede: string;
+  ledeBold: string;
+  reassure: string;
+  statsStrip: HeroStatItem[];
   footnote: string;
-  quote: {
-    text: string;
-    tagline: string;
-  };
   actions: {
     primary: LinkItem;
     secondary: LinkItem;
   };
-  map: {
-    texturePath: string;
-    safeChip: string;
-    incidentChip: string;
-    info: {
-      etaLabel: string;
-      etaValue: string;
-      etaExtra: string;
-      safetyLabel: string;
-      safetyValue: string;
-      safetyMax: string;
-    };
-    sosLabel: string;
+  ticker: string[];
+  alertCards: HeroAlertCard[];
+  phoneScreens: {
+    main: ImageItem;
+    side: ImageItem;
   };
 }
 
@@ -165,6 +167,8 @@ export interface MorouteContent {
     backToTopAriaLabel: string;
   };
   footer: {
+    trustItems: Array<{ icon: string; title: string; sub: string; }>;
+    sources: string;
     links: LinkItem[];
     copyright: string;
   };
