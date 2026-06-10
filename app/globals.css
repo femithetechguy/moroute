@@ -486,6 +486,7 @@ body.nav-menu-open main {
   z-index: 1;
   background: #05100c;
   overflow: hidden;
+  border-radius: 24px;
 }
 
 .hero::before {
@@ -2066,6 +2067,8 @@ body.nav-menu-open .mobile-top-btn {
 /* ===== SITE BASE (trust band + sources + footer) ===== */
 .site-base {
   background: #05100c;
+  border-radius: 24px;
+  overflow: hidden;
 }
 
 .trust-band {
