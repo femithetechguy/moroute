@@ -108,20 +108,29 @@ nav {
   gap: 24px;
   margin: 0 clamp(14px, 2.3vw, 28px);
   padding: 15px clamp(16px, 2.6vw, 34px);
-  border: 1px solid var(--panel-border);
+  border: 1px solid rgba(255, 255, 255, 0.08);
   border-radius: 18px;
-  background: rgba(255, 255, 255, 0.84);
-  box-shadow: var(--shadow-soft);
+  background: rgba(5, 16, 12, 0.82);
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.28);
   position: relative;
   z-index: 1;
-  backdrop-filter: blur(12px);
+  backdrop-filter: blur(14px);
   animation: navSlideIn 540ms var(--ease-smooth) both;
+  transition: background 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
 }
 
 .nav-shell {
-  position: sticky;
+  position: fixed;
   top: 12px;
+  left: 0;
+  right: 0;
   z-index: 140;
+}
+
+.nav-shell.is-scrolled nav {
+  background: rgba(255, 255, 255, 0.92);
+  border-color: var(--panel-border);
+  box-shadow: var(--shadow-soft);
 }
 
 .logo {
@@ -151,7 +160,7 @@ nav {
 }
 
 .nav-links a {
-  color: var(--ink-700);
+  color: rgba(234, 255, 245, 0.78);
   font-size: 12px;
   font-weight: 700;
   text-transform: uppercase;
@@ -163,11 +172,11 @@ nav {
 }
 
 .nav-links a:hover {
-  color: var(--ink-900);
+  color: #eafff5;
 }
 
 .nav-links a.is-active {
-  color: #0f8f62;
+  color: #19e08a;
 }
 
 .nav-links a.is-active::after {
@@ -178,6 +187,23 @@ nav {
   bottom: -6px;
   height: 2px;
   border-radius: 8px;
+  background: linear-gradient(120deg, #19e08a 0%, #7fffc4 100%);
+}
+
+/* Light nav when scrolled */
+.nav-shell.is-scrolled .nav-links a {
+  color: var(--ink-700);
+}
+
+.nav-shell.is-scrolled .nav-links a:hover {
+  color: var(--ink-900);
+}
+
+.nav-shell.is-scrolled .nav-links a.is-active {
+  color: #0f8f62;
+}
+
+.nav-shell.is-scrolled .nav-links a.is-active::after {
   background: linear-gradient(120deg, #0fd180 0%, #4ae7a9 100%);
 }
 
@@ -487,6 +513,7 @@ body.nav-menu-open main {
   background: #05100c;
   overflow: hidden;
   border-radius: 24px;
+  padding-top: 70px;
 }
 
 .hero::before {
