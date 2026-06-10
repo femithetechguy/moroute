@@ -71,7 +71,7 @@ body.feature-lightbox-open {
 main {
   width: min(1240px, 100%);
   margin: 0 auto;
-  padding: 0 14px 14px;
+  padding: 84px 14px 14px; /* 84px = fixed nav clearance (top:12px + ~66px height + 6px gap) */
   position: relative;
   isolation: isolate;
 }
@@ -512,8 +512,7 @@ body.nav-menu-open main {
   z-index: 1;
   background: #05100c;
   overflow: hidden;
-  border-radius: 0 0 24px 24px;
-  padding-top: 82px;
+  border-radius: 24px;
 }
 
 .hero::before {
