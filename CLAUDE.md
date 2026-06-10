@@ -164,3 +164,13 @@ Ref FTTG-XX     ← use when making progress but issue is not done yet
 **Magic words that close issues on merge:** fix, fixes, fixed, closes, closed, resolve, resolves, complete, completes, implements
 
 **Magic words that reference without closing:** ref, refs, part of, related to, contributes to
+
+**Simple rule:**
+- Still working on it? → `Ref FTTG-XX: what you changed`
+- Done with it? → `Fixes FTTG-XX: what you changed`
+
+Example:
+```
+Fixes FTTG-12: added Linear GitHub integration notes to CLAUDE.md
+Ref FTTG-12: updated hero section copy
+```
