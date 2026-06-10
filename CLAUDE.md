@@ -41,8 +41,7 @@ components/           — one file per section
   ThreatsRiskSection.tsx
   CtaSection.tsx
   ContactSection.tsx
-  SiteFooter.tsx
-  MapMockup.tsx
+  SiteFooter.tsx        — includes trust band + sources attribution above footer links
   MobileBackToTop.tsx
   MotionEnhancer.tsx  — scroll-reveal / ambient animations
 
@@ -61,7 +60,10 @@ docs/
 public/images/brand/
   preview_portrait.png   — 1080×1080 OG image (WhatsApp, mobile)
   preview_landscape.png  — 1200×630 OG image (Twitter, LinkedIn, desktop)
-  hero.png               — full-bleed hero background
+
+public/images/screenshots/
+  screen-live-feed.png   — hero phone mockup (front phone, live feed screen)
+  screen-on-route.png    — hero phone mockup (back phone, on-route map screen)
 
 PROGRESS.md           — session-by-session log of what has been completed and what's pending
 ```
@@ -81,6 +83,8 @@ All CSS lives in `app/globals.css`. No Tailwind, no CSS modules per component. A
 - Click handlers manage smooth scroll + active state manually
 - `window.history.pushState` is intentionally NOT used
 - Logo href is `"/"` not `"#home"`
+- Nav is `position: fixed` (floating) — dark glass over hero, transitions to light frosted glass when `is-scrolled` class is added (triggered at `scrollY > 60`)
+- `main { padding-top: 84px }` provides clearance for the fixed nav on desktop; `68px` on mobile (760px)
 
 ### Contact Form (`/api/contact`)
 - Three-layer bot protection: honeypot field, timing check (1.5s–2h window), no-space message check
@@ -95,11 +99,34 @@ All CSS lives in `app/globals.css`. No Tailwind, no CSS modules per component. A
 - Structured data: `SoftwareApplication` schema with ratings, OS, features, download URLs
 - `sitemap.ts` uses static `lastModified` date (not `new Date()`) to avoid unnecessary cache busts
 
+### Hero Section
+- Dark background (`#05100c`), two-column grid (`1.1fr / 0.9fr`), `border-radius: 24px`
+- Left: eyebrow badge, H1 (2 lines, single-line each), lede, reassure, stats strip, CTAs, footnote
+- Right: two phone mockups (side + main) from `public/images/screenshots/`, ambient glow blob
+- 3 floating alert cards (red/amber/teal) absolutely positioned within `.hero-visual`
+- Scrolling ticker strip at top (duplicated JSX items for seamless loop)
+- All content driven from `hero.*` in `content/moroute-content.json`
+- `overflow: hidden` on `.hero` clips phone/card overflow at border-radius corners
+
+### Footer / Site Base
+- `.site-base` wraps trust band + sources + `<footer>` in a dark background block
+- Trust band content driven from `footer.trustItems` (4 items); sources from `footer.sources`
+- Sources text colour: gold `#c8a84b`
+- Footer nav links and copyright styled for dark background
+
 ### Animations
-- `MotionEnhancer` drives scroll-reveal
+- `MotionEnhancer` drives scroll-reveal (IntersectionObserver, `threshold: 0.18`)
 - All animations guarded with `prefers-reduced-motion` — elements render in final visible state when motion is reduced
-- Hero CTA: shimmer sweep + glow pulse + Bell ring animation
+- Hero CTA: Bell ring animation; hero elements use `heroRise` keyframe
 - RAF-throttled NavBar scroll listener
+- `textureDrift` on `main::before` — vertical only (no horizontal translate) to prevent mobile scroll
+
+### Mobile Responsiveness
+- Fixed nav clearance: `main { padding-top: 84px }` desktop, `68px` at 760px
+- `html { overflow-x: hidden }` + `main { overflow-x: clip }` prevent horizontal scroll
+- 820px breakpoint: phones resized (210×452 / 168×360), alert cards hidden
+- 760px breakpoint: phones resized (150×322 / 120×257), alert cards hidden, stats 3-col
+- Direct dimension changes used (NOT `transform: scale()`) so grid layout space matches visual size
 
 ---
 
@@ -119,9 +146,12 @@ Stored in `.env.local` (not committed) and Vercel dashboard (Production + Previe
 
 ---
 
-## Current Status (as of 2026-05-13)
-- All core features complete and verified working
-- Preview deployed and verified on Vercel
+## Current Status (as of 2026-06-10)
+- Hero section fully redesigned (dark design, phone mockups, ticker, alert cards) — FTTG-11 in progress
+- Footer / site base redesigned with trust band and sources — FTTG-14 complete
+- Contact phone number updated — FTTG-13 complete
+- Mobile responsiveness pass complete — FTTG-15 in progress (pending real-device verification)
+- Floating nav with dark-to-light scroll transition live
 - **Pending:** Production deploy (`vercel --prod`) and verify on `https://www.moroute.com`
 
 See `PROGRESS.md` for the full session-by-session history.
