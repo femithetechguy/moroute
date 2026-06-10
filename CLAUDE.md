@@ -138,3 +138,29 @@ npm run build      # verify production build
 ```
 
 Clean build: `rm -rf .next && npm run build`
+
+---
+
+## Linear + GitHub Integration
+
+**Setup (already done):**
+- GitHub webhook configured on the `moroute` repo pointing to Linear's Payload URL
+- Repo linked to the FTTG Solutions team in Linear (Settings → Integrations → GitHub)
+- "Link commits to issues with magic words" toggle must be **ON** in Linear GitHub settings
+
+**Commit message format:**
+```
+type: short description
+
+Fixes FTTG-XX   ← use when commit completes the issue (Linear auto-closes it)
+Ref FTTG-XX     ← use when making progress but issue is not done yet
+```
+
+**Branching strategy:**
+- Day-to-day work happens on `develop` — no feature branch needed for small changes
+- Use `Fixes` or `Ref` in every commit body on develop to track against the issue
+- When promoting to `demo` or `main`, include the issue ID in the PR title for clean linking
+
+**Magic words that close issues on merge:** fix, fixes, fixed, closes, closed, resolve, resolves, complete, completes, implements
+
+**Magic words that reference without closing:** ref, refs, part of, related to, contributes to
