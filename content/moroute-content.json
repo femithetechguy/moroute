@@ -320,6 +320,29 @@
     "backToTopAriaLabel": "Scroll back to top"
   },
   "footer": {
+    "trustItems": [
+      {
+        "icon": "📡",
+        "title": "Real-time alerts",
+        "sub": "Live incidents on your route"
+      },
+      {
+        "icon": "👥",
+        "title": "Community-powered",
+        "sub": "Verified by travelers like you"
+      },
+      {
+        "icon": "🧭",
+        "title": "Safer routing",
+        "sub": "Avoid corridors with active risk"
+      },
+      {
+        "icon": "🆘",
+        "title": "One-tap SOS",
+        "sub": "Reach help and your contacts fast"
+      }
+    ],
+    "sources": "Sources: Federal Road Safety Corps (FRSC) 2025 Annual Road Traffic Crash Report — 10,446 crashes, 5,289 deaths; National Bureau of Statistics (NBS) Crime Experience & Security Perception Survey 2024 — 2.2m abductions, ₦2.2tn ransom paid (May 2023–Apr 2024); SBM Intelligence / road-corridor kidnapping analyses 2025. Figures shown for awareness; MoRoute provides community safety information, not a guarantee of safety.",
     "links": [
       {
         "label": "Home",

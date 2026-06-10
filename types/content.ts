@@ -167,6 +167,8 @@ export interface MorouteContent {
     backToTopAriaLabel: string;
   };
   footer: {
+    trustItems: Array<{ icon: string; title: string; sub: string; }>;
+    sources: string;
     links: LinkItem[];
     copyright: string;
   };
