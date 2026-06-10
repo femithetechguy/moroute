@@ -13,11 +13,19 @@ type NavBarProps = {
 export default function NavBar({ brand, nav, logoPath, logoAlt }: NavBarProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [activeHash, setActiveHash] = useState("#home");
+  const [scrolled, setScrolled] = useState(false);
   const mobileMenuId = useId();
   const trackedHashes = useMemo(
     () => nav.links.map((link) => link.href).filter((href) => href.startsWith("#")),
     [nav.links]
   );
+
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 60);
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
 
   useEffect(() => {
     const handleEscape = (event: KeyboardEvent) => {
@@ -113,7 +121,7 @@ export default function NavBar({ brand, nav, logoPath, logoAlt }: NavBarProps) {
   };
 
   return (
-    <header className="nav-shell">
+    <header className={`nav-shell${scrolled ? " is-scrolled" : ""}`}>
       <nav>
         <a href="/" className="logo" aria-label={brand} onClick={(event) => handleNavClick(event, "#home")}>
           <img src={logoPath} alt={logoAlt} className="brand-logo" />

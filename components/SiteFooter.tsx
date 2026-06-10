@@ -37,25 +37,46 @@ export default function SiteFooter({ brand, footer, logoPath, logoAlt }: SiteFoo
   };
 
   return (
-    <footer data-reveal>
-      <a href="/" className="logo logo-small" aria-label={brand} onClick={(event) => handleFooterLinkClick(event, "#home")}>
-        <img src={logoPath} alt={logoAlt} className="brand-logo brand-logo-footer" />
-      </a>
+    <div className="site-base">
+      {/* Trust band */}
+      <div className="trust-band">
+        <div className="trust-band-inner">
+          {footer.trustItems.map((item) => (
+            <div key={item.title} className="trust-item">
+              <div className="trust-item-icon">{item.icon}</div>
+              <div>
+                <div className="trust-item-title">{item.title}</div>
+                <div className="trust-item-sub">{item.sub}</div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
 
-      <ul className="footer-links">
-        {footer.links.map((link) => (
-          <li key={link.label}>
-            <a
-              href={link.href.startsWith("#") ? undefined : link.href}
-              onClick={(event) => handleFooterLinkClick(event, link.href)}
-            >
-              {link.label}
-            </a>
-          </li>
-        ))}
-      </ul>
+      {/* Sources attribution */}
+      <p className="trust-sources">{footer.sources}</p>
 
-      <div className="footer-copy">{footer.copyright}</div>
-    </footer>
+      {/* Footer */}
+      <footer>
+        <a href="/" className="logo logo-small" aria-label={brand} onClick={(event) => handleFooterLinkClick(event, "#home")}>
+          <img src={logoPath} alt={logoAlt} className="brand-logo brand-logo-footer" />
+        </a>
+
+        <ul className="footer-links">
+          {footer.links.map((link) => (
+            <li key={link.label}>
+              <a
+                href={link.href.startsWith("#") ? undefined : link.href}
+                onClick={(event) => handleFooterLinkClick(event, link.href)}
+              >
+                {link.label}
+              </a>
+            </li>
+          ))}
+        </ul>
+
+        <div className="footer-copy">{footer.copyright}</div>
+      </footer>
+    </div>
   );
 }
