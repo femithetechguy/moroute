@@ -28,6 +28,7 @@
 
 html {
   scroll-behavior: smooth;
+  overflow-x: hidden;
 }
 
 #home,
@@ -74,6 +75,7 @@ main {
   padding: 84px 14px 14px; /* 84px = fixed nav clearance (top:12px + ~66px height + 6px gap) */
   position: relative;
   isolation: isolate;
+  overflow-x: clip; /* prevent textureDrift animation from causing horizontal scroll */
 }
 
 main::before {
@@ -2220,7 +2222,7 @@ footer {
     transform: translate3d(0, 0, 0) scale(1);
   }
   100% {
-    transform: translate3d(10px, -8px, 0) scale(1.03);
+    transform: translate3d(0, -8px, 0) scale(1.02);
   }
 }
 
