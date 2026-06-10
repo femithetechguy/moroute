@@ -1,7 +1,7 @@
 # Progress
 
 ## Date
-- 2026-06-10 (latest session)
+- 2026-06-10 (latest session — continued)
 
 ## Completed
 - Integrated newly provided app screenshots across hero, features, and CTA sections.
@@ -170,7 +170,38 @@
   - `suppressHydrationWarning` added to `<html>` in `layout.tsx` to suppress browser-extension hydration mismatch (Scribe recorder)
   - Fixed Linear GitHub webhook 404 (integration had expired); reconnected and redelivered push event via GitHub API
 
+- **Nav updated to floating dark glass** (FTTG-11):
+  - `position: fixed` with dark semi-transparent background (`rgba(5,16,12,0.82)`) + `backdrop-filter: blur(14px)`
+  - Transitions to light frosted glass (`rgba(255,255,255,0.92)`) when scrolled past hero via `is-scrolled` class
+  - Nav link colours adapt: light on dark hero, dark on light sections
+  - `main { padding-top: 84px }` provides hero clearance; hero card starts flush below nav
+
+- **Hero H1 and layout tuned** (FTTG-11):
+  - Font size reduced to `clamp(2rem, 4.5vw, 3.5rem)` so both lines fit on a single line
+  - Grid ratio widened to `1.1fr / 0.9fr` giving copy column more room
+  - Alert card positions pulled in (`right: -30px / -44px`) to prevent clipping by `overflow: hidden`
+  - `border-radius: 24px` added to hero to match other sections
+
+- **Footer / base of site redesigned** (FTTG-14 — complete):
+  - Trust band added above footer: 4 items (Real-time alerts, Community-powered, Safer routing, One-tap SOS) in horizontal row
+  - Sources attribution text added below trust band in gold (`#c8a84b`) for visibility
+  - All trust band content driven from `footer.trustItems` and `footer.sources` in content.json
+  - Footer nav links and copyright updated to dark colour scheme matching dark site-base background
+  - `site-base` wrapper with dark background (`#05100c`) and `border-radius: 24px` unifies trust band + footer visually
+  - `data-reveal` removed from footer nav so menu items appear instantly
+
+- **Contact phone number updated** (FTTG-13 — complete):
+  - Updated to `09034464384` with `+2349034464384` on the `tel:` href
+
+- **Mobile responsiveness pass** (FTTG-15, in progress):
+  - Fixed nav clearance on mobile: `main { padding-top: 68px }` at 760px
+  - 820px breakpoint: phones resized to 210×452 / 168×360, alert cards hidden
+  - 760px breakpoint: phones resized to 150×322 / 120×257, alert cards hidden, stats remain 3-col
+  - Removed `transform: scale()` + negative margin approach (doesn't affect grid layout flow); switched to direct dimension changes
+  - Fixed horizontal scroll: `html { overflow-x: hidden }`, `main { overflow-x: clip }`, `textureDrift` animation no longer translates horizontally
+  - `N` visible in dev screenshots is Next.js dev overlay — not present in production builds
+
 ## Pending
-- Continue FTTG-11 hero section work (trust band below hero, any remaining refinements)
-- Deploy to production (`vercel --prod`) when ready.
-- Verify on `https://www.moroute.com` after production deploy.
+- Complete FTTG-15 mobile responsiveness (verify on real device)
+- Deploy to production (`vercel --prod`) when ready
+- Verify on `https://www.moroute.com` after production deploy
