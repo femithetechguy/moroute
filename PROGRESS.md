@@ -1,205 +1,261 @@
-# Progress
+# MoRoute — Project Context & Progress
 
-## Date
-- 2026-06-10 (latest session — continued)
+> This is the single source of truth for project context, decisions, and work history.
+> **Always read this file before starting any work or giving a status update.**
 
-## Completed
-- Integrated newly provided app screenshots across hero, features, and CTA sections.
-- Fixed broken image references and removed unintended mobile horizontal gallery scrolling.
-- Improved mobile responsiveness and visual density in CTA and showcase areas.
-- Added `ContactSection`, `MobileBackToTop`, and richer navigation behavior.
-- Added scroll-reveal motion system via `MotionEnhancer` and modernized hover/ambient animations.
-- Polished typography contrast, spacing, and card/shadow consistency across sections.
-- Updated content JSON copy to include service-request feature messaging.
-- Updated CTA store links in JSON to temporary official destinations for App Store and Google Play.
-- Added Open Graph and Twitter metadata/image routes for stronger cross-platform share previews (including WhatsApp).
-- Made production site URL JSON-driven via `meta.siteUrl` and wired metadata to read from content.
-- Added SEO foundation with `sitemap.xml`, `robots.txt`, and homepage JSON-LD structured data.
-- Centralized SEO URL resolution in shared helper logic to keep metadata and crawler routes in sync.
-- Added `vercel.json` for Vercel deployment configuration.
-- Fixed graphics visibility for users with reduced-motion preferences by forcing animation-dependent elements to render in their final visible state.
-- Added persistent mobile navigation access with a floating hamburger trigger and restored top navbar hamburger visibility.
-- Improved mobile sticky navigation behavior so menu access remains natural and reachable while scrolling.
-- Verified clean production builds after changes (`rm -rf .next && npm run build`).
-- Rewrote site copy for global clarity while preserving Nigeria as current primary use-case context.
-- Made section kicker labels optional and simplified section headings for cleaner one-page scanning.
-- Improved anchor navigation behavior so clicked sections align below sticky navigation on desktop and mobile.
-- Applied consistent offset-aware scrolling for header, mobile menu, and footer links.
-- Converted features screenshot block into a horizontal, snap-scrolling gallery for quick browsing.
-- Added gallery affordances: edge-fade cues and live viewed-percentage progress indicator.
-- Added full-screen screenshot lightbox with keyboard navigation, swipe support, and explicit close controls.
-- Rendered lightbox via body-level portal to prevent clipping/centering issues from transformed section context.
-- Separated quick-browse and expand actions by introducing explicit per-card expand controls.
-- Audited link preview / Open Graph metadata configuration.
-- Identified WhatsApp compatibility issue with dynamic OG images (requires static images in `/public/`).
-- Created `.env.local` with `NEXT_PUBLIC_SITE_URL=https://www.moroute.com/` for local development.
-- Created `.env.example` with documented template for collaborators (will be committed to repo).
-- Documented three deployment routes: `https://www.moroute.com/`, `https://demo.moroute.com/`, `https://dev.moroute.com/`.
-- Added static preview images to `/public/images/brand/`:
-  - `preview_portrait.png` (1080×1080) — mobile-optimized for WhatsApp, Instagram, mobile browsers
-  - `preview_landscape.png` (1200×630) — desktop-optimized for Twitter, LinkedIn, desktop shares
-- Replaced dynamic OG routes with static absolute URLs in [app/layout.tsx](app/layout.tsx)
-- Updated [lib/seo.ts](lib/seo.ts) to prioritize `NEXT_PUBLIC_SITE_URL` env var for Vercel/local env control
-- Implemented dual-image OG strategy: platforms auto-select portrait (mobile) or landscape (desktop) based on layout needs
+---
+
+## What This Project Is
+MoRoute is a road safety app for Nigerian roads. The marketing/landing site is a Next.js 15 single-page app deployed on Vercel. It surfaces live incident alerts, community updates, safer route guidance, and one-tap SOS help. Currently in pre-launch (early alerts / waitlist phase).
+
+**Live URLs**
+- Production: `https://www.moroute.com`
+- Preview/Demo: `https://demo.moroute.com`
+- Dev: `https://dev.moroute.com`
+
+---
+
+## Tech Stack
+- **Framework:** Next.js 15 (App Router), React 19, TypeScript
+- **Styling:** CSS Modules / global CSS (`app/globals.css`) — no Tailwind
+- **Icons:** Lucide React
+- **Email:** Gmail API via OAuth2 refresh token (`googleapis`)
+- **Deployment:** Vercel (CLI + dashboard)
+- **Content:** Single source of truth → `content/moroute-content.json`
+
+---
+
+## Project Structure
+
+```
+app/
+  layout.tsx          — root layout, metadata, OG tags
+  page.tsx            — assembles all sections
+  globals.css         — all styles live here
+  icon.svg            — favicon (auto-picked up by Next.js 15)
+  api/contact/
+    route.ts          — contact form POST handler (Gmail API, rate limiting, bot protection)
+    email-templates.ts — branded HTML email templates (admin + confirmation)
+  robots.ts / sitemap.ts
+
+components/           — one file per section
+  NavBar.tsx
+  HeroSection.tsx
+  FeaturesSection.tsx
+  StatsBar.tsx
+  ThreatsRiskSection.tsx
+  CtaSection.tsx
+  ContactSection.tsx
+  SiteFooter.tsx        — includes trust band + sources attribution above footer links
+  MobileBackToTop.tsx
+  MotionEnhancer.tsx  — scroll-reveal / ambient animations
+
+content/
+  moroute-content.json  — ALL copy, images, links, contact details (single source of truth)
+
+lib/
+  seo.ts              — SEO helpers, reads NEXT_PUBLIC_SITE_URL
+
+types/
+  content.ts          — TypeScript interfaces for content.json shape
+
+docs/
+  google-workspace-email.md  — Gmail API setup guide (OAuth2 strategy, env vars, two-client rationale)
+
+public/images/brand/
+  preview_portrait.png   — 1080×1080 OG image (WhatsApp, mobile)
+  preview_landscape.png  — 1200×630 OG image (Twitter, LinkedIn, desktop)
+
+public/images/screenshots/
+  screen-live-feed.png   — hero phone mockup (front phone, live feed screen)
+  screen-on-route.png    — hero phone mockup (back phone, on-route map screen)
+```
+
+---
+
+## Key Decisions & Patterns
+
+### Content is JSON-driven
+All copy, screenshot paths, CTA links, contact details, and metadata feed from `content/moroute-content.json`. Never hardcode content in components.
+
+### Styling
+All CSS lives in `app/globals.css`. No Tailwind, no CSS modules per component. Animations use keyframes defined in globals.css.
+
+### Navigation
+- Hash links removed from `<a href>` to keep URL clean at `moroute.com`
+- Click handlers manage smooth scroll + active state manually
+- `window.history.pushState` is intentionally NOT used
+- Logo href is `"/"` not `"#home"`
+- Nav is `position: fixed` (floating) — dark glass over hero, transitions to light frosted glass when `is-scrolled` class is added (triggered at `scrollY > 60`)
+- `main { padding-top: 84px }` provides clearance for the fixed nav on desktop; `68px` on mobile (760px)
+
+### Contact Form (`/api/contact`)
+- Three-layer bot protection: honeypot field, timing check (1.5s–2h window), no-space message check
+- Rate limit: 3 submissions per IP per minute (in-memory, per serverless instance)
+- Sends two emails concurrently via `Promise.all` inside Next.js 15 `after()` (fire-and-forget, returns 200 immediately)
+- Admin email → `support@moroute.com`, confirmation → form submitter
+- Gmail OAuth2: uses `moroute-playground` Web app client credentials (NOT `moroute-contact`) because refresh token is bound to the client that generated it
+
+### OG / SEO
+- Static OG images in `/public/images/brand/` (not dynamic routes) — required for WhatsApp compatibility
+- Dual-image strategy: portrait + landscape, platforms auto-select
+- Structured data: `SoftwareApplication` schema with ratings, OS, features, download URLs
+- `sitemap.ts` uses static `lastModified` date (not `new Date()`) to avoid unnecessary cache busts
+
+### Hero Section
+- Dark background (`#05100c`), two-column grid (`1.1fr / 0.9fr`), `border-radius: 24px`
+- Left: eyebrow badge, H1 (2 lines, single-line each), lede, reassure, stats strip, CTAs, footnote
+- Right: two phone mockups (side + main) from `public/images/screenshots/`, ambient glow blob
+- 3 floating alert cards (red/amber/teal) absolutely positioned within `.hero-visual`
+- Scrolling ticker strip at top (duplicated JSX items for seamless loop)
+- All content driven from `hero.*` in `content/moroute-content.json`
+- `overflow: hidden` on `.hero` clips phone/card overflow at border-radius corners
+
+### Footer / Site Base
+- `.site-base` wraps trust band + sources + `<footer>` in a dark background block
+- Trust band content driven from `footer.trustItems` (4 items); sources from `footer.sources`
+- Sources text colour: gold `#c8a84b`
+- Footer nav links and copyright styled for dark background
+
+### Animations
+- `MotionEnhancer` drives scroll-reveal (IntersectionObserver, `threshold: 0.18`)
+- All animations guarded with `prefers-reduced-motion` — elements render in final visible state when motion is reduced
+- Hero CTA: Bell ring animation; hero elements use `heroRise` keyframe
+- RAF-throttled NavBar scroll listener
+- `textureDrift` on `main::before` — vertical only (no horizontal translate) to prevent mobile scroll
+
+### Mobile Responsiveness
+- Fixed nav clearance: `main { padding-top: 84px }` desktop, `68px` at 760px
+- `html { overflow-x: hidden }` + `main { overflow-x: clip }` prevent horizontal scroll
+- 820px breakpoint: phones resized (210×452 / 168×360), alert cards hidden
+- 760px breakpoint: phones resized (150×322 / 120×257), alert cards hidden, stats 3-col
+- Direct dimension changes used (NOT `transform: scale()`) so grid layout space matches visual size
+
+---
+
+## Environment Variables
+Stored in `.env.local` (not committed) and Vercel dashboard (Production + Preview):
+
+| Variable | Purpose |
+|---|---|
+| `NEXT_PUBLIC_SITE_URL` | Site URL for metadata resolution (`https://www.moroute.com/`) |
+| `GOOGLE_CLIENT_ID` | OAuth2 client ID (`moroute-playground` Web app client) |
+| `GOOGLE_CLIENT_SECRET` | OAuth2 client secret |
+| `GOOGLE_REFRESH_TOKEN` | Long-lived refresh token (generated via OAuth Playground) |
+| `GOOGLE_SEND_AS` | Gmail send-from address (`support@moroute.com`) |
+| `CONTACT_FORM_TO` | Contact form destination email |
+
+`.env.example` is committed with documented placeholders for collaborators.
+
+---
+
+## How to Run Locally
+```bash
+npm install
+npm run dev        # http://localhost:3000
+npm run build      # verify production build
+```
+
+Clean build: `rm -rf .next && npm run build`
+
+---
+
+## Linear + GitHub Integration
+
+**Setup (already done):**
+- GitHub webhook configured on the `moroute` repo pointing to Linear's Payload URL
+- Repo linked to the FTTG Solutions team in Linear (Settings → Integrations → GitHub)
+- "Link commits to issues with magic words" toggle must be **ON** in Linear GitHub settings
+
+**Commit message format:**
+```
+Fixes FTTG-XX: what you changed   ← completes the issue (Linear auto-closes it)
+Ref FTTG-XX: what you changed     ← progress but issue is not done yet
+```
+
+**Simple rule:**
+- Still working on it? → `Ref FTTG-XX: what you changed`
+- Done with it? → `Fixes FTTG-XX: what you changed`
+
+**Magic words that close issues:** fix, fixes, fixed, closes, closed, resolve, resolves, complete, completes, implements
+
+**Magic words that reference without closing:** ref, refs, part of, related to, contributes to
+
+---
+
+## Current Status (as of 2026-06-10)
+- Hero section fully redesigned (dark design, phone mockups, ticker, alert cards) — FTTG-11 in progress
+- Footer / site base redesigned with trust band and sources — FTTG-14 complete
+- Contact phone number updated — FTTG-13 complete
+- Mobile responsiveness pass — FTTG-15 in progress (pending real-device verification)
+- Floating nav with dark-to-light scroll transition live
+- **Pending:** Production deploy (`vercel --prod`) and verify on `https://www.moroute.com`
+
+---
+
+## Work History
+
+### Session: 2026-05-13
+- Integrated newly provided app screenshots across hero, features, and CTA sections
+- Fixed broken image references and removed unintended mobile horizontal gallery scrolling
+- Improved mobile responsiveness and visual density in CTA and showcase areas
+- Added `ContactSection`, `MobileBackToTop`, and richer navigation behavior
+- Added scroll-reveal motion system via `MotionEnhancer` and modernized hover/ambient animations
+- Polished typography contrast, spacing, and card/shadow consistency across sections
+- Updated content JSON copy to include service-request feature messaging
+- Updated CTA store links in JSON to temporary official destinations for App Store and Google Play
+- Added Open Graph and Twitter metadata/image routes for stronger cross-platform share previews (including WhatsApp)
+- Made production site URL JSON-driven via `meta.siteUrl` and wired metadata to read from content
+- Added SEO foundation with `sitemap.xml`, `robots.txt`, and homepage JSON-LD structured data
+- Centralized SEO URL resolution in shared helper logic
+- Added `vercel.json` for Vercel deployment configuration
+- Fixed graphics visibility for users with reduced-motion preferences
+- Added persistent mobile navigation access with a floating hamburger trigger
+- Rewrote site copy for global clarity while preserving Nigeria as current primary use-case context
+- Made section kicker labels optional and simplified section headings
+- Improved anchor navigation behavior for sticky nav on desktop and mobile
+- Converted features screenshot block into a horizontal snap-scrolling gallery with edge-fade cues, progress indicator, and full-screen lightbox
+- Audited link preview / Open Graph metadata; fixed WhatsApp compatibility with static images
 - **Link preview now works universally including WhatsApp** ✅
-- Enhanced structured data with comprehensive `SoftwareApplication` schema including:
-  - App name, description, images (portrait + landscape)
-  - Operating systems (iOS, Android)
-  - Aggregate rating (4.8/5 stars, 2341+ reviews)
-  - Free pricing offer
-  - All 10 feature list items
-  - Download URLs for App Store and Google Play
-  - Keywords for better SERP visibility
+- Enhanced structured data with comprehensive `SoftwareApplication` schema
 - **SEO now includes rich snippets for app discovery** ✅
-- Fixed lingering references to old dynamic OG image routes; confirmed all metadata now uses static images from `/public/`
-- Added phone and email contact details rendering to ContactSection component (previously defined in JSON but not displayed on page)
-- Centralized all screenshot configuration into `content/moroute-content.json` under a new `screenshots` key (`primaryGallery`, `mainMapShot`, `floatingShots`, `screenShotAltPrefix`) — previously hardcoded in component files.
-- Refactored `MapMockup` and `HeroSection` to accept a `screenshots` prop instead of using hardcoded image paths, making hero visuals content-driven.
-- Refactored `FeaturesSection` gallery to derive primary shots and alt text prefix from the `screenshots` content config rather than inline constants.
-- Added `phone` and `email` contact fields (label, value, href) to `content/moroute-content.json`.
-- Extended TypeScript types (`types/content.ts`) with `ImageItem`, `ScreenshotConfig` interfaces and `phone`/`email` fields on the `contact` type.
-- Added `Phone` and `Mail` lucide icons to contact detail items; restructured each item as icon bubble + label/value body (horizontal layout).
-- Styled icon bubbles with tinted backgrounds (green for phone, blue for email) and a micro-rotation animation on hover.
-- Added shimmer sweep (`::after` pseudo-element) and lift + green shadow on hover; guarded with `@media (hover: hover)` to avoid sticky states on touch devices; `scale(0.97)` active press for mobile feedback.
-- Added "or send a message" ruled divider between contact detail chips and the form to visually separate the two interaction paths.
-
-- Created `docs/google-workspace-email.md` — full setup guide for sending contact form emails via the Gmail API (service account + domain-wide delegation as primary path; OAuth2 refresh token as fallback), including required env vars, Workspace Admin steps, and planned API route structure.
-
-- Implemented `app/api/contact/route.ts` — validates POST body, builds RFC 2822 email, sends via Gmail API using service account JWT; returns `503` gracefully when credentials are not yet configured.
-- Wired `ContactSection.tsx` form to POST to `/api/contact`; handles success, API error, and network error branches.
-- Added portal-based toast notifications (bottom-right, slide-up entry) with success/error variants, animated shrinking progress bar, auto-dismiss after 5 s, and manual close button.
-- Installed `googleapis` dependency.
-
-- Pivoted Gmail API auth from service account to OAuth2 refresh token — org policy `iam.disableServiceAccountKeyCreation` blocked JSON key downloads on the MorouteApp Workspace org.
-- Created OAuth consent screen (Internal) on `MorouteApp` Google Cloud project.
-- Created `moroute-contact` OAuth 2.0 client (Desktop app) — used by the Next.js API route; Client ID + Secret stored in `.env.local`.
-- Created `moroute-playground` OAuth 2.0 client (Web app) with `https://developers.google.com/oauthplayground` redirect URI — used only to generate the refresh token via OAuth Playground (Desktop app type doesn't support custom redirect URIs).
-- Updated `.env.local` with OAuth2 keys (`GOOGLE_CLIENT_ID`, `GOOGLE_CLIENT_SECRET`, `GOOGLE_REFRESH_TOKEN`, `GOOGLE_SEND_AS`, `CONTACT_FORM_TO`); Client ID + Secret filled in, remaining values pending.
-- Updated `docs/google-workspace-email.md` with full strategy history, two-client rationale, and step-by-step resume instructions.
-
+- Added phone and email contact details rendering to ContactSection
+- Centralized all screenshot configuration into `content/moroute-content.json` under `screenshots` key
+- Implemented `app/api/contact/route.ts` with Gmail API (OAuth2 refresh token)
 - **Gmail API contact form fully working end-to-end** ✅
-- Obtained refresh token via OAuth Playground using `moroute-playground` (Web app) client credentials — Desktop app clients reject custom redirect URIs so a separate Web app client was required to generate the token.
-- Discovered and fixed `unauthorized_client` error: refresh token is bound to the OAuth client that generated it. Updated `.env.local` `GOOGLE_CLIENT_ID` + `GOOGLE_CLIENT_SECRET` to use `moroute-playground` credentials (not `moroute-contact`) so they match the refresh token.
-- Filled all remaining `.env.local` values: `GOOGLE_REFRESH_TOKEN`, `GOOGLE_SEND_AS=support@moroute.com`, `CONTACT_FORM_TO=support@moroute.com`.
-- Rewrote `app/api/contact/route.ts` to use `google.auth.OAuth2` with `setCredentials({ refresh_token })` — removes all service account JWT code; library handles automatic access token refresh transparently.
-- Created `app/api/contact/email-templates.ts` with two branded HTML email template functions:
-  - `adminEmailHtml(name, email, message)` — internal notification sent to `support@moroute.com`; dark navy header, green-accented field rows, one-click "Reply to [name]" CTA button.
-  - `confirmationEmailHtml(name, message)` — confirmation sent to the form submitter; dark hero with checkmark, message summary, visit moroute.com CTA.
-  - Both templates use HTML-entity escaping (`esc`) and `nl2br` for user input; table-based layout with inline styles for broad email client compatibility; brand colors (`#0a1e36`, `#16c784`, `#f3f7fb`) matching the site design system.
-- Updated `buildRfc2822` in `route.ts` to accept a `contentType` parameter (defaults to `text/plain`); admin and confirmation emails now sent as `text/html`.
-- Route now sends both emails concurrently via `Promise.all` — one to the team, one to the submitter.
-- Confirmed working: `POST /api/contact 200` with both emails delivered correctly in Gmail.
-- Added all 5 env vars to Vercel (Production and Preview environments): `GOOGLE_CLIENT_ID`, `GOOGLE_CLIENT_SECRET`, `GOOGLE_REFRESH_TOKEN`, `GOOGLE_SEND_AS`, `CONTACT_FORM_TO`.
-- Fixed email dark mode rendering issue in Canary (Chromium-based client) — dark navy hero section was being auto-inverted to light lavender; added `color-scheme: light` meta tags and `:root { color-scheme: light }` CSS to both templates to opt out of automatic dark mode adaptation. Gmail web renders correctly in both cases.
-
-- Added in-memory IP rate limiter to `/api/contact` — 3 submissions per IP per minute; returns 429 on excess. Per-instance only (serverless limitation) but sufficient to block basic bursts.
-
-- Hero section redesigned with full-bleed photo background (`hero.png`):
-  - Replaced light gradient card with `hero.png` cover image + left-to-right dark overlay for text readability
-  - All hero text updated to white; `h1`, body, pills, footnote, secondary button scoped for dark background
-  - Pills rendered as a bordered row with vertical dividers; wraps to 2×2 grid on mobile
-  - Quote card ("Someone is waiting for you at home…") moved out of the right column — now spans full hero width as a bottom row with green top accent border, preventing overlap with the phone mockup
-  - Mobile: `background-position: left center` shows the dark rainy windshield (phone pushed off-screen), solid `rgba(4,12,24,0.88)` overlay keeps content readable
-  - Mobile: empty `.hero-right` spacer hidden; pills wrap to 2×2
-  - Removed hero texture layer (redundant over photo); suppressed `::after` ambient pulse on dark background
-
-- Button animations added to hero CTAs:
-  - Primary ("get early alerts"): recurring shimmer sweep (`::before`), glow pulse (`btnGlowPulse`), Bell icon ring animation (`bellRing`) — all suppressed under `prefers-reduced-motion`
-  - Secondary ("learn more"): green border glow + box-shadow trace on hover
-  - Switched primary button icon from custom SVG to Lucide `Bell` component for clean CSS animation targeting
-
-- Updated hero section copy and added new content elements to match new design brief:
-  - Badge: "Because every life matters."
-  - Headline: "Get home safely, Every time." (highlight in green)
-  - Body: "On Nigerian roads, anything can happen. Accidents. Hold-ups. Bad spots..."
-  - Green tagline with heart icon: "MoRoute keeps you informed, so you can stay alert and arrive safely."
-  - Four feature pills with icons: Live incident alerts, Community updates, Safer route guidance, One-tap SOS help
-  - CTA buttons: "Get early alerts" → `#contact`, "Learn more" → `#features`
-  - Footnote: "Built for Nigeria. Made for our roads. Powered by people like you."
-  - Quote card: "Someone is waiting for you at home. Give them a reason to smile today. / Travel safe, arrive secure."
-  - Extended `HeroContent` type and JSON with `tagline`, `pills`, `footnote`, `quote` fields
-  - Added CSS for `.hero-tagline`, `.hero-pills`, `.hero-pill`, `.hero-pill-icon`, `.hero-footnote`, `.hero-right`, `.hero-quote`, `.hero-quote-mark`, `.hero-quote-text`, `.hero-quote-tagline`
-  - Added new elements to `prefers-reduced-motion` override block
-
-- **Bot protection added to contact form** ✅ — detected live spam submissions with random alphanumeric strings (no spaces, no real words). Added three layered defenses:
-  - **Honeypot field** — hidden off-screen `<input name="_hp">` in the form; if it contains any value, the request is silently accepted without sending email (bots fill every field, humans never see it).
-  - **Timing check** — client sends `_t` (page load timestamp) with submission; server rejects if elapsed < 1.5s (too fast = bot) or > 2h (stale/replayed). Missing `_t` (raw API bots) also caught since elapsed would be ~55 years.
-  - **No-space message check** — real messages contain spaces; bot-generated random strings don't. Messages with no spaces return a 400 error.
-  - All bot defenses silently return `{ ok: true }` (except no-space which gives a user-visible error) to avoid enumeration by adapting bots.
-  - All 5 test scenarios verified locally via curl: honeypot block ✅, timing block ✅, no-space block ✅, missing `_t` block ✅, legitimate submission email delivered ✅.
-- Added 10-second timeout to Gmail API `Promise.all` via `Promise.race` — prevents serverless function from hanging if Gmail stalls.
-- Added 2000-character cap on message field and sanitized error logging (only logs `error.message`, not the full object).
-- RAF-throttled the NavBar scroll listener — `findActiveHash` now runs at most once per animation frame instead of on every scroll event.
-- Removed `window.history.pushState` from nav click handler — URL stays clean at `moroute.com` when navigating sections (no `#section` appended).
-- Removed double `requestAnimationFrame` in `handleNavClick` — reduced to a single RAF.
-- Removed `hashchange` listener and initial `window.location.hash` check — no longer needed since hash is not written to the URL.
-- Fixed `sitemap.ts` `lastModified` from `new Date()` (changes every build) to a static date `2026-05-05`.
-
-- Replaced bottom-right toast with a centered in-page success modal — shows checkmark icon, "Message sent!" heading, success message, and a "Done" button that closes the modal and resets the form. Error messages now shown inline below the submit button instead of a toast.
-- Removed all toast state, timers, and portal logic from `ContactSection.tsx`; removed all toast CSS from `globals.css`; added `.contact-modal-backdrop`, `.contact-modal`, `.contact-modal-icon`, `.contact-modal-title`, `.contact-modal-body`, `.contact-modal-btn`, `.contact-error` styles and `revealFade` keyframe.
-- Changed submit button label from "Send Request" → "Send Message" in `content/moroute-content.json`.
-- Switched contact route to use Next.js 15 `after()` for fire-and-forget email sending — route now returns `200` immediately (~100ms) and sends both emails in the background after the response; failures logged server-side. Previously took 3–4s waiting on Gmail API.
-- Timeout and error handling moved inside the `after()` callback.
-
-- Fixed URL hash appearing in address bar when clicking nav and footer links on mobile — removed `href="#section"` from all hash navigation `<a>` elements in `NavBar.tsx` and `SiteFooter.tsx`; browser now has nothing to follow so URL stays clean at `moroute.com`. Click handlers still manage smooth scrolling and active state.
-- Also removed stale `pushState` and double RAF from `SiteFooter.tsx` `handleFooterLinkClick`.
-- Added `cursor: pointer` to `.nav-links a` and `.nav-mobile-links a` in `globals.css` so links still look clickable without an `href`.
-- Logo links changed from `href="#home"` to `href="/"` in both NavBar and SiteFooter.
-- Raised all touch targets to 44px minimum (WCAG): `nav-toggle`, `nav-fab-toggle`, `mobile-top-btn`, `feature-lightbox-close`, `feature-lightbox-nav` — both desktop and mobile CSS overrides updated.
-- Loosened feature lightbox stage padding on mobile from `2px 34px` → `2px 20px` for better usability on small screens.
-- Added `cursor: pointer` to `.footer-links a` in `globals.css` (links no longer have `href` attribute so browser default cursor wouldn't apply).
-- Removed duplicate inline `style={{ cursor: "pointer" }}` from `SiteFooter.tsx` footer link elements.
-- Confirmed hero `h1 span max-width: 16ch` is already correctly overridden to `100%` at the 1080px breakpoint, which cascades down to 760px — no change needed.
-
-- Created `app/icon.svg` — favicon extracted from the logo icon (dark rounded square + M letterform + green dot accent); Next.js 15 picks this up automatically via file-based convention, no layout.tsx changes needed. Full wordmark text excluded since it's unreadable at favicon size.
-
-- Deployed to Vercel Preview (demo) via CLI — build passed, all features verified working: contact form modal, favicon, clean URL navigation, email sending.
+- Added portal-based toast → replaced with centered in-page success modal
+- Switched contact route to Next.js 15 `after()` for fire-and-forget email (returns 200 in ~100ms)
+- **Bot protection added to contact form** ✅ — honeypot, timing check, no-space message check
+- Added in-memory IP rate limiter (3/min per IP)
+- RAF-throttled NavBar scroll listener; removed hash from URL on nav clicks
+- Fixed URL hash appearing in address bar on mobile
+- Raised all touch targets to 44px minimum (WCAG)
+- Created `app/icon.svg` favicon
+- Deployed to Vercel Preview — all features verified working
 - Preview URL: `https://moroute-euy0upej3-tech-guys-projects-4a517b26.vercel.app`
 
-- **Hero section fully replaced with new dark design** (FTTG-11, in progress):
-  - Complete rewrite of `HeroSection.tsx` — removed old card/photo-background layout, map mockup, pills, quote card
-  - New layout: full-width dark background (`#05100c`), scrolling ticker strip, two-column grid (copy left, phone visual right)
-  - Ticker strip: scrolling marquee of road safety stats with animated red dots; content driven from `hero.ticker` in JSON
-  - Eyebrow badge, large gradient H1 ("Get home safely. / Every single time."), lede + bold suffix, reassure line with teal dot
-  - Stats strip: 3-column grid with red/amber/teal stat numbers (5,289 · 2.2M · 1 app) driven from `hero.statsStrip` in JSON
-  - CTA row: solid teal "Get early alerts" button + ghost "See how it works" button; Bell icon with ring animation retained
-  - Two phone mockups (side + main) using `public/images/screenshots/screen-on-route.png` and `screen-live-feed.png`; glow blob ambient effect
-  - 3 floating alert cards (High Alert/red, Accident/amber, Checkpoint/teal) with staggered float animations; content driven from `hero.alertCards` in JSON
-  - `HeroContent` TypeScript interface rewritten; old `map`, `quote`, `pills`, `tagline` fields removed
+### Session: 2026-06-10
+- **Hero section fully replaced with new dark design** (FTTG-11):
+  - Complete rewrite of `HeroSection.tsx` — dark background, scrolling ticker, two-column grid, phone mockups, floating alert cards
+  - All content driven from `hero.*` in content.json; `HeroContent` type rewritten
   - `MapMockup.tsx` deleted (dead component)
-  - `suppressHydrationWarning` added to `<html>` in `layout.tsx` to suppress browser-extension hydration mismatch (Scribe recorder)
-  - Fixed Linear GitHub webhook 404 (integration had expired); reconnected and redelivered push event via GitHub API
-
+  - `suppressHydrationWarning` added to `<html>` (Scribe browser extension hydration mismatch)
+  - Fixed Linear GitHub webhook 404; reconnected and redelivered via GitHub API
 - **Nav updated to floating dark glass** (FTTG-11):
-  - `position: fixed` with dark semi-transparent background (`rgba(5,16,12,0.82)`) + `backdrop-filter: blur(14px)`
-  - Transitions to light frosted glass (`rgba(255,255,255,0.92)`) when scrolled past hero via `is-scrolled` class
-  - Nav link colours adapt: light on dark hero, dark on light sections
-  - `main { padding-top: 84px }` provides hero clearance; hero card starts flush below nav
-
+  - `position: fixed`, dark glass over hero → light frosted glass when scrolled (`is-scrolled` class)
+  - `main { padding-top: 84px }` for fixed nav clearance
 - **Hero H1 and layout tuned** (FTTG-11):
-  - Font size reduced to `clamp(2rem, 4.5vw, 3.5rem)` so both lines fit on a single line
-  - Grid ratio widened to `1.1fr / 0.9fr` giving copy column more room
-  - Alert card positions pulled in (`right: -30px / -44px`) to prevent clipping by `overflow: hidden`
-  - `border-radius: 24px` added to hero to match other sections
-
+  - Font size reduced so both lines fit on single lines; grid ratio `1.1fr / 0.9fr`
+  - Alert card positions pulled in to prevent clipping; `border-radius: 24px` added
 - **Footer / base of site redesigned** (FTTG-14 — complete):
-  - Trust band added above footer: 4 items (Real-time alerts, Community-powered, Safer routing, One-tap SOS) in horizontal row
-  - Sources attribution text added below trust band in gold (`#c8a84b`) for visibility
-  - All trust band content driven from `footer.trustItems` and `footer.sources` in content.json
-  - Footer nav links and copyright updated to dark colour scheme matching dark site-base background
-  - `site-base` wrapper with dark background (`#05100c`) and `border-radius: 24px` unifies trust band + footer visually
-  - `data-reveal` removed from footer nav so menu items appear instantly
-
-- **Contact phone number updated** (FTTG-13 — complete):
-  - Updated to `09034464384` with `+2349034464384` on the `tel:` href
-
+  - Trust band (4 items) + sources text (gold) added above footer links
+  - `.site-base` wrapper with dark background unifies the base visually
+- **Contact phone updated** (FTTG-13 — complete): `09034464384` / `tel:+2349034464384`
 - **Mobile responsiveness pass** (FTTG-15, in progress):
-  - Fixed nav clearance on mobile: `main { padding-top: 68px }` at 760px
-  - 820px breakpoint: phones resized to 210×452 / 168×360, alert cards hidden
-  - 760px breakpoint: phones resized to 150×322 / 120×257, alert cards hidden, stats remain 3-col
-  - Removed `transform: scale()` + negative margin approach (doesn't affect grid layout flow); switched to direct dimension changes
-  - Fixed horizontal scroll: `html { overflow-x: hidden }`, `main { overflow-x: clip }`, `textureDrift` animation no longer translates horizontally
-  - `N` visible in dev screenshots is Next.js dev overlay — not present in production builds
+  - Fixed nav clearance on mobile (`padding-top: 68px` at 760px)
+  - Direct phone dimension changes at 820px and 760px (not transform scale)
+  - Alert cards hidden at 820px and below
+  - Fixed horizontal scroll: `html { overflow-x: hidden }`, `main { overflow-x: clip }`, `textureDrift` vertical-only
 
 ## Pending
 - Complete FTTG-15 mobile responsiveness (verify on real device)
