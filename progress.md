@@ -1,7 +1,7 @@
 # Progress
 
 ## Date
-- 2026-05-13 (latest session)
+- 2026-06-10 (latest session)
 
 ## Completed
 - Integrated newly provided app screenshots across hero, features, and CTA sections.
@@ -156,6 +156,21 @@
 - Deployed to Vercel Preview (demo) via CLI — build passed, all features verified working: contact form modal, favicon, clean URL navigation, email sending.
 - Preview URL: `https://moroute-euy0upej3-tech-guys-projects-4a517b26.vercel.app`
 
+- **Hero section fully replaced with new dark design** (FTTG-11, in progress):
+  - Complete rewrite of `HeroSection.tsx` — removed old card/photo-background layout, map mockup, pills, quote card
+  - New layout: full-width dark background (`#05100c`), scrolling ticker strip, two-column grid (copy left, phone visual right)
+  - Ticker strip: scrolling marquee of road safety stats with animated red dots; content driven from `hero.ticker` in JSON
+  - Eyebrow badge, large gradient H1 ("Get home safely. / Every single time."), lede + bold suffix, reassure line with teal dot
+  - Stats strip: 3-column grid with red/amber/teal stat numbers (5,289 · 2.2M · 1 app) driven from `hero.statsStrip` in JSON
+  - CTA row: solid teal "Get early alerts" button + ghost "See how it works" button; Bell icon with ring animation retained
+  - Two phone mockups (side + main) using `public/images/screenshots/screen-on-route.png` and `screen-live-feed.png`; glow blob ambient effect
+  - 3 floating alert cards (High Alert/red, Accident/amber, Checkpoint/teal) with staggered float animations; content driven from `hero.alertCards` in JSON
+  - `HeroContent` TypeScript interface rewritten; old `map`, `quote`, `pills`, `tagline` fields removed
+  - `MapMockup.tsx` deleted (dead component)
+  - `suppressHydrationWarning` added to `<html>` in `layout.tsx` to suppress browser-extension hydration mismatch (Scribe recorder)
+  - Fixed Linear GitHub webhook 404 (integration had expired); reconnected and redelivered push event via GitHub API
+
 ## Pending
+- Continue FTTG-11 hero section work (trust band below hero, any remaining refinements)
 - Deploy to production (`vercel --prod`) when ready.
 - Verify on `https://www.moroute.com` after production deploy.
