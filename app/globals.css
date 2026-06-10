@@ -573,7 +573,7 @@ body.nav-menu-open main {
   margin: 0 auto;
   padding: clamp(36px, 3.5vw, 56px) clamp(16px, 3.5vw, 48px) 90px;
   display: grid;
-  grid-template-columns: 1.05fr 0.95fr;
+  grid-template-columns: 1.1fr 0.9fr;
   gap: 56px;
   align-items: center;
 }
@@ -609,8 +609,8 @@ body.nav-menu-open main {
 .hero-h1 {
   font-family: var(--font-display), sans-serif;
   font-weight: 800;
-  font-size: clamp(2.8rem, 5.5vw, 4.5rem);
-  line-height: 0.98;
+  font-size: clamp(2rem, 4.5vw, 3.5rem);
+  line-height: 1.0;
   letter-spacing: -0.04em;
   color: #eafff5;
   margin-bottom: 26px;
@@ -915,19 +915,19 @@ body.nav-menu-open main {
 
 .hero-alert-card--pos1 {
   top: 70px;
-  right: -40px;
+  right: -30px;
   animation: heroCardFloat 5s ease-in-out infinite;
 }
 
 .hero-alert-card--pos2 {
   top: 250px;
-  right: -64px;
+  right: -44px;
   animation: heroCardFloat 5s ease-in-out 0.8s infinite;
 }
 
 .hero-alert-card--pos3 {
   top: 430px;
-  right: -40px;
+  right: -30px;
   animation: heroCardFloat 5s ease-in-out 1.6s infinite;
 }
 
