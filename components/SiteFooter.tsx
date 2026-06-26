@@ -60,7 +60,7 @@ export default function SiteFooter({ brand, footer, logoPath, logoAlt }: SiteFoo
       {/* Company address */}
       <p className="footer-address">
         <a href={footer.addressMapHref} target="_blank" rel="noopener noreferrer" className="footer-address-link">
-          <MapPin size={13} className="footer-address-icon" />
+          <MapPin size={16} className="footer-address-icon" />
           {footer.address}
         </a>
       </p>
