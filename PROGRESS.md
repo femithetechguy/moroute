@@ -80,6 +80,19 @@
 
 ---
 
+---
+
+## Session: 2026-06-25
+
+- **Company address added to footer** (FTTG-17):
+  - Address: 45, Presidential Avenue, Federal Housing Estate Shagari Village, Akure, Ondo State, Nigeria
+  - Added `footer.address` field to `content/moroute-content.json` (single source of truth)
+  - Updated `MorouteContent` TypeScript type to include `footer.address: string`
+  - Rendered in `SiteFooter.tsx` as `.footer-address` paragraph between sources attribution and the bottom footer bar
+  - Styled with muted green label ("Registered address:") and dimmed body text, consistent with footer palette
+
+---
+
 ## Pending
 - Complete FTTG-15 mobile responsiveness (verify on real device)
 - Complete FTTG-11 hero section (any remaining refinements)

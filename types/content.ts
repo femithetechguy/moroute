@@ -169,6 +169,7 @@ export interface MorouteContent {
   footer: {
     trustItems: Array<{ icon: string; title: string; sub: string; }>;
     sources: string;
+    address: string;
     links: LinkItem[];
     copyright: string;
   };

@@ -56,6 +56,11 @@ export default function SiteFooter({ brand, footer, logoPath, logoAlt }: SiteFoo
       {/* Sources attribution */}
       <p className="trust-sources">{footer.sources}</p>
 
+      {/* Company address */}
+      <p className="footer-address">
+        <span className="footer-address-label">Registered address:</span> {footer.address}
+      </p>
+
       {/* Footer */}
       <footer>
         <a href="/" className="logo logo-small" aria-label={brand} onClick={(event) => handleFooterLinkClick(event, "#home")}>
