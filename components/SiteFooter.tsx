@@ -58,7 +58,7 @@ export default function SiteFooter({ brand, footer, logoPath, logoAlt }: SiteFoo
 
       {/* Company address */}
       <p className="footer-address">
-        <span className="footer-address-label">Registered address:</span> {footer.address}
+        <span className="footer-address-label">Office address:</span> {footer.address}
       </p>
 
       {/* Footer */}
