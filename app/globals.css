@@ -544,6 +544,7 @@ body.nav-menu-open main {
   gap: 60px;
   padding: 9px 0;
   animation: heroTickerScroll 38s linear infinite;
+  will-change: transform;
 }
 
 .hero-ticker-track span {
@@ -949,8 +950,8 @@ body.nav-menu-open main {
 }
 
 @keyframes heroTickerScroll {
-  from { transform: translateX(0); }
-  to { transform: translateX(-50%); }
+  from { transform: translateX(0) translateZ(0); }
+  to { transform: translateX(-50%) translateZ(0); }
 }
 
 @keyframes heroTickerPulse {
