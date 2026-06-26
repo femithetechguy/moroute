@@ -93,8 +93,14 @@
 
 ---
 
+- **Ticker animation fixed on iOS mobile** (FTTG-15):
+  - Added `will-change: transform` to `.hero-ticker-track` to promote element to GPU layer
+  - Added `translateZ(0)` to `heroTickerScroll` keyframes to prevent iOS Safari from dropping the animation
+
+---
+
 ## Pending
-- Complete FTTG-15 mobile responsiveness (verify on real device)
 - Complete FTTG-11 hero section (any remaining refinements)
+- Verify ticker fix on real iOS device
 - Deploy to production (`vercel --prod`) when ready
 - Verify on `https://www.moroute.com` after production deploy
