@@ -2171,6 +2171,19 @@ body.nav-menu-open .mobile-top-btn {
   font-weight: 600;
 }
 
+.footer-address-link {
+  color: #a8c4b8;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  text-decoration-color: rgba(168, 196, 184, 0.35);
+  transition: color 0.2s ease, text-decoration-color 0.2s ease;
+}
+
+.footer-address-link:hover {
+  color: #eafff5;
+  text-decoration-color: rgba(234, 255, 245, 0.5);
+}
+
 footer {
   max-width: 1240px;
   margin: 0 auto;

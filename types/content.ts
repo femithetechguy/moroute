@@ -170,6 +170,7 @@ export interface MorouteContent {
     trustItems: Array<{ icon: string; title: string; sub: string; }>;
     sources: string;
     address: string;
+    addressMapHref: string;
     links: LinkItem[];
     copyright: string;
   };

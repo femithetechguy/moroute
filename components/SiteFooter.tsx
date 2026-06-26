@@ -58,7 +58,10 @@ export default function SiteFooter({ brand, footer, logoPath, logoAlt }: SiteFoo
 
       {/* Company address */}
       <p className="footer-address">
-        <span className="footer-address-label">Office address:</span> {footer.address}
+        <span className="footer-address-label">Office address:</span>{" "}
+        <a href={footer.addressMapHref} target="_blank" rel="noopener noreferrer" className="footer-address-link">
+          {footer.address}
+        </a>
       </p>
 
       {/* Footer */}
