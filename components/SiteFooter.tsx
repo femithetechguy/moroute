@@ -1,6 +1,7 @@
 "use client";
 
 import type { MouseEvent } from "react";
+import { MapPin } from "lucide-react";
 import type { MorouteContent } from "@/types/content";
 
 type SiteFooterProps = {
@@ -58,8 +59,8 @@ export default function SiteFooter({ brand, footer, logoPath, logoAlt }: SiteFoo
 
       {/* Company address */}
       <p className="footer-address">
-        <span className="footer-address-label">Office address:</span>{" "}
         <a href={footer.addressMapHref} target="_blank" rel="noopener noreferrer" className="footer-address-link">
+          <MapPin size={13} className="footer-address-icon" />
           {footer.address}
         </a>
       </p>

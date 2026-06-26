@@ -2166,12 +2166,10 @@ body.nav-menu-open .mobile-top-btn {
   line-height: 1.6;
 }
 
-.footer-address-label {
-  color: #eafff5;
-  font-weight: 600;
-}
-
 .footer-address-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
   color: #a8c4b8;
   text-decoration: underline;
   text-underline-offset: 3px;
